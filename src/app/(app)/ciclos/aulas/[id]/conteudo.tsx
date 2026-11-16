@@ -1,9 +1,10 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowLeft, ArrowUpRight, CalendarDays, Download, FileText, MapPin } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, BookOpen, CalendarDays, Download, FileText, MapPin, Presentation } from "lucide-react";
 import { AreaDeTexto, BotaoEnviar, Formulario } from "@/components/formulario";
 import { Lista, Pagina, Secao } from "@/components/ui";
 import type { OpcaoDeProfessor } from "@/lib/professores";
+import { dia, hoje } from "@/lib/datas";
 import { formatarDataLonga, formatarHora, formatarTamanho, rotuloAula, rotuloDoCiclo, type Aula } from "@/lib/ciclos";
 import { apagarMaterial, justificarFalta } from "./actions";
 import { EnvioDeMateriais, FormularioAula } from "./edicao";
@@ -18,6 +19,59 @@ function comLinks(texto: string): ReactNode[] {
     ) : (
       parte
     ),
+  );
+}
+
+/** Texto livre em parágrafos (linha em branco separa parágrafos), com links clicáveis. */
+function Paragrafos({ texto }: { texto: string }) {
+  const paragrafos = texto
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  return (
+    <div className="prosa flex flex-col gap-3 text-tinta">
+      {paragrafos.map((p, i) => (
+        <p key={i} className="whitespace-pre-line">
+          {comLinks(p)}
+        </p>
+      ))}
+    </div>
+  );
+}
+
+/** De onde vem o link, para o membro saber o que vai abrir. */
+function origem(url: string): string {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, "");
+    if (host.endsWith("drive.google.com") || host.endsWith("docs.google.com")) return "Google Drive";
+    if (host.endsWith("canva.com")) return "Canva";
+    return host;
+  } catch {
+    return "Link externo";
+  }
+}
+
+/** Link externo em cartão, no mesmo desenho dos anexos. */
+function LinkExterno({ href, titulo, icone }: { href: string; titulo: string; icone: ReactNode }) {
+  return (
+    <li>
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="cartao group flex items-center gap-3 p-3 transition-colors hover:border-linha-forte sm:gap-4 sm:p-4"
+      >
+        <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-vinho-suave text-vinho">
+          {icone}
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block font-medium text-tinta group-hover:text-vinho">{titulo}</span>
+          <span className="block text-sm text-grafite">{origem(href)}</span>
+        </span>
+        <ArrowUpRight aria-hidden="true" className="size-5 shrink-0 text-linha-forte transition-colors group-hover:text-vinho" />
+        <span className="sr-only">(abre em nova aba)</span>
+      </a>
+    </li>
   );
 }
 
@@ -43,6 +97,8 @@ export function ConteudoDaAula({
   professores?: OpcaoDeProfessor[];
 }) {
   const leituras = (aula.bibliografia ?? "").split("\n").filter((linha) => linha.trim());
+  const temPosAula = Boolean(aula.resumo || aula.slidesUrl || aula.apostilaUrl);
+  const aulaPassou = aula.data !== null && dia(aula.data) < hoje();
 
   return (
     <Pagina>
@@ -183,6 +239,23 @@ export function ConteudoDaAula({
         )}
       </Secao>
 
+      {temPosAula || aulaPassou ? (
+        <Secao titulo="Depois da aula">
+          {aula.resumo ? <Paragrafos texto={aula.resumo} /> : null}
+          {aula.slidesUrl || aula.apostilaUrl ? (
+            <ul className={`flex flex-col gap-2 ${aula.resumo ? "mt-6" : ""}`}>
+              {aula.slidesUrl ? (
+                <LinkExterno href={aula.slidesUrl} titulo="Slides da aula" icone={<Presentation className="size-5" strokeWidth={1.75} />} />
+              ) : null}
+              {aula.apostilaUrl ? (
+                <LinkExterno href={aula.apostilaUrl} titulo="Apostila" icone={<BookOpen className="size-5" strokeWidth={1.75} />} />
+              ) : null}
+            </ul>
+          ) : null}
+          {!temPosAula ? <p className="text-grafite">Slides e resumo ainda não publicados.</p> : null}
+        </Secao>
+      ) : null}
+
       {diretoria ? (
         <section aria-labelledby="editar-aula" className="mt-2 rounded-2xl bg-sutil p-5 sm:p-8">
           <div className="flex flex-wrap items-center gap-2.5">
@@ -201,6 +274,9 @@ export function ConteudoDaAula({
                 professorBio: aula.professorBio ?? "",
                 local: aula.local ?? "",
                 bibliografia: aula.bibliografia ?? "",
+                resumo: aula.resumo ?? "",
+                slidesUrl: aula.slidesUrl ?? "",
+                apostilaUrl: aula.apostilaUrl ?? "",
               }}
             />
             <div className="mt-8 border-t border-linha-forte pt-8">

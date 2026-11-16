@@ -39,6 +39,9 @@ export type Aula = {
   professorId: string | null;
   professorBio: string | null;
   bibliografia: string | null;
+  resumo: string | null;
+  slidesUrl: string | null;
+  apostilaUrl: string | null;
   pastaUrl: string | null;
   ciclo: { id: string; codigo: string; titulo: string; status: "planejado" | "atual" | "encerrado" } | null;
   materiais: Material[];
@@ -104,7 +107,7 @@ export async function getAula(id: string): Promise<Aula | null> {
   const { data, error } = await supabase
     .from("aulas")
     .select(
-      "id, numero, titulo, data, local, professor, professor_id, professor_bio, bibliografia, pasta_url, ciclo:ciclos(id, codigo, titulo, status), aula_materiais(id, titulo, tamanho, criado_em)",
+      "id, numero, titulo, data, local, professor, professor_id, professor_bio, bibliografia, resumo, slides_url, apostila_url, pasta_url, ciclo:ciclos(id, codigo, titulo, status), aula_materiais(id, titulo, tamanho, criado_em)",
     )
     .eq("id", id)
     .maybeSingle();
@@ -123,6 +126,9 @@ export async function getAula(id: string): Promise<Aula | null> {
     professorId: data.professor_id,
     professorBio: data.professor_bio,
     bibliografia: data.bibliografia,
+    resumo: data.resumo,
+    slidesUrl: data.slides_url,
+    apostilaUrl: data.apostila_url,
     pastaUrl: data.pasta_url,
     ciclo: um<NonNullable<Aula["ciclo"]>>(data.ciclo),
     materiais: materiais.map(({ id, titulo, tamanho }) => ({ id, titulo, tamanho })),
