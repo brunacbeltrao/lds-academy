@@ -38,8 +38,13 @@ Os documentos da liga em PDF, por categoria: Estatuto e regimento · Eleições 
 
 ## Outras rotas
 
-- `/ciclos/aulas/[id]`: página da aula, com professor, bibliografia e anexos; a diretoria edita ali mesmo.
+- `/ciclos/aulas/[id]`: página da aula, com professor, bibliografia, anexos, pasta do Drive, presença e justificativa de falta; a diretoria edita ali mesmo.
+- `/ciclos/acervo/[codigo]`: aulas de um ciclo anterior, com as pastas do Drive.
+- `/producao/[id]`: página de uma publicação: prazos, autores, entregas e edição pela diretoria.
+- `/tira-duvidas/[id]`: pergunta, respostas, validação e resposta da diretoria.
+- `/conta`: meu perfil: foto (bucket privado `fotos`, visível aos membros) e troca de senha. Abre pelo nome no rodapé do menu.
+- `/conta/senha`: nova senha, destino do link de Esqueci a senha.
 - `/materiais/[id]`: download de um anexo, por link temporário.
-- `/login`: pedido do link de acesso.
-- `/auth/callback`: retorno do link de acesso.
+- `/login`: entrar, primeiro acesso (criar senha) e esqueci a senha.
+- `/auth/callback`: retorno do link de nova senha.
 - `/auth/sair`: encerra a sessão.

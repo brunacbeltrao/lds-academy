@@ -12,7 +12,7 @@ Três papéis: **ligante** (associado acadêmico), **diretoria** (associado dire
 | Biblioteca | Busca, lê (links do Drive) e favorita | Cadastra links do Drive e classifica |
 | Competições | Só quem está na equipe selecionada | Toda a diretoria acompanha; cria edições e monta equipes |
 | Tira-dúvidas | Pergunta (pública ou privada) e responde as públicas | Valida respostas, responde as privadas e modera |
-| Produção | Consulta calendário e orientações | Mantém o calendário |
+| Produção | Consulta calendário e orientações; envia rascunhos das suas publicações | Mantém o calendário, autores e revisores |
 | A Liga | Lê | Lê |
 | Regularização | Sem acesso | Mantém os documentos da liga |
 | Gestão | Sem acesso | Acesso total |
@@ -23,13 +23,16 @@ Todas as tabelas têm RLS. As políticas usam funções do schema `privado` (`is
 
 | Tabela | Ligante | Diretoria |
 | --- | --- | --- |
-| `membros` | Lê só a própria linha | Lê e gere todas |
+| `membros` (nome, papel, situação) | Lê todas, para ver os colegas | Lê e gere todas |
+| `membros_acesso` (e-mail de acesso) | Lê só o próprio | Lê e gere todos (o conselho lê) |
 | `ciclos`, `biblioteca_itens`, `aula_leituras`, `eventos`, `avisos`, `competicoes` | Lê | Lê e escreve |
 | `aulas` | Lê as publicadas | Lê e escreve todas |
 | `aula_materiais` e arquivos do bucket `materiais` | Lê e baixa | Envia, registra e apaga |
-| `producoes` | Lê | Lê e escreve |
+| `producoes`, `producao_participantes` | Lê | Lê e escreve |
+| `producao_entregas` | Lê; envia se é autor ou revisor da publicação; apaga as próprias | Lê, envia e apaga |
 | `documentos` e arquivos do bucket `documentos` | Sem acesso | Envia, registra e apaga (o conselho lê) |
 | `favoritos` | Só os próprios | Só os próprios |
+| `perfis` e arquivos do bucket `fotos` | Lê as fotos de todos; envia, troca e apaga só a própria | Igual ao ligante |
 | `equipes`, `equipe_membros` | Só das equipes de que participa | Lê e gere todas |
 | `perguntas` | Lê as públicas e as próprias; cria as suas | Lê todas; edita e apaga |
 | `respostas` | Lê as validadas e as próprias; responde só a perguntas públicas, sempre como pendente | Lê todas; cria, valida, recusa e apaga |

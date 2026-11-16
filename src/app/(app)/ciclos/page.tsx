@@ -1,43 +1,96 @@
 import type { Metadata } from "next";
-import { Cronograma } from "@/components/cronograma";
-import { PaginaArea, type Bloco } from "@/components/pagina-area";
-import { formatarDia, getCicloAtual, proximoEncontro } from "@/lib/ciclos";
+import Link from "next/link";
+import { CartaoEncontro } from "@/components/cartao-encontro";
+import { Abas, abaAtual, CabecalhoDaPagina, Cartao, DestinoDoCartao, Grade, Pagina, Vazio, type Aba } from "@/components/ui";
+import { getCicloAtual, getCiclos, jaPassou, proximoEncontro } from "@/lib/ciclos";
 
 export const metadata: Metadata = { title: "Ciclos e aulas" };
 
-const BLOCOS: Bloco[] = [
-  { titulo: "Próximo ciclo", descricao: "2027.1 · M&A." },
-  { titulo: "Ciclos anteriores", descricao: "Acervo por tema, aberto a todos os membros." },
-];
+export default async function CiclosPage({ searchParams }: PageProps<"/ciclos">) {
+  const [{ aba }, atual, ciclos] = await Promise.all([searchParams, getCicloAtual(), getCiclos()]);
+  const planejados = ciclos.filter((c) => c.status === "planejado");
+  const encerrados = ciclos.filter((c) => c.status === "encerrado");
 
-export default async function CiclosPage() {
-  const atual = await getCicloAtual();
-  const proximo = atual ? proximoEncontro(atual.encontros) : null;
-  const aulas = atual?.encontros.filter((e) => e.tipo === "aula").length ?? 0;
+  const abas: Aba[] = [
+    { id: "atual", rotulo: atual ? `Ciclo ${atual.ciclo.codigo}` : "Ciclo atual" },
+    { id: "proximo", rotulo: "Próximo ciclo" },
+    { id: "acervo", rotulo: "Acervo", contagem: encerrados.length },
+  ];
+  const ativa = abaAtual(aba, abas);
 
   return (
-    <PaginaArea titulo="Ciclos e aulas" descricao="O cronograma do ciclo em curso, com professor, bibliografia e anexos de cada aula." blocos={BLOCOS}>
-      <section aria-labelledby="ciclo-atual">
-        {atual ? (
-          <>
-            <div className="mb-7 flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
-              <h2 id="ciclo-atual" className="h2">
-                {atual.ciclo.titulo}
-              </h2>
-              <p className="numeral text-[0.9375rem] text-grafite">
-                Ciclo {atual.ciclo.codigo}
-                {atual.ciclo.inicio && atual.ciclo.fim
-                  ? ` · ${formatarDia(atual.ciclo.inicio + "T12:00:00-03:00")} a ${formatarDia(atual.ciclo.fim + "T12:00:00-03:00")}`
-                  : ""}
-                {` · ${aulas} aulas`}
-              </p>
-            </div>
-            <Cronograma encontros={atual.encontros} proximoId={proximo?.id ?? null} />
-          </>
+    <Pagina larga>
+      <CabecalhoDaPagina titulo="Ciclos e aulas" descricao="O cronograma do Grupo de Estudos, as aulas de cada ciclo e o acervo dos semestres anteriores." />
+      <Abas base="/ciclos" atual={ativa} itens={abas} />
+
+      {ativa === "atual" ? <CicloAtual atual={atual} /> : null}
+
+      {ativa === "proximo" ? (
+        planejados.length === 0 ? (
+          <Vazio titulo="Nenhum ciclo planejado" texto="Quando a diretoria planejar o próximo ciclo, o tema e as aulas aparecem aqui." />
         ) : (
-          <p className="cartao p-5 text-grafite">Nenhum ciclo em curso no momento.</p>
-        )}
-      </section>
-    </PaginaArea>
+          <div className="flex flex-col gap-3">
+            {planejados.map((c) => (
+              <section key={c.id} className="cartao p-5 sm:p-7">
+                <p className="text-sm font-medium text-grafite">Ciclo {c.codigo} · em planejamento</p>
+                <h2 className="mt-1 text-2xl font-bold tracking-[-0.02em] text-tinta">{c.titulo}</h2>
+                {c.descricao ? <p className="prosa mt-2 text-grafite">{c.descricao}</p> : null}
+                <p className="mt-4 text-[0.9375rem] text-tinta">
+                  {c.aulas > 0 ? `${c.aulas} aulas já cadastradas.` : "O cronograma ainda não foi publicado."}{" "}
+                  <Link href="/ciclos?aba=acervo" className="link">
+                    Estudar pelos ciclos anteriores de M&A
+                  </Link>
+                </p>
+              </section>
+            ))}
+          </div>
+        )
+      ) : null}
+
+      {ativa === "acervo" ? (
+        <>
+          <p className="prosa mb-5 text-grafite">
+            Slides, leituras e materiais de cada aula, organizados por semestre. Os arquivos ficam no Drive da liga.
+          </p>
+          <Grade>
+            {encerrados.map((c) => (
+              <Cartao key={c.id} href={`/ciclos/acervo/${c.codigo}`}>
+                <p className="numeral text-sm font-semibold text-vinho">{c.codigo.replace("-", " e ")}</p>
+                <h2 className="h3 mt-1">{c.titulo}</h2>
+                {c.descricao ? <p className="mt-1.5 line-clamp-3 text-[0.9375rem] text-grafite">{c.descricao}</p> : null}
+                <p className="mt-3 text-sm text-grafite">{c.aulas} {c.aulas === 1 ? "aula" : "aulas"}</p>
+                <DestinoDoCartao rotulo="Ver as aulas" />
+              </Cartao>
+            ))}
+          </Grade>
+        </>
+      ) : null}
+    </Pagina>
+  );
+}
+
+function CicloAtual({ atual }: { atual: Awaited<ReturnType<typeof getCicloAtual>> }) {
+  if (!atual) return <Vazio titulo="Nenhum ciclo em curso" texto="O cronograma do próximo ciclo aparece aqui quando for publicado." />;
+  const proximo = proximoEncontro(atual.encontros);
+  const aulas = atual.encontros.filter((e) => e.tipo === "aula").length;
+  const realizadas = atual.encontros.filter((e) => e.tipo === "aula" && jaPassou(e)).length;
+
+  return (
+    <>
+      <div className="mb-5 flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+        <div>
+          <h2 className="h2">{atual.ciclo.titulo}</h2>
+          {atual.ciclo.descricao ? <p className="prosa mt-1 text-grafite">{atual.ciclo.descricao}</p> : null}
+        </div>
+        <p className="numeral text-[0.9375rem] text-grafite">
+          {realizadas} de {aulas} aulas realizadas
+        </p>
+      </div>
+      <Grade>
+        {atual.encontros.map((e) => (
+          <CartaoEncontro key={e.id} encontro={e} proximo={e.id === proximo?.id} />
+        ))}
+      </Grade>
+    </>
   );
 }

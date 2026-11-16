@@ -1,9 +1,10 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowLeft, CalendarDays, FileText, MapPin } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CalendarDays, FileText, MapPin } from "lucide-react";
+import { AreaDeTexto, BotaoEnviar, Formulario } from "@/components/formulario";
 import { Lista, Pagina, Secao } from "@/components/ui";
 import { formatarDataLonga, formatarHora, formatarTamanho, rotuloAula, type Aula } from "@/lib/ciclos";
-import { apagarMaterial } from "./actions";
+import { apagarMaterial, justificarFalta } from "./actions";
 import { EnvioDeMateriais, FormularioAula } from "./edicao";
 
 /** Transforma endereços https em links, mantendo o resto do texto. */
@@ -20,14 +21,26 @@ function comLinks(texto: string): ReactNode[] {
 }
 
 /** Página da aula: professor, bibliografia, anexos e, para a diretoria, a edição. */
-export function ConteudoDaAula({ aula, diretoria }: { aula: Aula; diretoria: boolean }) {
+export type MinhaPresenca = {
+  podeJustificar: boolean;
+  presenca: "presente" | "falta" | "justificada" | null;
+  justificativa: { motivo: string; status: "pendente" | "aceita" | "recusada" } | null;
+};
+
+const ROTULO_PRESENCA = { presente: "Presença registrada", falta: "Falta registrada", justificada: "Falta justificada" } as const;
+const ROTULO_JUSTIFICATIVA = { pendente: "Em análise pela diretoria", aceita: "Aceita", recusada: "Recusada" } as const;
+
+export function ConteudoDaAula({ aula, diretoria, minha }: { aula: Aula; diretoria: boolean; minha: MinhaPresenca | null }) {
   const leituras = (aula.bibliografia ?? "").split("\n").filter((linha) => linha.trim());
 
   return (
     <Pagina>
-      <Link href="/ciclos" className="inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-grafite transition-colors hover:text-vinho">
+      <Link
+        href={aula.ciclo ? `/ciclos/acervo/${aula.ciclo.codigo}` : "/ciclos"}
+        className="inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-grafite transition-colors hover:text-vinho"
+      >
         <ArrowLeft aria-hidden="true" className="size-4" />
-        Ciclos e aulas
+        {aula.ciclo ? `Ciclo ${aula.ciclo.codigo}` : "Ciclos e aulas"}
       </Link>
 
       <header className="mt-4 mb-8 sm:mb-10">
@@ -55,7 +68,49 @@ export function ConteudoDaAula({ aula, diretoria }: { aula: Aula; diretoria: boo
             </li>
           ) : null}
         </ul>
+        {aula.pastaUrl ? (
+          <a href={aula.pastaUrl} target="_blank" rel="noopener noreferrer" className="botao botao-secundario mt-5">
+            Materiais no Drive
+            <ArrowUpRight aria-hidden="true" className="size-4" />
+          </a>
+        ) : null}
       </header>
+
+      {minha ? (
+        <section id="justificativa" aria-labelledby="minha-presenca" className="cartao mb-8 scroll-mt-24 p-5 sm:p-6">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 id="minha-presenca" className="h3">
+              Minha presença
+            </h2>
+            <span className={`selo ${minha.presenca === "falta" ? "selo-suave" : ""}`}>
+              {minha.presenca ? ROTULO_PRESENCA[minha.presenca] : "Ainda sem registro"}
+            </span>
+          </div>
+          {minha.justificativa ? (
+            <div className="mt-3 text-[0.9375rem]">
+              <p className="text-grafite">
+                Justificativa enviada: <span className="font-semibold text-tinta">{ROTULO_JUSTIFICATIVA[minha.justificativa.status]}</span>
+              </p>
+              <p className="prosa mt-1 whitespace-pre-line text-tinta">{minha.justificativa.motivo}</p>
+            </div>
+          ) : minha.podeJustificar && minha.presenca !== "presente" ? (
+            <Formulario acao={justificarFalta} className="prosa mt-3 flex flex-col gap-3">
+              <input type="hidden" name="aulaId" value={aula.id} />
+              <AreaDeTexto
+                nome="motivo"
+                rotulo="Justificar falta"
+                obrigatorio
+                linhas={3}
+                maxLength={2000}
+                ajuda="Pode ser antes ou depois da aula. O limite é de três faltas sem justificativa por ciclo."
+              />
+              <BotaoEnviar enviando="Enviando…" variante="secundario" className="self-start">
+                Enviar justificativa
+              </BotaoEnviar>
+            </Formulario>
+          ) : null}
+        </section>
+      ) : null}
 
       <Secao titulo="Professor">
         {aula.professor ? (

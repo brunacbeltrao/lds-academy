@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 export type Papel = "ligante" | "diretoria" | "conselheiro";
-export type Membro = { id: string; nome: string; email: string; papel: Papel };
+export type Membro = { id: string; nome: string; papel: Papel };
 
 /**
  * Membro logado, conferido no servidor a cada requisição.
@@ -18,12 +18,12 @@ export const getMembroAtual = cache(async (): Promise<Membro> => {
 
   const { data: membro } = await supabase
     .from("membros")
-    .select("id, nome, email, papel, ativo")
+    .select("id, nome, papel, ativo")
     .eq("user_id", userId)
     .maybeSingle();
 
   if (!membro || !membro.ativo) redirect("/auth/sair?erro=inativo");
-  return { id: membro.id, nome: membro.nome, email: membro.email, papel: membro.papel as Papel };
+  return { id: membro.id, nome: membro.nome, papel: membro.papel as Papel };
 });
 
 /** Gestão: a diretoria gere e o conselho acompanha em modo leitura. Ligantes não entram. */

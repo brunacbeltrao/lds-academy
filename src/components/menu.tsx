@@ -9,7 +9,6 @@ import {
   FileCheck,
   GraduationCap,
   House,
-  KeyRound,
   Landmark,
   Library,
   LogOut,
@@ -25,6 +24,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import type { ItemMenu } from "@/lib/navegacao";
+import { Avatar } from "@/components/ui";
 
 type Papel = "ligante" | "diretoria" | "conselheiro";
 const ROTULO_PAPEL: Record<Papel, string> = { ligante: "Ligante", diretoria: "Diretoria", conselheiro: "Conselho" };
@@ -47,17 +47,11 @@ function ativo(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 }
 
-function iniciais(nome: string) {
-  const partes = nome.trim().split(/\s+/);
-  const primeira = partes[0]?.charAt(0) ?? "";
-  const ultima = partes.length > 1 ? partes[partes.length - 1].charAt(0) : "";
-  return (primeira + ultima).toUpperCase();
-}
 
-type Props = { itens: ItemMenu[]; nome: string; papel: Papel; recolhidoInicial: boolean; children: ReactNode };
+type Props = { itens: ItemMenu[]; nome: string; papel: Papel; foto: string | null; recolhidoInicial: boolean; children: ReactNode };
 
 /** Moldura da área logada: o menu lateral (recolhível no computador, gaveta no celular) e o conteúdo. */
-export function Estrutura({ itens, nome, papel, recolhidoInicial, children }: Props) {
+export function Estrutura({ itens, nome, papel, foto, recolhidoInicial, children }: Props) {
   const [recolhido, setRecolhido] = useState(recolhidoInicial);
 
   const alternar = useCallback(() => {
@@ -70,7 +64,7 @@ export function Estrutura({ itens, nome, papel, recolhidoInicial, children }: Pr
 
   return (
     <>
-      <Menu itens={itens} nome={nome} papel={papel} recolhido={recolhido} alternar={alternar} />
+      <Menu itens={itens} nome={nome} papel={papel} foto={foto} recolhido={recolhido} alternar={alternar} />
       <main
         id="conteudo"
         className={`min-h-screen transition-[padding] duration-300 ease-entra-sai ${recolhido ? "lg:pl-(--menu-recolhido)" : "lg:pl-(--menu-largura)"}`}
@@ -85,12 +79,14 @@ function Menu({
   itens,
   nome,
   papel,
+  foto,
   recolhido,
   alternar,
 }: {
   itens: ItemMenu[];
   nome: string;
   papel: Papel;
+  foto: string | null;
   recolhido: boolean;
   alternar: () => void;
 }) {
@@ -272,25 +268,18 @@ function Menu({
             r ? "gap-2 px-4 lg:flex-col lg:gap-1 lg:px-0" : "gap-2 px-4"
           }`}
         >
-          <span
-            aria-hidden="true"
-            title={r ? `${nome} · ${ROTULO_PAPEL[papel]}` : undefined}
-            className="flex size-9 shrink-0 items-center justify-center rounded-full bg-vinho-suave text-[0.8125rem] font-bold text-vinho ring-1 ring-vinho-borda"
-          >
-            {iniciais(nome)}
-          </span>
-          <div className={`ml-1 min-w-0 flex-1 ${r ? "lg:sr-only" : ""}`}>
-            <p className="truncate text-sm font-semibold text-tinta">{nome}</p>
-            <p className="text-xs text-grafite">{ROTULO_PAPEL[papel]}</p>
-          </div>
           <Link
-            href="/conta/senha"
+            href="/conta"
             onClick={() => setAberto(false)}
-            aria-label="Trocar senha"
-            title="Trocar senha"
-            className="flex size-10 shrink-0 items-center justify-center rounded-lg text-grafite transition-colors hover:bg-sutil hover:text-tinta"
+            aria-label={`Meu perfil: ${nome}`}
+            title={r ? `${nome} · ${ROTULO_PAPEL[papel]}` : "Meu perfil"}
+            className={`flex min-w-0 items-center gap-3 rounded-lg p-1 transition-colors hover:bg-sutil ${r ? "flex-1 lg:flex-none" : "flex-1"}`}
           >
-            <KeyRound aria-hidden="true" className="size-[1.125rem]" strokeWidth={1.75} />
+            <Avatar nome={nome} foto={foto} />
+            <span className={`min-w-0 flex-1 ${r ? "lg:sr-only" : ""}`}>
+              <span className="block truncate text-sm font-semibold text-tinta">{nome}</span>
+              <span className="block text-xs text-grafite">{ROTULO_PAPEL[papel]}</span>
+            </span>
           </Link>
           <form action="/auth/sair" method="post">
             <button

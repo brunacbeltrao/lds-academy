@@ -34,6 +34,8 @@
 
 - **Regularização:** aba da diretoria (conselho em leitura) com os documentos da liga em PDF, por categoria. Os arquivos ficam no Storage, em bucket privado próprio, fora do alcance dos ligantes.
 
+- **Links do Drive:** biblioteca, acervo de ciclos e competições apontam para a pasta "(cópia lds base)" no Drive da diretoria. Para os membros abrirem, a pasta precisa estar compartilhada com eles (ou com quem tiver o link).
+
 ## Em aberto
 
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.

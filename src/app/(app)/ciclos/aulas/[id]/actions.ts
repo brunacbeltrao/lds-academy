@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { exigirDiretoria } from "@/lib/membro";
+import { exigirDiretoria, getMembroAtual } from "@/lib/membro";
 import { createClient } from "@/lib/supabase/server";
 
 export type Resultado = { ok: boolean; mensagem: string } | null;
@@ -86,4 +86,22 @@ export async function apagarMaterial(formData: FormData): Promise<void> {
   if (error) return;
   await supabase.storage.from("materiais").remove([material.arquivo]);
   atualizar(material.aula_id);
+}
+
+/** O membro justifica a falta (antes ou depois da aula). A diretoria decide na Gestão. */
+export async function justificarFalta(_: Resultado, formData: FormData): Promise<Resultado> {
+  const membro = await getMembroAtual();
+  if (membro.papel === "conselheiro") return { ok: false, mensagem: "O conselho acompanha em modo leitura." };
+  const aulaId = String(formData.get("aulaId") ?? "");
+  const motivo = texto(formData, "motivo", 2000);
+  if (!UUID.test(aulaId)) return { ok: false, mensagem: "Aula inválida." };
+  if (!motivo || motivo.length < 10) return { ok: false, mensagem: "Explique o motivo em pelo menos uma frase." };
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("justificativas").insert({ aula_id: aulaId, membro_id: membro.id, motivo });
+  if (error) return { ok: false, mensagem: "Não foi possível enviar a justificativa. Tente de novo." };
+  revalidatePath(`/ciclos/aulas/${aulaId}`);
+  revalidatePath("/trajetoria");
+  revalidatePath("/");
+  return { ok: true, mensagem: "Justificativa enviada. A diretoria acadêmica vai analisar." };
 }

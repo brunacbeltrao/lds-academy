@@ -13,6 +13,25 @@ export type Producao = {
   fim_revisao: string | null;
   publicacao: string;
   status: StatusProducao;
+  link_publicado: string | null;
+  observacoes: string | null;
+  participantes: { id: string; nome: string; papel: "autor" | "revisor" }[];
+  entregas: Entrega[];
+};
+
+export type Entrega = {
+  id: string;
+  etapa: "rascunho" | "revisao" | "final";
+  link: string;
+  nota: string | null;
+  criado_em: string;
+  autor: { id: string; nome: string } | null;
+};
+
+export const ROTULO_ETAPA: Record<Entrega["etapa"], string> = {
+  rascunho: "Rascunho",
+  revisao: "Parecer da revisão",
+  final: "Versão final",
 };
 
 export const ROTULO_STATUS: Record<StatusProducao, string> = {
