@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CartaoEncontro } from "@/components/cartao-encontro";
-import { Abas, abaAtual, CabecalhoDaPagina, Cartao, DestinoDoCartao, Grade, Pagina, Vazio, type Aba } from "@/components/ui";
-import { getCicloAtual, getCiclos, jaPassou, proximoEncontro } from "@/lib/ciclos";
+import { AcervoPorTema } from "@/components/acervo";
+import { Abas, abaAtual, CabecalhoDaPagina, Grade, Pagina, Vazio, type Aba } from "@/components/ui";
+import { acervoPorTema, getCicloAtual, getCiclos, jaPassou, proximoEncontro } from "@/lib/ciclos";
 
 export const metadata: Metadata = { title: "Ciclos e aulas" };
 
@@ -37,7 +38,7 @@ export default async function CiclosPage({ searchParams }: PageProps<"/ciclos">)
                 {c.descricao ? <p className="prosa mt-2 text-grafite">{c.descricao}</p> : null}
                 <p className="mt-4 text-[0.9375rem] text-tinta">
                   {c.aulas > 0 ? `${c.aulas} aulas já cadastradas.` : "O cronograma ainda não foi publicado."}{" "}
-                  <Link href="/ciclos?aba=acervo" className="link">
+                  <Link href="/ciclos?aba=acervo#tema-fusoes-e-aquisicoes" className="link">
                     Estudar pelos ciclos anteriores de M&A
                   </Link>
                 </p>
@@ -49,20 +50,10 @@ export default async function CiclosPage({ searchParams }: PageProps<"/ciclos">)
 
       {ativa === "acervo" ? (
         <>
-          <p className="prosa mb-5 text-grafite">
-            Slides, leituras e materiais de cada aula, organizados por semestre. Os arquivos ficam no Drive da liga.
+          <p className="prosa mb-2 text-grafite">
+            Os semestres anteriores, por tema: o cronograma com as datas de cada encontro e os materiais das aulas, que ficam no Drive da liga.
           </p>
-          <Grade>
-            {encerrados.map((c) => (
-              <Cartao key={c.id} href={`/ciclos/acervo/${c.codigo}`}>
-                <p className="numeral text-sm font-semibold text-vinho">{c.codigo.replace("-", " e ")}</p>
-                <h2 className="h3 mt-1">{c.titulo}</h2>
-                {c.descricao ? <p className="mt-1.5 line-clamp-3 text-[0.9375rem] text-grafite">{c.descricao}</p> : null}
-                <p className="mt-3 text-sm text-grafite">{c.aulas} {c.aulas === 1 ? "aula" : "aulas"}</p>
-                <DestinoDoCartao rotulo="Ver as aulas" />
-              </Cartao>
-            ))}
-          </Grade>
+          <AcervoPorTema grupos={acervoPorTema(encerrados)} />
         </>
       ) : null}
     </Pagina>

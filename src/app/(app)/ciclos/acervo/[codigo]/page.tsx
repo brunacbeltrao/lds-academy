@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
-import { CabecalhoDaPagina, Cartao, DestinoDoCartao, Grade, Pagina, Vazio } from "@/components/ui";
-import { getCiclo, rotuloAula } from "@/lib/ciclos";
-import { curta } from "@/lib/datas";
+import { CronogramaDoAcervo } from "@/components/acervo";
+import { CabecalhoDaPagina, Cartao, DestinoDoCartao, Grade, Pagina, Secao, Vazio } from "@/components/ui";
+import { getCiclo, periodoDoCiclo, rotuloAula, rotuloDoCiclo } from "@/lib/ciclos";
 
 export const metadata: Metadata = { title: "Acervo" };
 
@@ -12,7 +12,9 @@ export default async function CicloDoAcervoPage({ params }: PageProps<"/ciclos/a
   const { codigo } = await params;
   const dados = await getCiclo(decodeURIComponent(codigo));
   if (!dados) notFound();
-  const { ciclo, aulas } = dados;
+  const { ciclo, cronograma, semData } = dados;
+  const periodo = periodoDoCiclo(ciclo.inicio, ciclo.fim);
+  const aulasNoCronograma = cronograma.filter((e) => e.tipo === "aula").length;
 
   return (
     <Pagina larga>
@@ -21,7 +23,12 @@ export default async function CicloDoAcervoPage({ params }: PageProps<"/ciclos/a
         Acervo
       </Link>
       <CabecalhoDaPagina
-        contexto={`Ciclo ${ciclo.codigo.replace("-", " e ")}`}
+        contexto={
+          <>
+            Ciclo {rotuloDoCiclo(ciclo.codigo)}
+            {periodo ? <span className="first-letter:uppercase"> · {periodo}</span> : null}
+          </>
+        }
         titulo={ciclo.titulo}
         descricao={ciclo.descricao ?? undefined}
         acoes={
@@ -33,26 +40,43 @@ export default async function CicloDoAcervoPage({ params }: PageProps<"/ciclos/a
           ) : null
         }
       />
-      {aulas.length === 0 ? (
-        <Vazio titulo="Sem aulas cadastradas" />
-      ) : (
-        <Grade>
-          {aulas.map((a) => {
-            const href = a.data ? `/ciclos/aulas/${a.id}` : (a.pasta_url ?? undefined);
-            return (
-              <Cartao key={a.id} href={href} externo={!a.data && Boolean(a.pasta_url)} className="min-h-36">
-                <p className="text-sm font-semibold text-vinho">
-                  {rotuloAula(a.numero)}
-                  {a.data ? <span className="numeral font-normal text-grafite"> · {curta(a.data)}</span> : null}
-                </p>
-                <h2 className="h3 mt-1">{a.titulo}</h2>
+
+      {cronograma.length > 0 ? (
+        <Secao
+          id="cronograma"
+          titulo="Cronograma"
+          descricao={`${aulasNoCronograma} ${aulasNoCronograma === 1 ? "aula" : "aulas"} e ${cronograma.length - aulasNoCronograma} ${
+            cronograma.length - aulasNoCronograma === 1 ? "evento" : "eventos"
+          }, conforme o calendário oficial do semestre.`}
+        >
+          <CronogramaDoAcervo cronograma={cronograma} />
+        </Secao>
+      ) : null}
+
+      {semData.length > 0 ? (
+        <Secao
+          id="aulas"
+          titulo={cronograma.length > 0 ? "Outras aulas no Drive" : "Aulas"}
+          descricao={
+            cronograma.length > 0
+              ? "Aulas com material no Drive que não aparecem no calendário do semestre."
+              : "O calendário deste semestre ainda não foi registrado. As aulas abaixo levam aos materiais no Drive."
+          }
+        >
+          <Grade>
+            {semData.map((a) => (
+              <Cartao key={a.id} href={a.pasta_url ?? undefined} externo={Boolean(a.pasta_url)} className="min-h-32">
+                <p className="text-sm font-semibold text-vinho">{rotuloAula(a.numero)}</p>
+                <h3 className="h3 mt-1">{a.titulo}</h3>
                 {a.professor ? <p className="mt-1 text-[0.9375rem] text-grafite">com {a.professor}</p> : null}
-                {href ? <DestinoDoCartao rotulo={a.data ? "Abrir a aula" : "Materiais no Drive"} externo={!a.data} /> : null}
+                {a.pasta_url ? <DestinoDoCartao rotulo="Materiais no Drive" externo /> : null}
               </Cartao>
-            );
-          })}
-        </Grade>
-      )}
+            ))}
+          </Grade>
+        </Secao>
+      ) : null}
+
+      {cronograma.length === 0 && semData.length === 0 ? <Vazio titulo="Sem aulas cadastradas" /> : null}
     </Pagina>
   );
 }

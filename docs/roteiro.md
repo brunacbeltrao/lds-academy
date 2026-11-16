@@ -22,6 +22,7 @@
 - Login por e-mail e senha; e-mails de acesso em `membros_acesso`, visíveis só à diretoria e ao conselho.
 - Plataforma completa (novembro de 2026): Início com avisos, pendências, frequência e prazos; Ciclos com abas (ciclo atual em cartões, próximo ciclo e acervo de 2021.2 a 2026.1 com as pastas do Drive); Calendário mensal; Biblioteca com busca, filtros e favoritos; Competições com equipes; Produção com páginas por publicação, autores, revisores e entregas; Tira-dúvidas com validação; Minha trajetória; Gestão com membros, frequência, justificativas, avisos e fila.
 - Conteúdo do Drive "(cópia lds base)" carregado no banco: 42 obras e leis na Biblioteca (a partir do acervo original da liga), 6 materiais de eventos, 9 ciclos anteriores com 74 aulas e 3 competições.
+- Acervo organizado por tema e com as datas dos calendários de 2024.1, 2024.2 e 2025.1-2.
 
 ## Próximas etapas
 
