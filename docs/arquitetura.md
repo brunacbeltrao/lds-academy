@@ -27,11 +27,13 @@ docs/                       decisões de produto
 
 ## Login por lista de membros
 
-1. A diretoria cadastra a pessoa em `membros` (e-mail em minúsculas, papel, ativo).
-2. A pessoa informa o e-mail em `/login` e recebe um link de acesso.
-3. No primeiro acesso, um gatilho em `auth.users` confere a lista: se o e-mail não está ativo em `membros`, o cadastro é recusado; se está, a conta é vinculada à linha do membro.
-4. `/auth/callback` troca o código do link pela sessão, guardada em cookies.
-5. Para tirar o acesso de alguém, basta marcar `ativo = false`: as políticas deixam de valer para a pessoa e o app encerra a sessão no acesso seguinte.
+1. A diretoria cadastra a pessoa em `membros` (nome, papel, ativo) e, quando tiver, o e-mail em minúsculas. Sem e-mail, o nome fica na lista mas ninguém cria conta por ele. A carga de nomes é feita direto no banco, nunca em migração.
+2. No primeiro acesso, a pessoa abre a aba Primeiro acesso em `/login`, informa o e-mail e cria a senha.
+3. Um gatilho em `auth.users` confere a lista: se o e-mail não está ativo em `membros`, o cadastro é recusado; se está, a conta é vinculada à linha do membro (e o papel vem dela).
+4. Nos acessos seguintes, e-mail e senha. Trocar a senha: `/conta/senha` (ícone de chave no menu).
+5. Esqueci a senha: o Supabase envia um link; `/auth/callback?proximo=/conta/senha` troca o código pela sessão e leva à tela de nova senha.
+6. Para tirar o acesso de alguém, basta marcar `ativo = false`: as políticas deixam de valer para a pessoa e o app encerra a sessão no acesso seguinte.
+7. No Supabase (Authentication → Sign In / Providers → Email), "Confirm email" fica desligado: a lista de membros já é a verificação, e assim o cadastro não depende do envio de e-mail.
 
 ## Anexos das aulas
 

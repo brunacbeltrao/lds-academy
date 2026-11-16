@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Entrar" };
 
 const ERROS: Record<string, string> = {
   inativo: "Seu acesso não está ativo na lista de membros. Fale com a diretoria.",
-  link: "O link expirou ou já foi usado. Peça um novo abaixo.",
+  link: "O link expirou ou já foi usado. Peça um novo em Esqueci a senha.",
 };
 
 export default async function LoginPage({ searchParams }: PageProps<"/login">) {
@@ -33,9 +33,9 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
 
       <section className="flex items-start justify-center border-t border-linha bg-superficie px-6 py-10 sm:px-12 lg:items-center lg:border-t-0 lg:border-l">
         <div className="surgir w-full max-w-sm">
-          <h2 className="h2">Entrar</h2>
+          <h2 className="h2">Acesso</h2>
           <p className="mt-2 text-grafite">
-            O acesso é restrito aos membros. Enviamos um link de acesso para o seu e-mail, sem senha.
+            Restrito aos membros da liga.
           </p>
           <div className="mt-7">
             <FormularioLogin erroInicial={mensagem} />

@@ -9,6 +9,7 @@ import {
   FileCheck,
   GraduationCap,
   House,
+  KeyRound,
   Landmark,
   Library,
   LogOut,
@@ -267,8 +268,8 @@ function Menu({
         </div>
 
         <div
-          className={`mt-auto flex shrink-0 items-center gap-3 border-t border-linha py-4 ${
-            r ? "px-4 lg:flex-col lg:gap-2 lg:px-0" : "px-4"
+          className={`mt-auto flex shrink-0 items-center border-t border-linha py-4 ${
+            r ? "gap-2 px-4 lg:flex-col lg:gap-1 lg:px-0" : "gap-2 px-4"
           }`}
         >
           <span
@@ -278,10 +279,19 @@ function Menu({
           >
             {iniciais(nome)}
           </span>
-          <div className={`min-w-0 flex-1 ${r ? "lg:sr-only" : ""}`}>
+          <div className={`ml-1 min-w-0 flex-1 ${r ? "lg:sr-only" : ""}`}>
             <p className="truncate text-sm font-semibold text-tinta">{nome}</p>
             <p className="text-xs text-grafite">{ROTULO_PAPEL[papel]}</p>
           </div>
+          <Link
+            href="/conta/senha"
+            onClick={() => setAberto(false)}
+            aria-label="Trocar senha"
+            title="Trocar senha"
+            className="flex size-10 shrink-0 items-center justify-center rounded-lg text-grafite transition-colors hover:bg-sutil hover:text-tinta"
+          >
+            <KeyRound aria-hidden="true" className="size-[1.125rem]" strokeWidth={1.75} />
+          </Link>
           <form action="/auth/sair" method="post">
             <button
               type="submit"

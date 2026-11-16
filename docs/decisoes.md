@@ -15,7 +15,7 @@
 ## Decidido na Etapa 1 (fundação)
 
 - **Stack:** Next.js na Vercel e Supabase (Postgres, Auth, RLS, pgvector). Tudo na nuvem.
-- **Login:** link de acesso por e-mail, sem senha, restrito à lista de membros. Quem não está na lista não consegue criar conta: o banco recusa.
+- **Login:** e-mail e senha (novembro de 2026; substituiu o link por e-mail, que esbarrava no limite de envios). Só cria conta quem tem e-mail na lista de membros: a diretoria informa o e-mail de cada um, e o banco recusa os demais. Os nomes podem entrar na lista antes dos e-mails. O e-mail só é usado em Esqueci a senha.
 - **Identidade visual:** começou com o padrão de novembro de 2026 do design system (Playfair Display e Raleway) e foi substituída pela identidade própria para tela descrita mais abaixo.
 - **Repositório:** sem PDFs, sem segredos e sem dados pessoais.
 - **Supabase:** projeto `lds-academy`, região de São Paulo (`sa-east-1`), na organização pessoal da Bruna.
@@ -39,7 +39,7 @@
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.
 2. **Aceitar justificativas dá ao diretor acadêmico uma permissão própria: isso vira um nível?** Hoje qualquer membro da diretoria pode decidir.
 3. **Em quanto tempo a diretoria valida uma resposta antes de a dúvida ficar parada?**
-4. **Envio de e-mail do login.** O serviço de e-mail padrão do Supabase serve só para testes (poucos envios por hora). Antes de abrir aos ligantes, definir um serviço de envio próprio ou outro método de login.
+4. **Envio de e-mail.** Com o login por senha, o e-mail só sai em Esqueci a senha. O serviço padrão do Supabase manda poucos por hora; se os pedidos de nova senha ficarem frequentes, configurar um serviço de envio próprio (SMTP).
 5. **Proteção de acesso da Vercel.** O projeto está com a "Vercel Authentication" ligada em todos os endereços `vercel.app`: só entra quem está logado na conta da Vercel. Serve para a fase de construção, mas impede o acesso dos ligantes. Antes de abrir, definir entre um domínio próprio da liga ou liberar o endereço de produção.
 6. **Faltas: avisos.** Definir o que a plataforma faz quando o membro se aproxima das três faltas sem justificativa (aviso ao membro, alerta à diretoria).
 7. **Direitos autorais dos anexos.** Os PDFs de bibliografia ficam restritos aos membros, mas trechos e livros inteiros têm regras diferentes. Definir o que pode ser anexado.
