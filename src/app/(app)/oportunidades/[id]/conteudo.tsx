@@ -46,7 +46,7 @@ export function DetalheDaOportunidade({
         Oportunidades
       </Link>
 
-      <div className={`mt-4 grid gap-8 ${cartaz ? "lg:grid-cols-[minmax(0,1fr)_22rem]" : ""}`}>
+      <div className={`mt-4 grid grid-cols-1 gap-8 ${cartaz ? "lg:grid-cols-[minmax(0,1fr)_22rem]" : ""}`}>
         <div className="min-w-0">
           <CabecalhoDaPagina titulo={o.titulo} descricao={o.organizacao ?? undefined}>
             <div className="mt-3 flex flex-wrap gap-1.5">

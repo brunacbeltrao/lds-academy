@@ -110,7 +110,7 @@ export default async function GestaoPage({ searchParams }: PageProps<"/gestao">)
           {diretoria ? (
             <div className="mt-6">
               <Recolhivel titulo="Adicionar membro">
-                <Formulario acao={adicionarMembro} resetar className="grid gap-4 sm:grid-cols-2">
+                <Formulario acao={adicionarMembro} resetar className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <Campo nome="nome" rotulo="Nome completo" obrigatorio maxLength={200} className="sm:col-span-2" />
                   <Campo nome="email" rotulo="E-mail" tipo="email" ajuda="É com este e-mail que a pessoa cria a conta." />
                   <Escolha nome="papel" rotulo="Papel" opcoes={Object.entries(ROTULO_PAPEL).map(([valor, rotulo]) => ({ valor, rotulo }))} />
@@ -123,7 +123,7 @@ export default async function GestaoPage({ searchParams }: PageProps<"/gestao">)
       ) : null}
 
       {ativa === "frequencia" ? (
-        <div className="grid gap-6 lg:grid-cols-[1fr_22rem]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_22rem]">
           <section aria-labelledby="registro">
             <h2 id="registro" className="h3 mb-3">
               Registro de presença
@@ -258,7 +258,7 @@ export default async function GestaoPage({ searchParams }: PageProps<"/gestao">)
       ) : null}
 
       {ativa === "avisos" ? (
-        <div className="grid gap-6 lg:grid-cols-[1fr_24rem]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_24rem]">
           <section>
             <h2 className="h3 mb-3">Publicados</h2>
             {avisos.length === 0 ? (
@@ -318,7 +318,7 @@ export default async function GestaoPage({ searchParams }: PageProps<"/gestao">)
       ) : null}
 
       {ativa === "fila" ? (
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <section>
             <h2 className="h3 mb-3">Respostas para validar</h2>
             {respostasPendentes.length === 0 ? (
@@ -384,7 +384,7 @@ export default async function GestaoPage({ searchParams }: PageProps<"/gestao">)
 
 function LinhaDeMembro({ membro: m, editavel, faltas }: { membro: MembroDaLista; editavel: boolean; faltas: number }) {
   const resumo = (
-    <div className="grid gap-1 md:grid-cols-[1.6fr_1.4fr_0.8fr_0.8fr] md:items-center md:gap-4">
+    <div className="grid grid-cols-1 gap-1 md:grid-cols-[1.6fr_1.4fr_0.8fr_0.8fr] md:items-center md:gap-4">
       <span className={`font-medium ${m.ativo ? "text-tinta" : "text-grafite line-through"}`}>{m.nome}</span>
       <span className="truncate text-sm text-grafite">{m.email ?? <span className="text-vinho">sem e-mail</span>}</span>
       <span className="text-sm">
@@ -402,7 +402,7 @@ function LinhaDeMembro({ membro: m, editavel, faltas }: { membro: MembroDaLista;
     <li>
       <details className="group">
         <summary className="cursor-pointer list-none px-4 py-3 hover:bg-sutil/60 [&::-webkit-details-marker]:hidden">{resumo}</summary>
-        <Formulario acao={salvarMembro} className="grid gap-4 border-t border-linha bg-sutil/50 px-4 py-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Formulario acao={salvarMembro} className="grid grid-cols-1 gap-4 border-t border-linha bg-sutil/50 px-4 py-4 sm:grid-cols-2 lg:grid-cols-4">
           <input type="hidden" name="id" value={m.id} />
           <Campo prefixo={m.id} nome="nome" rotulo="Nome" obrigatorio padrao={m.nome} maxLength={200} />
           <Campo prefixo={m.id} nome="email" rotulo="E-mail de acesso" tipo="email" padrao={m.email ?? ""} />

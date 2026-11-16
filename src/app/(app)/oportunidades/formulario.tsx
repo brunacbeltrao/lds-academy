@@ -86,7 +86,7 @@ export function FormularioDaOportunidade({ oportunidade }: { oportunidade?: Opor
   }
 
   return (
-    <form ref={formulario} onSubmit={enviar} className="grid gap-4 sm:grid-cols-2">
+    <form ref={formulario} onSubmit={enviar} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <Escolha
         nome="tipo"
         rotulo="Tipo"

@@ -75,7 +75,7 @@ export default async function ALigaPage({ searchParams }: PageProps<"/a-liga">) 
 
       {ativa === "cargos" ? (
         <Bloco titulo="Cargos da liga">
-          <dl className="grid gap-3 sm:grid-cols-3">
+          <dl className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             {CARGOS.map(([cargo, descricao]) => (
               <div key={cargo} className="rounded-xl bg-sutil p-4">
                 <dt className="font-semibold text-tinta">{cargo}</dt>
@@ -178,7 +178,7 @@ async function EventosRealizados() {
   return (
     <div className="mt-8">
       <h3 className="h3 mb-3">Eventos já realizados</h3>
-      <ul className="grid gap-2 sm:grid-cols-2">
+      <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         {eventos.map((e) => (
           <li key={e.id}>
             <a

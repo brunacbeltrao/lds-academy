@@ -14,7 +14,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   const mensagem = typeof erro === "string" ? ERROS[erro] : undefined;
 
   return (
-    <main className="grid min-h-screen lg:grid-cols-[1.1fr_1fr]">
+    <main className="grid grid-cols-1 min-h-screen lg:grid-cols-[1.1fr_1fr]">
       <section className="entrada flex flex-col justify-between gap-10 px-6 pt-8 pb-10 sm:px-12 sm:pt-12 lg:py-14">
         <Image src="/marca/lockup-vinho.png" alt="LDS·FDR" width={173} height={64} priority className="h-12 w-auto self-start sm:h-14" />
         <div className="max-w-lg">

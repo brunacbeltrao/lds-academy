@@ -159,7 +159,7 @@ export default async function PublicacaoPage({ params }: PageProps<"/producao/[i
             Enviar entrega
           </h2>
           <p className="mt-1 text-[0.9375rem] text-grafite">Cole o link do Canva (cópia do modelo) ou do Drive. Entrega até segunda, às 18h.</p>
-          <Formulario acao={enviarEntrega} resetar className="mt-4 grid gap-4 sm:grid-cols-[12rem_1fr]">
+          <Formulario acao={enviarEntrega} resetar className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-[12rem_1fr]">
             <input type="hidden" name="producao_id" value={p.id} />
             <Escolha
               nome="etapa"
@@ -181,7 +181,7 @@ export default async function PublicacaoPage({ params }: PageProps<"/producao/[i
 
       {diretoria ? (
         <Recolhivel titulo="Editar publicação (diretoria)">
-          <Formulario acao={salvarProducao} className="grid gap-4 sm:grid-cols-2">
+          <Formulario acao={salvarProducao} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <input type="hidden" name="producao_id" value={p.id} />
             <Campo nome="tema" rotulo="Tema" padrao={p.tema ?? ""} maxLength={300} className="sm:col-span-2" />
             <Escolha

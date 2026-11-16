@@ -90,7 +90,9 @@ export function abaAtual(valor: string | string[] | undefined, itens: Aba[]): st
 
 /** Cartões lado a lado. */
 export function Grade({ children, colunas = 3 }: { children: ReactNode; colunas?: 2 | 3 | 4 }) {
-  const cols = { 2: "sm:grid-cols-2", 3: "sm:grid-cols-2 lg:grid-cols-3", 4: "grid-cols-2 lg:grid-cols-4" }[colunas];
+  // No celular, uma coluna com minmax(0, 1fr): sem isso, um texto cortado com reticências
+  // estica a coluna até o tamanho da frase inteira e a página passa da largura da tela.
+  const cols = { 2: "grid-cols-1 sm:grid-cols-2", 3: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3", 4: "grid-cols-2 lg:grid-cols-4" }[colunas];
   return <div className={`grid gap-3 ${cols}`}>{children}</div>;
 }
 

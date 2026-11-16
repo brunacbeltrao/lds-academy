@@ -171,7 +171,7 @@ export default async function BibliotecaPage({ searchParams }: PageProps<"/bibli
       {diretoria ? (
         <div className="mt-8">
           <Recolhivel titulo="Adicionar à biblioteca">
-            <Formulario acao={adicionarItem} resetar className="grid gap-4 sm:grid-cols-2">
+            <Formulario acao={adicionarItem} resetar className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Campo nome="titulo" rotulo="Título" obrigatorio maxLength={300} className="sm:col-span-2" />
               <Campo nome="url" rotulo="Link" tipo="url" obrigatorio placeholder="https://drive.google.com/..." className="sm:col-span-2" ajuda="Link do Drive (com acesso para os membros) ou de fonte oficial." />
               <Campo nome="autor" rotulo="Autor" maxLength={200} />

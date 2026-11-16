@@ -36,7 +36,7 @@ export default async function TiraDuvidasPage({ searchParams }: PageProps<"/tira
           <Formulario acao={perguntar} className="flex flex-col gap-4">
             <Campo nome="titulo" rotulo="Sua pergunta, em uma frase" obrigatorio maxLength={200} placeholder="Ex.: O acordo de acionistas vincula os administradores?" />
             <AreaDeTexto nome="corpo" rotulo="Contexto" obrigatorio linhas={6} maxLength={5000} ajuda="O que você já leu, onde travou, o artigo de lei ou o caso em questão." />
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Escolha
                 nome="visibilidade"
                 rotulo="Quem vê"

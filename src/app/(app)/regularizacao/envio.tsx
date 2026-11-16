@@ -81,7 +81,7 @@ export function EnvioDeDocumento() {
         <input id="titulo" name="titulo" maxLength={200} placeholder="Ex.: Edital do processo eleitoral 2026.2" className="campo" />
         <p className="mt-1.5 text-sm text-grafite">Em branco, usa o nome do arquivo.</p>
       </div>
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="categoria" className="rotulo-campo">
             Categoria

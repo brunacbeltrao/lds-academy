@@ -92,9 +92,9 @@ export function EditorDoCiclo({
         )}
 
         {editavel ? (
-          <div className="mt-6 grid items-start gap-3 lg:grid-cols-[1fr_20rem]">
+          <div className="mt-6 grid grid-cols-1 items-start gap-3 lg:grid-cols-[1fr_20rem]">
             <Recolhivel titulo="Adicionar encontro">
-              <Formulario acao={adicionarEncontro} resetar className="grid gap-4 sm:grid-cols-2">
+              <Formulario acao={adicionarEncontro} resetar className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <input type="hidden" name="ciclo_id" value={ciclo.id} />
                 <Escolha
                   nome="tipo"
@@ -131,7 +131,7 @@ export function EditorDoCiclo({
       {editavel ? (
         <>
           <Secao id="publicacao" titulo="Publicação">
-            <div className="grid gap-3 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
               <div className="cartao p-4 sm:p-5">
                 <h3 className="font-semibold text-tinta">{ciclo.cronograma_publicado ? "Recolher o cronograma" : "Publicar o cronograma"}</h3>
                 <p className="mt-1 text-[0.9375rem] text-grafite">
@@ -175,7 +175,7 @@ export function EditorDoCiclo({
           </Secao>
 
           <Secao id="dados" titulo="Dados do ciclo">
-            <Formulario acao={salvarCiclo} className="grid gap-4 sm:grid-cols-2">
+            <Formulario acao={salvarCiclo} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <input type="hidden" name="ciclo_id" value={ciclo.id} />
               <Campo nome="titulo" rotulo="Tema do ciclo" obrigatorio maxLength={200} padrao={ciclo.titulo} prefixo="ciclo" className="sm:col-span-2" />
               <Campo nome="inicio" rotulo="Primeiro encontro" tipo="date" padrao={ciclo.inicio ?? undefined} prefixo="ciclo" />
@@ -243,7 +243,7 @@ function LinhaDoCronograma({ encontro: e, professores, editavel }: { encontro: E
             <ChevronDown aria-hidden="true" className="size-4 transition-transform duration-200 group-open:rotate-180" />
           </summary>
           <div className="border-t border-linha bg-sutil px-4 py-5 sm:px-5">
-            <Formulario acao={salvarEncontro} className="grid gap-4 sm:grid-cols-2">
+            <Formulario acao={salvarEncontro} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <input type="hidden" name="evento_id" value={e.id} />
               <Campo nome="titulo" rotulo={aula ? "Tema da aula" : "Nome do evento"} obrigatorio maxLength={300} padrao={e.titulo} prefixo={prefixo} className="sm:col-span-2" />
               <Campo nome="dia" rotulo="Data" tipo="date" obrigatorio padrao={dia(e.inicio)} prefixo={prefixo} />
