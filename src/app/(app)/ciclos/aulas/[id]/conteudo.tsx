@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowLeft, ArrowUpRight, CalendarDays, FileText, MapPin } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CalendarDays, Download, FileText, MapPin } from "lucide-react";
 import { AreaDeTexto, BotaoEnviar, Formulario } from "@/components/formulario";
 import { Lista, Pagina, Secao } from "@/components/ui";
 import { formatarDataLonga, formatarHora, formatarTamanho, rotuloAula, type Aula } from "@/lib/ciclos";
@@ -139,11 +139,19 @@ export function ConteudoDaAula({ aula, diretoria, minha }: { aula: Aula; diretor
                   <FileText className="size-5" strokeWidth={1.75} />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <a href={`/materiais/${m.id}`} className="block font-medium break-words text-tinta underline-offset-4 hover:text-vinho hover:underline">
+                  <Link href={`/materiais/${m.id}/ler`} className="block font-medium break-words text-tinta underline-offset-4 hover:text-vinho hover:underline">
                     {m.titulo}
-                  </a>
+                  </Link>
                   <p className="text-sm text-grafite">PDF{m.tamanho ? ` · ${formatarTamanho(m.tamanho)}` : ""}</p>
                 </div>
+                <a
+                  href={`/materiais/${m.id}`}
+                  aria-label={`Baixar ${m.titulo}`}
+                  title="Baixar"
+                  className="flex size-10 shrink-0 items-center justify-center rounded-lg text-grafite transition-colors hover:bg-sutil hover:text-vinho"
+                >
+                  <Download aria-hidden="true" className="size-[1.125rem]" strokeWidth={1.75} />
+                </a>
                 {diretoria ? (
                   <form action={apagarMaterial}>
                     <input type="hidden" name="materialId" value={m.id} />

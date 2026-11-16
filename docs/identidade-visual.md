@@ -66,8 +66,9 @@ Datas são o objeto central da liga: numeral em peso 700, algarismos tabulares (
 ## Marca
 
 - Lockups em `public/marca/`: `lockup-vinho.png` (em uso, sobre fundo claro) e `lockup-branco.png`.
-- Não existe versão vetorial nem brasão isolado. **Nunca** desenhar um brasão aproximado, recolorir, contornar ou sombrear o existente. Por isso o ícone da aba é um quadrado vinho liso.
-- Pendência com a liga: obter o SVG do lockup e o brasão solto.
+- Ícones (novembro de 2026, arquivos enviados pela diretoria): o brasão vinho com fundo transparente é o ícone da aba do navegador (`src/app/icon.png`); a arte de fundo vinho com o lockup branco é o ícone do app no iPhone (`src/app/apple-icon.png`) e no Android (`public/icones/`).
+- **Nunca** desenhar um brasão aproximado, recolorir, contornar ou sombrear o existente. Os ícones só são recortados e reduzidos a partir dos arquivos originais.
+- Pendência com a liga: obter o SVG do lockup.
 
 ## Texto
 

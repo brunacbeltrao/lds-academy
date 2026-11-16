@@ -2,6 +2,8 @@
 
 Três papéis: **ligante** (associado acadêmico), **diretoria** (associado diretor) e **conselheiro** (associado conselheiro). A diretoria não tem níveis por enquanto (ver `decisoes.md`).
 
+**Acesso de diretoria** (`membros.acesso_diretoria`): dá a um ligante as permissões da diretoria sem mudar o cargo exibido, para quem ajuda a manter a plataforma. A diretoria liga e desliga em Gestão → Membros. No banco, `privado.is_diretoria()` aceita o cargo ou o acesso; no app, `getMembroAtual()` devolve `papel` (efetivo) e `cargo` (exibido).
+
 **Conselheiro:** lê tudo o que a diretoria lê, em todas as áreas e na Gestão, e não escreve nada: não pergunta, não responde, não justifica, não favorita e não gere. No banco, isso são as políticas `*_conselho_ler` e a função `privado.pode_participar()`, exigida em toda escrita de participação.
 
 | Área | Ligante | Diretoria |

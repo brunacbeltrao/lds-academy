@@ -1,4 +1,5 @@
-import { FileText } from "lucide-react";
+import Link from "next/link";
+import { Download, FileText } from "lucide-react";
 import { CabecalhoDaPagina, Pagina, Recolhivel } from "@/components/ui";
 import { formatarTamanho } from "@/lib/ciclos";
 import { CATEGORIAS, formatarDataDoDocumento, type Documento } from "@/lib/documentos";
@@ -43,13 +44,21 @@ export function ConteudoDaRegularizacao({ documentos, diretoria }: { documentos:
                     <FileText className="size-5" strokeWidth={1.75} />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <a href={`/documentos/${d.id}`} className="block font-medium break-words text-tinta underline-offset-4 hover:text-vinho hover:underline">
+                    <Link href={`/documentos/${d.id}/ler`} className="block font-medium break-words text-tinta underline-offset-4 hover:text-vinho hover:underline">
                       {d.titulo}
-                    </a>
+                    </Link>
                     <p className="text-sm text-grafite">
                       {[formatarDataDoDocumento(d.data_documento), "PDF", formatarTamanho(d.tamanho), d.descricao].filter(Boolean).join(" · ")}
                     </p>
                   </div>
+                  <a
+                    href={`/documentos/${d.id}`}
+                    aria-label={`Baixar ${d.titulo}`}
+                    title="Baixar"
+                    className="flex size-10 shrink-0 items-center justify-center rounded-lg text-grafite transition-colors hover:bg-sutil hover:text-vinho"
+                  >
+                    <Download aria-hidden="true" className="size-[1.125rem]" strokeWidth={1.75} />
+                  </a>
                   {diretoria ? (
                     <form action={apagarDocumento}>
                       <input type="hidden" name="documentoId" value={d.id} />
