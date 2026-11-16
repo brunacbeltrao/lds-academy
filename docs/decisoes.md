@@ -35,6 +35,8 @@
 - **Regularização:** aba da diretoria (conselho em leitura) com os documentos da liga em PDF, por categoria. Os arquivos ficam no Storage, em bucket privado próprio, fora do alcance dos ligantes.
 
 - **Links do Drive:** biblioteca e acervo de ciclos apontam para o Drive original da liga (pasta "Grupo de Estudos", com a Biblioteca e os semestres, e a pasta do ciclo de M&A de 2025). Quando a pasta exata de uma aula não está visível na busca do Drive, o link leva à pasta do semestre. Os materiais de eventos e as competições ainda apontam para a cópia da diretoria, até a liga informar as pastas originais.
+- **Acervo por tema e com datas:** a aba Acervo agrupa os ciclos encerrados pelo tema (título do ciclo); temas com um só ciclo ficam em "Outros temas". Cada ciclo mostra o cronograma do calendário oficial, com as datas, e à parte as aulas do Drive que não aparecem no calendário. Datas registradas para 2024.1, 2024.2 e 2025.1-2 (migração `20261116001300_datas_do_acervo.sql`); os demais ciclos ainda não têm calendário.
+- **Justificativa de falta:** só para aulas do ciclo em curso (página, ação no servidor e RLS). Aulas de ciclos encerrados mostram a data, mas não a presença.
 
 ## Fluxo do mini-artigo (novembro de 2026)
 
@@ -62,3 +64,4 @@ Etapas: vaga aberta → tema → redação → rascunho → revisão → ajustes
 7. **Direitos autorais dos anexos.** Os PDFs de bibliografia ficam restritos aos membros, mas trechos e livros inteiros têm regras diferentes. Definir o que pode ser anexado.
 8. **Atraso de mais de 2 dias no rascunho: o artigo muda de data sozinho ou o diretor confirma?** Hoje o site sugere o próximo espaço livre (a primeira segunda-feira da grade quinzenal sem artigo) e qualquer membro da diretoria confirma ou escolhe outra data; sem confirmação, a data não muda.
 9. **Datas a confirmar.** A aula extra de Litígios Societários foi registrada em 06/11 (data deduzida das mensagens). A aula de Atos Constitutivos teve dois professores e só um foi identificado.
+10. **Calendários do acervo a confirmar.** (a) Datas que não caem numa quarta-feira, registradas como estão nos calendários: 30/07/2024 (Rinha, 2024.1), 19/11/2024 e 25/11/2024 (2024.2) e 22/07/2025 (2025.1-2). (b) 2025.1-2: o calendário repete "Aula 13 - Acordo de Sócios e Governança Corporativa" em 12/11/2025; a linha não foi registrada. A Aula 06 (Due Diligence) está no Drive mas não no calendário. (c) 2024.1: o calendário traz blocos de tema (Disputas de M&A, Fundos de Investimento etc.) que não batem com as aulas do Drive; o cronograma ficou sem ligação com as aulas. (d) 2024.2: a partir de 12/02/2025 o calendário diverge da numeração do Drive (a Aula 10 do Drive é Introdução ao M&A, que não aparece no calendário); as aulas sem correspondência ficaram só no cronograma.
