@@ -46,22 +46,25 @@ body {
   line-height: 1.6;
 }
 
-/* Títulos: Playfair Display em itálico, peso 500, caixa mista. */
-.titulo {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 500;
-  line-height: 1.15;
-  color: var(--lds-vinho);
-}
+/* Em @layer components para que utilitários (text-bege, text-3xl) possam sobrepor. */
+@layer components {
+  /* Títulos: Playfair Display em itálico, peso 500, caixa mista. */
+  .titulo {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--lds-vinho);
+  }
 
-/* Rótulos: Raleway 600, caixa alta rastreada. */
-.rotulo {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  /* Rótulos: Raleway 600, caixa alta rastreada. */
+  .rotulo {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
 }
 
 :focus-visible {
