@@ -1,6 +1,8 @@
 # Quem vê o quê
 
-Dois papéis: **ligante** e **diretoria**. A diretoria não tem níveis por enquanto (ver `decisoes.md`).
+Três papéis: **ligante** (associado acadêmico), **diretoria** (associado diretor) e **conselheiro** (associado conselheiro). A diretoria não tem níveis por enquanto (ver `decisoes.md`).
+
+**Conselheiro:** lê tudo o que a diretoria lê, em todas as áreas e na Gestão, e não escreve nada: não pergunta, não responde, não justifica, não favorita e não gere. No banco, isso são as políticas `*_conselho_ler` e a função `privado.pode_participar()`, exigida em toda escrita de participação.
 
 | Área | Ligante | Diretoria |
 | --- | --- | --- |
@@ -10,6 +12,7 @@ Dois papéis: **ligante** e **diretoria**. A diretoria não tem níveis por enqu
 | Biblioteca | Busca, lê (links do Drive) e favorita | Cadastra links do Drive e classifica |
 | Competições | Só quem está na equipe selecionada | Toda a diretoria acompanha; cria edições e monta equipes |
 | Tira-dúvidas | Pergunta (pública ou privada) e responde as públicas | Valida respostas, responde as privadas e modera |
+| A Liga | Lê | Lê |
 | Gestão | Sem acesso | Acesso total |
 
 ## Como isso está no banco (RLS)
@@ -35,5 +38,5 @@ Quem não está logado não lê nada. Quem está logado mas foi desativado na li
 
 - O proxy (`src/proxy.ts`) manda para `/login` quem não tem sessão.
 - `getMembroAtual()` confere, a cada requisição, se a sessão pertence a um membro ativo.
-- Páginas da diretoria chamam `exigirDiretoria()`.
-- O menu só mostra "Gestão" à diretoria, mas isso é conveniência, não segurança.
+- A Gestão chama `exigirGestao()` (diretoria e conselho). Toda ação que altera dados de gestão chama `exigirDiretoria()`.
+- O menu só mostra "Gestão" à diretoria e ao conselho, mas isso é conveniência, não segurança.

@@ -23,7 +23,7 @@ Leia `docs/`: é a fonte das decisões de produto.
 3. **Nenhum dado pessoal no repositório**: nomes e e-mails de membros vivem só no banco.
 4. **Toda tabela nasce com RLS ligado e políticas explícitas**, na mesma migração. Funções de apoio às políticas ficam no schema `privado`, fora da API. Depois de qualquer mudança de esquema, rode o verificador de segurança do Supabase (advisors) e zere os avisos.
 5. **Toda mudança de banco é uma migração** em `supabase/migrations/`, com o mesmo SQL aplicado no projeto. Não altere o banco sem gravar o arquivo.
-6. **Permissão se confere no servidor e no banco.** Esconder um item do menu não é controle de acesso: páginas da diretoria chamam `exigirDiretoria()` e a RLS repete a regra.
+6. **Permissão se confere no servidor e no banco.** Esconder um item do menu não é controle de acesso: a Gestão chama `exigirGestao()`, toda ação de escrita da gestão chama `exigirDiretoria()` e a RLS repete a regra. O conselheiro lê tudo e não escreve nada.
 7. **Interface em português do Brasil**, registro formal e impessoal, sem emoji. Títulos em caixa mista; rótulos em caixa alta. Código (nomes de tabelas, rotas, funções de domínio) também em português.
 8. **Identidade visual da liga**: use os tokens de `src/app/globals.css`. Cantos retos, filete de 1px, sem gradiente e sem sombra. Nunca redesenhar, recolorir ou aproximar o brasão.
 

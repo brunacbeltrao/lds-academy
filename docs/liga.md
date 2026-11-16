@@ -18,12 +18,12 @@ A Liga de Direito Societário e Mercado de Capitais da Faculdade de Direito do R
 | Associados diretores | Associados acadêmicos eleitos pela Assembleia Geral para os cargos da Diretoria |
 | Associados conselheiros | Ex-associados acadêmicos, a partir do 9º período, que por deliberação da Diretoria exercem papel consultor e supervisor |
 
-Na plataforma, "ligante" corresponde ao associado acadêmico e "diretoria" ao associado diretor. **O conselheiro ainda não tem papel na plataforma** (ver `decisoes.md`, em aberto).
+Na plataforma: "ligante" é o associado acadêmico, "diretoria" o associado diretor e "conselheiro" o associado conselheiro, que lê tudo em modo leitura.
 
 ## Grupo de Estudos
 
 - Reuniões às quartas-feiras, às 20h, nas salas da Faculdade de Direito do Recife.
-- Todos os membros devem comparecer e **justificar as faltas com antecedência**.
+- Todos os membros devem comparecer e justificar as faltas, de preferência com antecedência. A plataforma aceita justificativa antes ou depois da aula.
 - Máximo de **três faltas sem justificativa plausível**; ao atingir esse número, o membro é excluído do quadro da liga.
 - As aulas são conduzidas por professores designados pela Diretoria; aos membros cabe o estudo prévio do assunto.
 - O último encontro do semestre é a Rinha de Calouros, sobre caso definido pela Diretoria.

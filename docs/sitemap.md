@@ -2,7 +2,7 @@
 
 Entrada única: **LDS Academy**, com login por lista de membros. Fonte: quadro "LDS Academy: mapa do site" (novembro de 2026).
 
-## Menu principal (ligantes e diretoria)
+## Menu principal (todos os membros)
 
 | Área | Rota | Conteúdo previsto |
 | --- | --- | --- |
@@ -13,10 +13,13 @@ Entrada única: **LDS Academy**, com login por lista de membros. Fonte: quadro "
 | Competições | `/competicoes` | Sociecap, CMNA e outras · Edital, regras e prazos · Casos e peças de edições anteriores · Equipes: acesso só da equipe e da diretoria · Trilha de preparação e treinos |
 | Tira-dúvidas | `/tira-duvidas` | Feed público por ciclo e tema · Perguntar, em público ou privado · Respostas dos ligantes (nas públicas) · Rascunho da IA com base na biblioteca · Validação da diretoria antes de publicar |
 | Minha trajetória | `/trajetoria` | Presença, faltas e justificativas (limite de 3) · Leituras e aulas concluídas · Minhas perguntas e respostas · Minhas equipes de competição |
+| A Liga | `/a-liga` | O que é a LDS·FDR · Cargos · Regras do Grupo de Estudos · Eventos · Código de Conduta |
 
-## Gestão (só diretoria)
+A aba "A Liga" não estava no mapa original; foi acrescentada em novembro de 2026.
 
-Rota `/gestao`. Não aparece no menu do ligante e é bloqueada no servidor.
+## Gestão (diretoria e conselho)
+
+Rota `/gestao`. Não aparece no menu do ligante e é bloqueada no servidor. A diretoria gere; o conselho só lê.
 
 - Membros e papéis (lista oficial)
 - Frequência e justificativas (decide o acadêmico)

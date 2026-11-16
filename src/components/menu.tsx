@@ -6,7 +6,10 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { ItemMenu } from "@/lib/navegacao";
 
-type Props = { itens: ItemMenu[]; nome: string; papel: "ligante" | "diretoria" };
+type Papel = "ligante" | "diretoria" | "conselheiro";
+const ROTULO_PAPEL: Record<Papel, string> = { ligante: "Ligante", diretoria: "Diretoria", conselheiro: "Conselho" };
+
+type Props = { itens: ItemMenu[]; nome: string; papel: Papel };
 
 function ativo(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
@@ -24,8 +27,8 @@ export function Menu({ itens, nome, papel }: Props) {
     return () => window.removeEventListener("keydown", fechar);
   }, [aberto]);
 
-  const principais = itens.filter((i) => !i.soDiretoria);
-  const gestao = itens.filter((i) => i.soDiretoria);
+  const principais = itens.filter((i) => !i.gestao);
+  const gestao = itens.filter((i) => i.gestao);
 
   const link = (item: ItemMenu) => {
     const atual = ativo(pathname, item.href);
@@ -91,14 +94,14 @@ export function Menu({ itens, nome, papel }: Props) {
 
         {gestao.length > 0 && (
           <>
-            <p className="rotulo border-t border-filete-vinho px-5 pt-4 pb-1 text-rosa-claro">Só diretoria</p>
+            <p className="rotulo border-t border-filete-vinho px-5 pt-4 pb-1 text-rosa-claro">Diretoria e conselho</p>
             <ul className="flex flex-col pb-3">{gestao.map(link)}</ul>
           </>
         )}
 
         <div className="mt-auto border-t border-filete-vinho px-5 py-5">
           <p className="truncate font-semibold text-bege">{nome}</p>
-          <p className="rotulo mt-0.5 text-rosa-claro">{papel === "diretoria" ? "Diretoria" : "Ligante"}</p>
+          <p className="rotulo mt-0.5 text-rosa-claro">{ROTULO_PAPEL[papel]}</p>
           <form action="/auth/sair" method="post" className="mt-3">
             <button type="submit" className="text-sm text-bege/85 underline underline-offset-4 hover:text-bege focus-visible:outline-bege">
               Sair

@@ -4,7 +4,7 @@ import { MENU } from "@/lib/navegacao";
 
 export default async function AppLayout({ children }: LayoutProps<"/">) {
   const membro = await getMembroAtual();
-  const itens = MENU.filter((item) => !item.soDiretoria || membro.papel === "diretoria");
+  const itens = MENU.filter((item) => !item.gestao || membro.papel !== "ligante");
 
   return (
     <>

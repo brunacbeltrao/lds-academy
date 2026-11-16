@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PaginaArea, type Bloco } from "@/components/pagina-area";
-import { exigirDiretoria } from "@/lib/membro";
+import { exigirGestao } from "@/lib/membro";
 
 export const metadata: Metadata = { title: "Gestão" };
 
@@ -15,12 +15,12 @@ const BLOCOS: Bloco[] = [
 ];
 
 export default async function GestaoPage() {
-  await exigirDiretoria();
+  await exigirGestao();
   return (
     <PaginaArea
-      rotulo="Gestão · só diretoria"
+      rotulo="Gestão · diretoria e conselho"
       titulo="Gestão"
-      descricao="Administração da liga: membros, frequência, planejamento e curadoria."
+      descricao="Administração da liga: membros, frequência, planejamento e curadoria. A diretoria gere; o conselho acompanha em modo leitura."
       blocos={BLOCOS}
     />
   );

@@ -1,6 +1,6 @@
-export type ItemMenu = { href: string; rotulo: string; resumo: string; soDiretoria?: boolean };
+export type ItemMenu = { href: string; rotulo: string; resumo: string; gestao?: boolean };
 
-/** As sete áreas do menu principal (docs/sitemap.md) e a Gestão, só da diretoria. */
+/** As áreas do menu principal (docs/sitemap.md) e a Gestão, da diretoria e do conselho. */
 export const MENU: ItemMenu[] = [
   { href: "/", rotulo: "Início", resumo: "Próxima aula, avisos, prazos e pendências." },
   { href: "/calendario", rotulo: "Calendário", resumo: "Aulas, eventos e competições do ciclo." },
@@ -9,5 +9,6 @@ export const MENU: ItemMenu[] = [
   { href: "/competicoes", rotulo: "Competições", resumo: "Sociecap, CMNA e outras; materiais da equipe." },
   { href: "/tira-duvidas", rotulo: "Tira-dúvidas", resumo: "Perguntas públicas ou privadas, validadas pela diretoria." },
   { href: "/trajetoria", rotulo: "Minha trajetória", resumo: "Presença, leituras, perguntas e equipes." },
-  { href: "/gestao", rotulo: "Gestão", resumo: "Membros, frequência, planejamento e curadoria.", soDiretoria: true },
+  { href: "/a-liga", rotulo: "A Liga", resumo: "O que é a liga, regras do Grupo de Estudos e Código de Conduta." },
+  { href: "/gestao", rotulo: "Gestão", resumo: "Membros, frequência, planejamento e curadoria.", gestao: true },
 ];

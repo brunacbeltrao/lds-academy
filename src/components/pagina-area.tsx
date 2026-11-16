@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export type Bloco = { titulo: string; descricao: string; soDiretoria?: boolean };
+export type Bloco = { titulo: string; descricao: string };
 
 type Props = {
   rotulo: string;
@@ -28,7 +28,7 @@ export function PaginaArea({ rotulo, titulo, descricao, blocos, children }: Prop
             <h2 className="titulo text-2xl">{bloco.titulo}</h2>
             <p className="mt-2 flex-1 text-grafite">{bloco.descricao}</p>
             <p className="rotulo mt-5 text-grafite">
-              {bloco.soDiretoria ? "Só diretoria · " : ""}Em construção
+              Em construção
             </p>
           </li>
         ))}

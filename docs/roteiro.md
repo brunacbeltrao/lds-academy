@@ -12,6 +12,8 @@
 ## Feito depois da fundação
 
 - Ciclo 2026.2 cadastrado (14 aulas e 3 eventos); cronograma em Ciclos e aulas e próximo encontro no Início.
+- Papel de conselheiro, em modo leitura.
+- Aba "A Liga", com regras do Grupo de Estudos e Código de Conduta.
 
 ## Próximas etapas (a definir a ordem)
 

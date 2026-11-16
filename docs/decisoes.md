@@ -20,6 +20,13 @@
 - **Repositório:** sem PDFs, sem segredos e sem dados pessoais.
 - **Supabase:** projeto `lds-academy`, região de São Paulo (`sa-east-1`), na organização pessoal da Bruna.
 
+## Decidido depois da fundação
+
+- **Conselheiros:** entram na plataforma com um papel próprio, que lê tudo em modo leitura (inclusive Gestão, perguntas privadas, equipes e frequência) e não escreve nada.
+- **Conteúdo institucional:** aba "A Liga" (`/a-liga`), com o que é a liga, cargos, regras do Grupo de Estudos, eventos e Código de Conduta. O texto fica no código da página.
+- **Justificativas:** aceitas antes ou depois da aula.
+- **Ciclo 2026.2:** chama-se "Ciclo-base de Direito Societário", como no cronograma oficial.
+
 ## Em aberto
 
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.
@@ -27,6 +34,4 @@
 3. **Em quanto tempo a diretoria valida uma resposta antes de a dúvida ficar parada?**
 4. **Envio de e-mail do login.** O serviço de e-mail padrão do Supabase serve só para testes (poucos envios por hora). Antes de abrir aos ligantes, definir um serviço de envio próprio ou outro método de login.
 5. **Proteção de acesso da Vercel.** O projeto está com a "Vercel Authentication" ligada em todos os endereços `vercel.app`: só entra quem está logado na conta da Vercel. Serve para a fase de construção, mas impede o acesso dos ligantes. Antes de abrir, definir entre um domínio próprio da liga ou liberar o endereço de produção.
-6. **Conselheiros.** A liga tem três cargos (acadêmicos, diretores e conselheiros), mas a plataforma só tem dois papéis. Definir se os conselheiros entram na plataforma e o que veem: como ligantes, como diretoria ou com um papel próprio (por exemplo, leitura de tudo, sem gestão).
-7. **Conteúdo institucional.** O mapa do site não tem lugar para o Código de Conduta, as regras do Grupo de Estudos e a apresentação da liga (`liga.md`). Definir se viram uma página da plataforma e onde ela fica.
-8. **Faltas.** O mapa fala em "limite de 3"; a regra da liga é exclusão ao atingir três faltas sem justificativa plausível, com justificativa antecipada. Definir o que a plataforma faz ao chegar perto do limite (aviso ao membro, alerta à diretoria) e se aceita justificativa depois da aula.
+6. **Faltas: avisos.** Definir o que a plataforma faz quando o membro se aproxima das três faltas sem justificativa (aviso ao membro, alerta à diretoria).

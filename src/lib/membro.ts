@@ -3,7 +3,7 @@ import { cache } from "react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-export type Papel = "ligante" | "diretoria";
+export type Papel = "ligante" | "diretoria" | "conselheiro";
 export type Membro = { id: string; nome: string; email: string; papel: Papel };
 
 /**
@@ -26,7 +26,14 @@ export const getMembroAtual = cache(async (): Promise<Membro> => {
   return { id: membro.id, nome: membro.nome, email: membro.email, papel: membro.papel as Papel };
 });
 
-/** Barra quem não é da diretoria (a RLS também barra no banco). */
+/** Gestão: a diretoria gere e o conselho acompanha em modo leitura. Ligantes não entram. */
+export async function exigirGestao(): Promise<Membro> {
+  const membro = await getMembroAtual();
+  if (membro.papel === "ligante") redirect("/");
+  return membro;
+}
+
+/** Só a diretoria escreve. Use em toda ação que altera dados de gestão (a RLS repete a regra). */
 export async function exigirDiretoria(): Promise<Membro> {
   const membro = await getMembroAtual();
   if (membro.papel !== "diretoria") redirect("/");
