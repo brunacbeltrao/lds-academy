@@ -1,4 +1,5 @@
 /** Tipos e formatação do calendário de produção (sem acesso a dados). */
+import type { Andamento, FaseArtigo } from "./artigo";
 
 export type StatusProducao = "a_definir" | "em_redacao" | "em_revisao" | "pronto" | "publicado" | "atrasado";
 export type Producao = {
@@ -11,12 +12,21 @@ export type Producao = {
   inicio_redacao: string | null;
   entrega: string | null;
   fim_revisao: string | null;
-  publicacao: string;
+  /** Sem data: artigo de reserva. Carrosséis sempre têm data. */
+  publicacao: string | null;
   status: StatusProducao;
   link_publicado: string | null;
   observacoes: string | null;
+  /** Só artigos: calculada pelo banco a partir do andamento. */
+  fase: FaseArtigo | null;
+  tema_registrado_em: string | null;
+  tema_recusado: string | null;
+  tema_recusa_motivo: string | null;
+  publicado_em: string | null;
   participantes: { id: string; nome: string; papel: "autor" | "revisor" }[];
   entregas: Entrega[];
+  /** Só chega a quem escreve, revisa, à diretoria e ao conselho. */
+  andamento: Andamento | null;
 };
 
 export type Entrega = {

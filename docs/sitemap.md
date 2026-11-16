@@ -40,7 +40,7 @@ Os documentos da liga em PDF, por categoria: Estatuto e regimento · Eleições 
 
 - `/ciclos/aulas/[id]`: página da aula, com professor, bibliografia, anexos, pasta do Drive, presença e justificativa de falta; a diretoria edita ali mesmo.
 - `/ciclos/acervo/[codigo]`: um ciclo anterior, com o cronograma datado (quando há calendário) e as aulas do Drive. Na aba Acervo de `/ciclos`, os ciclos ficam agrupados por tema.
-- `/producao/[id]`: página de uma publicação: prazos, autores, entregas e edição pela diretoria.
+- `/producao/[id]`: página de uma publicação. Nos mini-artigos, o fluxo completo: etapas, prazos, o que cada pessoa faz agora (tema, rascunho, revisor, parecer, ajustes, conferência, publicação) e o andamento. Nos carrosséis, entregas e edição pela diretoria.
 - `/tira-duvidas/[id]`: pergunta, respostas, validação e resposta da diretoria.
 - `/conta`: meu perfil: foto (bucket privado `fotos`, visível aos membros) e troca de senha. Abre pelo nome no rodapé do menu.
 - `/conta/senha`: nova senha, destino do link de Esqueci a senha.

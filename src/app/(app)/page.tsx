@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Pin } from "lucide-react";
 import { ProximoEncontro } from "@/components/proximo-encontro";
 import { CabecalhoDaPagina, Pagina, Painel } from "@/components/ui";
+import { pendenciasDeArtigos, type Pendencia } from "@/lib/artigo";
 import { getAvisos } from "@/lib/avisos";
 import { getCicloAtual, proximoEncontro } from "@/lib/ciclos";
 import { curta, diasAte, hoje, longa, quando } from "@/lib/datas";
@@ -14,7 +15,6 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Início" };
 
-type Pendencia = { href: string; texto: string; detalhe: string; urgente?: boolean };
 
 export default async function InicioPage() {
   const membro = await getMembroAtual();
@@ -36,34 +36,37 @@ export default async function InicioPage() {
 
   // Prazos: próximas publicações e entregas da Produção.
   const prazos = producoes
-    .filter((p) => p.status !== "publicado" && p.publicacao >= dataDeHoje)
+    .filter((p): p is typeof p & { publicacao: string } => p.status !== "publicado" && Boolean(p.publicacao) && (p.publicacao as string) >= dataDeHoje)
     .slice(0, 5)
-    .map((p) => ({
-      id: p.id,
-      titulo: `${p.tipo === "artigo" ? "Artigo" : "Carrossel"} ${String(p.numero ?? "").padStart(2, "0")}`,
-      tema: p.tema,
-      data: p.tipo === "artigo" ? (p.entrega && p.entrega >= dataDeHoje ? p.entrega : p.publicacao) : (p.entrega ?? p.publicacao),
-      rotulo: p.tipo === "artigo" ? (p.entrega && p.entrega >= dataDeHoje ? "rascunho" : "publicação") : "entrega",
-      minha: p.participantes.some((x) => x.id === membro.id),
-    }));
+    .map((p) => {
+      const rascunhoPela = p.tipo === "artigo" && (p.fase === "tema" || p.fase === "redacao") && p.entrega && p.entrega >= dataDeHoje;
+      return {
+        id: p.id,
+        titulo: `${p.tipo === "artigo" ? "Artigo" : "Carrossel"} ${String(p.numero ?? "").padStart(2, "0")}`,
+        tema: p.tema,
+        data: p.tipo === "artigo" ? (rascunhoPela ? (p.entrega as string) : p.publicacao) : (p.entrega ?? p.publicacao),
+        rotulo: p.tipo === "artigo" ? (rascunhoPela ? "rascunho" : "publicação") : "entrega",
+        minha: p.participantes.some((x) => x.id === membro.id),
+      };
+    });
 
-  // Pendências do membro.
+  // Pendências do membro: carrosséis por entrega; mini-artigos pela etapa do fluxo.
   const pendencias: Pendencia[] = [];
   for (const p of producoes) {
+    if (p.tipo !== "carrossel") continue;
     const minha = p.participantes.some((x) => x.id === membro.id);
     const prazo = p.entrega ?? p.publicacao;
-    if (minha && p.status !== "publicado" && diasAte(prazo) >= -2 && diasAte(prazo) <= 14) {
+    if (prazo && minha && p.status !== "publicado" && diasAte(prazo) >= -2 && diasAte(prazo) <= 14 && p.entregas.length === 0) {
       // Uma entrega de qualquer integrante da dupla resolve a pendência.
-      if (p.entregas.length === 0) {
-        pendencias.push({
-          href: `/producao?aba=${p.tipo === "artigo" ? "artigos" : "carrosseis"}#p-${p.id}`,
-          texto: `Enviar ${p.tipo === "artigo" ? "o rascunho do artigo" : "o carrossel"} ${String(p.numero ?? "").padStart(2, "0")}`,
-          detalhe: `Prazo ${quando(prazo)} (${curta(prazo)})`,
-          urgente: diasAte(prazo) <= 2,
-        });
-      }
+      pendencias.push({
+        href: `/producao/${p.id}`,
+        texto: `Enviar o carrossel ${String(p.numero ?? "").padStart(2, "0")}`,
+        detalhe: `Prazo ${quando(prazo)} (${curta(prazo)})`,
+        urgente: diasAte(prazo) <= 2,
+      });
     }
   }
+  pendencias.push(...pendenciasDeArtigos(producoes, membro));
   for (const l of frequencia) {
     if (l.presenca === "falta" && !l.justificativa) {
       pendencias.push({ href: `/ciclos/aulas/${l.aulaId}#justificativa`, texto: `Justificar a falta na ${l.numero ? `aula ${l.numero}` : "aula extra"}`, detalhe: l.titulo, urgente: true });
@@ -140,7 +143,7 @@ export default async function InicioPage() {
             <p className="text-[0.9375rem] text-grafite">Nada pendente. Bom trabalho.</p>
           ) : (
             <ul className="-my-2 divide-y divide-linha">
-              {pendencias.slice(0, 6).map((p, i) => (
+              {pendencias.slice(0, 8).map((p, i) => (
                 <li key={i}>
                   <Link href={p.href} className="group flex items-start gap-3 py-2.5">
                     <span aria-hidden="true" className={`mt-2 size-1.5 shrink-0 rounded-full ${p.urgente ? "bg-vinho" : "bg-linha-forte"}`} />

@@ -14,7 +14,7 @@ Três papéis: **ligante** (associado acadêmico), **diretoria** (associado dire
 | Biblioteca | Busca, lê (links do Drive) e favorita | Cadastra links do Drive e classifica |
 | Competições | Só quem está na equipe selecionada | Toda a diretoria acompanha; cria edições e monta equipes |
 | Tira-dúvidas | Pergunta (pública ou privada) e responde as públicas | Valida respostas, responde as privadas e modera |
-| Produção | Consulta calendário e orientações; envia rascunhos das suas publicações | Mantém o calendário, autores e revisores |
+| Produção | Consulta calendário e orientações. Nos seus artigos: registra o tema, envia o rascunho e conclui os ajustes; como revisor, registra o parecer | Abre vagas, muda datas, marca como publicado. Só o diretor acadêmico designa revisores, recusa temas, decide sobre "Reescrever" e faz a conferência final |
 | A Liga | Lê | Lê |
 | Regularização | Sem acesso | Mantém os documentos da liga |
 | Gestão | Sem acesso | Acesso total |
@@ -30,8 +30,12 @@ Todas as tabelas têm RLS. As políticas usam funções do schema `privado` (`is
 | `ciclos`, `biblioteca_itens`, `aula_leituras`, `eventos`, `avisos`, `competicoes` | Lê | Lê e escreve |
 | `aulas` | Lê as publicadas | Lê e escreve todas |
 | `aula_materiais` e arquivos do bucket `materiais` | Lê e baixa | Envia, registra e apaga |
-| `producoes`, `producao_participantes` | Lê | Lê e escreve |
-| `producao_entregas` | Lê; envia se é autor ou revisor da publicação; apaga as próprias | Lê, envia e apaga |
+| `producoes` | Lê; o autor altera só o tema do próprio artigo, até a entrega do rascunho | Lê e escreve (revisor de fora e recusa de tema: só o diretor acadêmico) |
+| `producao_participantes` | Lê | Lê e escreve (revisor de artigo: só o diretor acadêmico; ninguém revisa o próprio texto) |
+| `producao_entregas` | Lê, envia e apaga as próprias se participa da publicação | Lê, envia e apaga |
+| `artigo_andamento` | Só se participa do artigo: o autor envia o rascunho e conclui ajustes; o revisor registra o parecer | Lê tudo; o diretor acadêmico registra parecer por revisor de fora, decide a reescrita e libera (o conselho lê) |
+
+O fluxo do mini-artigo usa gatilhos no banco (`privado.producoes_antes_de_gravar`, `privado.artigo_andamento_antes_de_gravar`, `privado.participantes_conferir`) que conferem quem altera cada campo, carimbam datas e autoria e recalculam a fase. A função `privado.is_diretor_academico()` exige a marcação de diretor acadêmico e permissões de diretoria.
 | `documentos` e arquivos do bucket `documentos` | Sem acesso | Envia, registra e apaga (o conselho lê) |
 | `favoritos` | Só os próprios | Só os próprios |
 | `perfis` e arquivos do bucket `fotos` | Lê as fotos de todos; envia, troca e apaga só a própria | Igual ao ligante |

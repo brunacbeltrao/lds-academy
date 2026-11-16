@@ -84,7 +84,7 @@ export default async function GestaoPage({ searchParams }: PageProps<"/gestao">)
             <Numero rotulo="Membros ativos" valor={membros.filter((m) => m.ativo).length} />
             <Numero rotulo="Com conta criada" valor={membros.filter((m) => m.temConta).length} />
             <Numero rotulo="Sem e-mail cadastrado" valor={membros.filter((m) => m.ativo && !m.email).length} alerta={membros.some((m) => m.ativo && !m.email)} detalhe="Sem e-mail, a pessoa não consegue criar a conta." />
-            <Numero rotulo="Diretoria e conselho" valor={membros.filter((m) => m.papel !== "ligante" || m.acessoDiretoria).length} />
+            <Numero rotulo="Diretoria e conselho" valor={membros.filter((m) => m.ativo && m.papel !== "ligante").length} />
           </Grade>
 
           <div className="cartao mt-6 overflow-hidden">
@@ -383,7 +383,7 @@ function LinhaDeMembro({ membro: m, editavel, faltas }: { membro: MembroDaLista;
       <span className="truncate text-sm text-grafite">{m.email ?? <span className="text-vinho">sem e-mail</span>}</span>
       <span className="text-sm">
         <span className={`selo ${m.papel === "diretoria" ? "selo-suave" : ""}`}>{ROTULO_PAPEL[m.papel]}</span>
-        {m.acessoDiretoria && m.papel !== "diretoria" ? <span className="selo selo-suave ml-1">Acesso de diretoria</span> : null}
+        {m.diretorAcademico ? <span className="selo ml-1">Diretor acadêmico</span> : null}
       </span>
       <span className="text-sm text-grafite">
         {!m.ativo ? "Inativo" : m.temConta ? "Conta criada" : "Sem conta"}
@@ -420,6 +420,17 @@ function LinhaDeMembro({ membro: m, editavel, faltas }: { membro: MembroDaLista;
             opcoes={[
               { valor: "nao", rotulo: "As do cargo" },
               { valor: "sim", rotulo: "Acesso de diretoria" },
+            ]}
+          />
+          <Escolha
+            prefixo={m.id}
+            nome="diretor_academico"
+            rotulo="Mini-artigos"
+            padrao={m.diretorAcademico ? "sim" : "nao"}
+            ajuda="O diretor acadêmico designa revisores e faz a conferência final. Só vale para quem tem permissões de diretoria."
+            opcoes={[
+              { valor: "nao", rotulo: "Sem função no fluxo" },
+              { valor: "sim", rotulo: "Diretor acadêmico" },
             ]}
           />
           <BotaoEnviar variante="secundario" className="justify-self-start">

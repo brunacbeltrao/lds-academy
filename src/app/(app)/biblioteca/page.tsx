@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight, Search, Star, Trash2 } from "lucide-react";
 import { AcaoRapida, AreaDeTexto, BotaoEnviar, Campo, Escolha, Formulario } from "@/components/formulario";
-import { Abas, abaAtual, CabecalhoDaPagina, Grade, Pagina, Recolhivel, Vazio, type Aba } from "@/components/ui";
+import { Abas, abaAtual, CabecalhoDaPagina, Grade, nomeCurto, Pagina, Recolhivel, Vazio, type Aba } from "@/components/ui";
 import { getBiblioteca, ROTULO_TIPO, type TipoItem } from "@/lib/biblioteca";
+import { curta } from "@/lib/datas";
 import { getMembroAtual } from "@/lib/membro";
+import { getProducoes } from "@/lib/producao";
 import { adicionarItem, alternarFavorito, removerItem } from "./actions";
 
 export const metadata: Metadata = { title: "Biblioteca" };
@@ -12,7 +14,7 @@ export const metadata: Metadata = { title: "Biblioteca" };
 const semAcento = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
 export default async function BibliotecaPage({ searchParams }: PageProps<"/biblioteca">) {
-  const [params, membro] = await Promise.all([searchParams, getMembroAtual()]);
+  const [params, membro, producoes] = await Promise.all([searchParams, getMembroAtual(), getProducoes()]);
   const itens = await getBiblioteca(membro.id);
   const q = typeof params.q === "string" ? params.q.trim().slice(0, 100) : "";
   const tipo = typeof params.tipo === "string" && params.tipo in ROTULO_TIPO ? (params.tipo as TipoItem) : null;
@@ -30,7 +32,17 @@ export default async function BibliotecaPage({ searchParams }: PageProps<"/bibli
       (!tipo || i.tipo === tipo) &&
       (!termo || semAcento(`${i.titulo} ${i.autor ?? ""} ${i.tema ?? ""} ${i.descricao ?? ""}`).includes(termo)),
   );
-  const tiposPresentes = (Object.keys(ROTULO_TIPO) as TipoItem[]).filter((t) => itens.some((i) => i.tipo === t));
+  // Mini-artigos publicados pela liga (fluxo da Produção), com o link do LinkedIn.
+  const artigosDaLiga = producoes.filter(
+    (p) =>
+      p.tipo === "artigo" &&
+      p.fase === "publicado" &&
+      p.link_publicado &&
+      ativa === "todos" &&
+      (!tipo || tipo === "artigo") &&
+      (!termo || semAcento(`${p.tema ?? ""} ${p.participantes.map((x) => x.nome).join(" ")}`).includes(termo)),
+  );
+  const tiposPresentes = (Object.keys(ROTULO_TIPO) as TipoItem[]).filter((t) => itens.some((i) => i.tipo === t) || (t === "artigo" && producoes.some((p) => p.fase === "publicado")));
   const diretoria = membro.papel === "diretoria";
   const extra = (t: TipoItem | null) => ({ ...(ativa !== "todos" ? { aba: ativa } : {}), ...(q ? { q } : {}), ...(t ? { tipo: t } : {}) });
 
@@ -76,7 +88,36 @@ export default async function BibliotecaPage({ searchParams }: PageProps<"/bibli
         })}
       </nav>
 
-      {filtrados.length === 0 ? (
+      {artigosDaLiga.length > 0 ? (
+        <section aria-labelledby="artigos-da-liga" className="mb-8">
+          <h2 id="artigos-da-liga" className="h3 mb-3">
+            Artigos produzidos pela liga
+          </h2>
+          <Grade>
+            {artigosDaLiga.map((p) => (
+              <article key={p.id} className="cartao flex flex-col p-4 sm:p-5">
+                <span className="selo self-start">Artigo da liga</span>
+                <h3 className="h3 mt-2 break-words">{p.tema}</h3>
+                <p className="mt-0.5 text-[0.9375rem] text-tinta">
+                  {p.participantes
+                    .filter((x) => x.papel === "autor")
+                    .map((x) => nomeCurto(x.nome))
+                    .join(" e ") || p.autores}
+                </p>
+                <div className="mt-auto flex items-center justify-between gap-3 pt-4">
+                  <span className="text-sm text-grafite">{p.publicado_em ? `LinkedIn, ${curta(p.publicado_em)}` : "LinkedIn"}</span>
+                  <a href={p.link_publicado as string} target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-11 shrink-0 items-center gap-1 text-sm font-semibold text-vinho">
+                    Abrir
+                    <ArrowUpRight aria-hidden="true" className="seta size-4" />
+                  </a>
+                </div>
+              </article>
+            ))}
+          </Grade>
+        </section>
+      ) : null}
+
+      {filtrados.length === 0 && artigosDaLiga.length > 0 ? null : filtrados.length === 0 ? (
         <Vazio
           titulo={ativa === "favoritos" && !q && !tipo ? "Nenhum favorito ainda" : "Nada encontrado"}
           texto={ativa === "favoritos" && !q && !tipo ? "Toque na estrela de um item para guardá-lo aqui." : "Tente outro termo ou limpe os filtros."}

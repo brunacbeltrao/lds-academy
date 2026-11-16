@@ -21,8 +21,9 @@ export const ORIENTACOES_ARTIGO: { titulo: string; itens: string[] }[] = [
   {
     titulo: "Fluxo de cada artigo",
     itens: [
-      "Redação (2 semanas): a dupla escolhe o tema dentro do direito societário ou do mercado de capitais e o comunica à Diretoria Acadêmica já no início do ciclo, para evitar repetição entre duplas.",
-      "Entrega do rascunho: até o domingo que encerra a segunda semana, em .docx ou Google Docs com permissão de comentário, enviado à Diretoria Acadêmica e ao revisor designado.",
+      "Redação (2 semanas): a dupla escolhe o tema dentro do direito societário ou do mercado de capitais e o registra na página do artigo já na primeira semana, para evitar repetição entre duplas. A Diretoria Acadêmica pode recusar o tema, com o motivo.",
+      "Entrega do rascunho: até o domingo que encerra a segunda semana, como link do Google Docs com permissão de comentário, enviado pela página do artigo. O site registra se a entrega foi no prazo.",
+      "Revisor: designado pelo diretor acadêmico até a entrega do rascunho. Pode ser membro da liga ou alguém de fora; nesse caso, o diretor envia o link e registra o parecer no site.",
       "Revisão (até 1 semana): sugere-se que o revisor devolva o parecer até a quinta-feira e a dupla conclua os ajustes até o domingo, prazo final para a versão aprovada.",
       "Publicação: na segunda-feira seguinte ao fim da revisão. Como redação e revisão se sobrepõem entre ciclos, há uma publicação a cada 2 semanas.",
       "Atrasos: rascunho com mais de 2 dias de atraso perde a vaga e é deslocado para o próximo espaço livre. Recomenda-se manter um artigo de reserva pronto.",
