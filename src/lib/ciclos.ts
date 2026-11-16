@@ -1,7 +1,19 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 
-export type Ciclo = { id: string; codigo: string; titulo: string; inicio: string | null; fim: string | null };
+export type Ciclo = {
+  id: string;
+  codigo: string;
+  titulo: string;
+  inicio: string | null;
+  fim: string | null;
+  descricao?: string | null;
+  pasta_url?: string | null;
+  status?: "planejado" | "atual" | "encerrado";
+};
+
+export type CicloResumo = Required<Ciclo> & { aulas: number };
+export type AulaDoAcervo = { id: string; numero: number | null; titulo: string; data: string | null; professor: string | null; pasta_url: string | null };
 export type Encontro = {
   id: string;
   titulo: string;
@@ -25,7 +37,8 @@ export type Aula = {
   professor: string | null;
   professorBio: string | null;
   bibliografia: string | null;
-  ciclo: { codigo: string; titulo: string } | null;
+  pastaUrl: string | null;
+  ciclo: { id: string; codigo: string; titulo: string } | null;
   materiais: Material[];
 };
 
@@ -36,7 +49,7 @@ export async function getCicloAtual(): Promise<{ ciclo: Ciclo; encontros: Encont
   const supabase = await createClient();
   const { data: ciclo, error } = await supabase
     .from("ciclos")
-    .select("id, codigo, titulo, inicio, fim")
+    .select("id, codigo, titulo, inicio, fim, descricao, pasta_url, status")
     .eq("status", "atual")
     .order("inicio", { ascending: false })
     .limit(1)
@@ -84,7 +97,7 @@ export async function getAula(id: string): Promise<Aula | null> {
   const { data, error } = await supabase
     .from("aulas")
     .select(
-      "id, numero, titulo, data, local, professor, professor_bio, bibliografia, ciclo:ciclos(codigo, titulo), aula_materiais(id, titulo, tamanho, criado_em)",
+      "id, numero, titulo, data, local, professor, professor_bio, bibliografia, pasta_url, ciclo:ciclos(id, codigo, titulo), aula_materiais(id, titulo, tamanho, criado_em)",
     )
     .eq("id", id)
     .maybeSingle();
@@ -102,7 +115,8 @@ export async function getAula(id: string): Promise<Aula | null> {
     professor: data.professor,
     professorBio: data.professor_bio,
     bibliografia: data.bibliografia,
-    ciclo: um<{ codigo: string; titulo: string }>(data.ciclo),
+    pastaUrl: data.pasta_url,
+    ciclo: um<{ id: string; codigo: string; titulo: string }>(data.ciclo),
     materiais: materiais.map(({ id, titulo, tamanho }) => ({ id, titulo, tamanho })),
   };
 }
@@ -167,4 +181,33 @@ export function formatarTamanho(bytes: number | null): string {
 export function rotuloEncontro(e: Encontro): string {
   if (e.tipo === "aula") return rotuloAula(e.numero);
   return "Evento";
+}
+
+/** Todos os ciclos, do mais recente ao mais antigo, com o número de aulas. */
+export async function getCiclos(): Promise<CicloResumo[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("ciclos")
+    .select("id, codigo, titulo, inicio, fim, descricao, pasta_url, status, aulas(count)")
+    .order("codigo", { ascending: false });
+  if (error) throw new Error(`Falha ao ler os ciclos: ${error.message}`);
+  return (data ?? []).map(({ aulas, ...c }) => ({ ...(c as Required<Ciclo>), aulas: (aulas as { count: number }[])?.[0]?.count ?? 0 }));
+}
+
+/** Um ciclo e as suas aulas, para o acervo. */
+export async function getCiclo(codigo: string): Promise<{ ciclo: Required<Ciclo>; aulas: AulaDoAcervo[] } | null> {
+  if (!/^[0-9.\-]{4,12}$/.test(codigo)) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("ciclos")
+    .select("id, codigo, titulo, inicio, fim, descricao, pasta_url, status, aulas(id, numero, titulo, data, professor, pasta_url)")
+    .eq("codigo", codigo)
+    .maybeSingle();
+  if (error) throw new Error(`Falha ao ler o ciclo: ${error.message}`);
+  if (!data) return null;
+  const { aulas, ...ciclo } = data;
+  const lista = ((aulas as AulaDoAcervo[]) ?? []).sort(
+    (a, b) => (a.data ?? "").localeCompare(b.data ?? "") || (a.numero ?? 99) - (b.numero ?? 99) || a.titulo.localeCompare(b.titulo),
+  );
+  return { ciclo: ciclo as Required<Ciclo>, aulas: lista };
 }
