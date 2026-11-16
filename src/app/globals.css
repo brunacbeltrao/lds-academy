@@ -2,7 +2,7 @@
 
 /*
  * LDS Academy · base visual
- * Estratégia de cor contida: o bege da liga no fundo, superfícies brancas e o vinho da liga
+ * Estratégia de cor contida: o bege da liga no fundo, superfícies em creme do mesmo matiz e o vinho da liga
  * como único destaque (ações, item ativo, próximo encontro). Uma só família tipográfica.
  *
  * Movimento: tokens próprios (duração e curva), inspirados nas receitas de transitions.dev.
@@ -12,14 +12,14 @@
   --lds-vinho: #a7002e;
   --lds-vinho-escuro: #8a0026;
   --lds-vinho-profundo: #6e001f;
-  --lds-vinho-suave: #fbeff1;
-  --lds-vinho-borda: #efc9d1;
+  --lds-vinho-suave: #f2e5e1;
+  --lds-vinho-borda: #e7c2c6;
   --lds-tinta: #231c1e;
   --lds-grafite: #635a5c;
   --lds-fundo: #ebece0;
-  --lds-superficie: #ffffff;
-  --lds-sutil: #f4f4ec;
-  --lds-linha: #d9d9cb;
+  --lds-superficie: #f9f9f1;
+  --lds-sutil: #f1f2e6;
+  --lds-linha: #dcdecf;
   --lds-linha-forte: #bdbcab;
 
   /* Elevação mínima: só para separar o branco do bege, nunca como efeito. */

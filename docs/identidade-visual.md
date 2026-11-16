@@ -6,20 +6,20 @@ A plataforma usa uma versão própria, feita para tela, da identidade da LDS·FD
 
 ## Cor
 
-Estratégia contida: o bege da liga no fundo, superfícies brancas e um só acento.
+Estratégia contida: o bege da liga no fundo, superfícies num creme claro da mesma família (branco puro destoa do bege, que puxa para o amarelo-esverdeado) e um só acento.
 
 | Token | Valor | Uso |
 | --- | --- | --- |
 | `vinho` | `#A7002E` | Ações principais, item ativo do menu, selos de destaque, painel do próximo encontro |
 | `vinho-escuro` | `#8A0026` | Hover de botões; texto de erro |
-| `vinho-suave` | `#FBEFF1` | Fundo de destaque (item ativo, próximo encontro, avisos) |
-| `vinho-borda` | `#EFC9D1` | Borda dos destaques; sublinhado de links |
+| `vinho-suave` | `#F2E5E1` | Fundo de destaque (item ativo, próximo encontro, avisos) |
+| `vinho-borda` | `#E7C2C6` | Borda dos destaques; sublinhado de links |
 | `tinta` | `#231C1E` | Texto e títulos |
 | `grafite` | `#635A5C` | Texto secundário (5,6:1 sobre o bege) |
 | `fundo` | `#EBECE0` | Fundo da página: o bege da liga, mantido a pedido da diretoria |
-| `superficie` | `#FFFFFF` | Cartões, campos e menu |
-| `sutil` | `#F4F4EC` | Hover neutro, selos, painel de edição |
-| `linha` / `linha-forte` | `#D9D9CB` / `#BDBCAB` | Bordas |
+| `superficie` | `#F9F9F1` | Cartões, campos e menu: creme no mesmo matiz do bege, nunca branco puro |
+| `sutil` | `#F1F2E6` | Hover neutro, selos, painel de edição |
+| `linha` / `linha-forte` | `#DCDECF` / `#BDBCAB` | Bordas |
 
 - O vinho cheio aparece em poucos lugares: botões, selos e o painel do próximo encontro, no Início. Nunca como fundo de menu ou de página.
 - Texto sempre com contraste de pelo menos 4,5:1. Não usar cinza claro "por elegância".
@@ -55,7 +55,7 @@ Receitas adaptadas de transitions.dev. Tokens em `globals.css`: `--duracao-rapid
 
 Datas são o objeto central da liga e têm tratamento próprio: numeral grande, em peso 700 a 800, com algarismos tabulares (`.numeral`).
 
-- Próximo encontro (Início): a data vira uma folha de calendário branca sobre o vinho, com mês, dia e dia da semana.
+- Próximo encontro (Início): a data vira uma folha de calendário creme sobre o vinho, com mês, dia e dia da semana.
 - Cronograma e calendário de Produção (`LinhaDoTempo`): datas à esquerda, trilho com marcos e cartões à direita, agrupados por mês. O que passou fica esmaecido; o próximo leva marco e cartão em vinho suave.
 - Áreas em construção: contorno tracejado, "Em breve nesta área".
 

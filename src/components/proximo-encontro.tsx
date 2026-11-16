@@ -55,7 +55,7 @@ export function ProximoEncontro({ proximo, ciclo }: { proximo: Encontro | null; 
         {/* Folha de calendário */}
         <div
           aria-hidden="true"
-          className="flex w-[5.5rem] shrink-0 flex-col items-center self-start overflow-hidden rounded-2xl bg-white text-tinta sm:w-24"
+          className="flex w-[5.5rem] shrink-0 flex-col items-center self-start overflow-hidden rounded-2xl bg-superficie text-tinta sm:w-24"
         >
           <span className="w-full bg-vinho-escuro py-1 text-center text-xs font-semibold text-white/90">{mes}</span>
           <span className="numeral pt-1.5 text-[2.75rem] leading-none font-extrabold tracking-[-0.04em] sm:text-5xl">{dia}</span>
@@ -103,7 +103,7 @@ export function ProximoEncontro({ proximo, ciclo }: { proximo: Encontro | null; 
             </ul>
             <Link
               href={destino}
-              className="group inline-flex min-h-11 shrink-0 items-center justify-center gap-2 self-start rounded-[0.625rem] bg-white px-4 text-[0.9375rem] font-semibold text-vinho transition-[background-color,transform] duration-150 ease-saida hover:bg-vinho-suave focus-visible:outline-white active:scale-[0.97] sm:self-auto"
+              className="group inline-flex min-h-11 shrink-0 items-center justify-center gap-2 self-start rounded-[0.625rem] bg-superficie px-4 text-[0.9375rem] font-semibold text-vinho transition-[background-color,transform] duration-150 ease-saida hover:bg-vinho-suave focus-visible:outline-white active:scale-[0.97] sm:self-auto"
             >
               {proximo.aulaId ? "Ver professor e bibliografia" : "Ver o cronograma"}
               <ArrowRight aria-hidden="true" className="seta size-4" />
