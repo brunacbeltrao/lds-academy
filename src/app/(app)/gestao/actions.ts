@@ -41,9 +41,15 @@ export async function salvarMembro(_: Estado, formData: FormData): Promise<Estad
   if (!membroId || !nome || !PAPEIS.includes(papel)) return erro("Dados inválidos.");
   if (email && !EMAIL.test(email)) return erro("E-mail inválido.");
   if (membroId === eu.id && (!ativo || (papel !== "diretoria" && !acessoDiretoria))) return erro("Você não pode tirar o seu próprio acesso de diretoria.");
+  const comoDiretoria = papel === "diretoria" || (papel === "ligante" && acessoDiretoria);
+  const diretorAcademico = formData.get("diretor_academico") === "sim";
+  if (diretorAcademico && !comoDiretoria) return erro("Diretor acadêmico precisa ter permissões de diretoria.");
 
   const supabase = await createClient();
-  const { error } = await supabase.from("membros").update({ nome, papel, ativo, acesso_diretoria: papel === "conselheiro" ? false : acessoDiretoria }).eq("id", membroId);
+  const { error } = await supabase
+    .from("membros")
+    .update({ nome, papel, ativo, acesso_diretoria: papel === "conselheiro" ? false : acessoDiretoria, diretor_academico: diretorAcademico })
+    .eq("id", membroId);
   if (error) return erro("Não foi possível salvar.");
   const { error: erroEmail } = email
     ? await supabase.from("membros_acesso").upsert({ membro_id: membroId, email })

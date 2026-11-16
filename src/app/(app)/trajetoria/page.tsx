@@ -4,6 +4,7 @@ import { CabecalhoDaPagina, Cartao, Grade, Numero, nomeCurto, Pagina, Secao, Vaz
 import { rotuloAula } from "@/lib/ciclos";
 import { getCompeticoes } from "@/lib/competicoes";
 import { curta } from "@/lib/datas";
+import { ROTULO_FASE } from "@/lib/artigo";
 import { getFrequencia, LIMITE_DE_FALTAS, resumo, type LinhaDeFrequencia } from "@/lib/frequencia";
 import { getMembroAtual } from "@/lib/membro";
 import { getProducoes } from "@/lib/producao";
@@ -64,10 +65,10 @@ export default async function TrajetoriaPage() {
                   <p className="text-sm font-semibold text-vinho">
                     {p.tipo === "artigo" ? "Artigo" : "Carrossel"} {String(p.numero ?? "").padStart(2, "0")}
                   </p>
-                  <span className="selo">{ROTULO_STATUS[p.status]}</span>
+                  <span className="selo">{p.fase ? ROTULO_FASE[p.fase] : ROTULO_STATUS[p.status]}</span>
                 </div>
                 <p className="mt-2 font-semibold text-tinta">{p.tema ?? "Tema a definir"}</p>
-                <p className="numeral mt-auto pt-3 text-sm text-grafite">Publicação {curta(p.publicacao)}</p>
+                <p className="numeral mt-auto pt-3 text-sm text-grafite">{p.publicacao ? `Publicação ${curta(p.publicacao)}` : "Reserva, sem data marcada"}</p>
               </Cartao>
             ))}
           </Grade>

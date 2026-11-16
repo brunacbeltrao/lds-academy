@@ -9,7 +9,7 @@
 - **Competições:** só a equipe selecionada acessa, com toda a diretoria acompanhando.
 - **Biblioteca:** links do Drive, sem upload de livros.
 - **Ciclos anteriores:** abertos a todos, como acervo por tema.
-- **Diretoria:** sem níveis por enquanto.
+- **Diretoria:** sem níveis por enquanto. A exceção é a função de diretor acadêmico no fluxo do mini-artigo (ver abaixo).
 - **Presença:** registrada; o diretor acadêmico aceita ou recusa justificativas. Limite de 3 faltas sem justificativa (ver `liga.md`).
 
 ## Decidido na Etapa 1 (fundação)
@@ -36,6 +36,21 @@
 
 - **Links do Drive:** biblioteca e acervo de ciclos apontam para o Drive original da liga (pasta "Grupo de Estudos", com a Biblioteca e os semestres, e a pasta do ciclo de M&A de 2025). Quando a pasta exata de uma aula não está visível na busca do Drive, o link leva à pasta do semestre. Os materiais de eventos e as competições ainda apontam para a cópia da diretoria, até a liga informar as pastas originais.
 
+## Fluxo do mini-artigo (novembro de 2026)
+
+Etapas: vaga aberta → tema → redação → rascunho → revisão → ajustes → conferência final → publicação. A fase de cada artigo é calculada pelo banco a partir do que já aconteceu.
+
+- **Diretor acadêmico:** só ele designa o revisor, registra o parecer de revisor de fora, decide depois de um parecer "Reescrever" e faz a conferência final. É uma marcação na lista de membros (Gestão), válida só para quem tem permissões de diretoria. Abrir vagas, mudar datas e marcar como publicado ficam com qualquer membro da diretoria.
+- **Revisor de fora da liga:** não entra no site. Recebe o link do Docs pelo diretor acadêmico, que registra o parecer por ele.
+- **Rascunho:** entregue como link do Google Docs, com permissão de comentário. O site grava a data da primeira entrega e diz se foi no prazo ou com quantos dias de atraso.
+- **Designação do revisor:** a qualquer momento, e cobrada até a entrega do rascunho, para a semana de revisão não começar sem revisor. Os autores não podem revisar o próprio texto.
+- **Parecer "Reescrever":** o diretor acadêmico decide caso a caso: segue para ajustes na mesma semana ou volta para a redação, com novo prazo (e, se preciso, nova data de publicação).
+- **Quem vê o andamento:** rascunho, parecer e ajustes só para a dupla, o revisor, a diretoria e o conselho. Os demais ligantes veem o calendário, o tema e a fase.
+- **Tema:** a dupla registra na página do artigo; o site avisa se outro artigo já usou um tema parecido. O diretor acadêmico pode recusar, com motivo.
+- **Reserva:** um artigo pode passar pelo fluxo sem data marcada, para cobrir uma vaga perdida.
+- **Avisos:** enquanto não houver e-mail, cada pendência aparece em "Minhas pendências" (Início) e na fila da Produção.
+- **Publicado:** o artigo aparece na Biblioteca, em "Artigos produzidos pela liga", com o link do LinkedIn.
+
 ## Em aberto
 
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.
@@ -45,5 +60,5 @@
 5. **Proteção de acesso da Vercel.** O projeto está com a "Vercel Authentication" ligada em todos os endereços `vercel.app`: só entra quem está logado na conta da Vercel. Serve para a fase de construção, mas impede o acesso dos ligantes. Antes de abrir, definir entre um domínio próprio da liga ou liberar o endereço de produção.
 6. **Faltas: avisos.** Definir o que a plataforma faz quando o membro se aproxima das três faltas sem justificativa (aviso ao membro, alerta à diretoria).
 7. **Direitos autorais dos anexos.** Os PDFs de bibliografia ficam restritos aos membros, mas trechos e livros inteiros têm regras diferentes. Definir o que pode ser anexado.
-8. **Edição da Produção.** O calendário de carrosséis e mini-artigos é só leitura; temas, autores, revisores e status ainda são alterados direto no banco. Falta a tela de edição para a diretoria.
+8. **Atraso de mais de 2 dias no rascunho: o artigo muda de data sozinho ou o diretor confirma?** Hoje o site sugere o próximo espaço livre (a primeira segunda-feira da grade quinzenal sem artigo) e qualquer membro da diretoria confirma ou escolhe outra data; sem confirmação, a data não muda.
 9. **Datas a confirmar.** A aula extra de Litígios Societários foi registrada em 06/11 (data deduzida das mensagens). A aula de Atos Constitutivos teve dois professores e só um foi identificado.

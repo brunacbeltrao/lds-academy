@@ -86,13 +86,19 @@ export function BotaoEnviar({
   enviando = "Salvando…",
   variante = "principal",
   className = "",
+  nome,
+  valor,
 }: {
   children: ReactNode;
   enviando?: string;
   variante?: "principal" | "secundario" | "discreto";
   className?: string;
+  /** Quando o formulário tem mais de um botão, cada um envia o seu valor. */
+  nome?: string;
+  valor?: string;
 }) {
-  const { pending } = useFormStatus();
+  const { pending, data } = useFormStatus();
+  const esteBotao = !nome || data?.get(nome) === valor;
   const estilo =
     variante === "principal"
       ? "botao"
@@ -100,8 +106,8 @@ export function BotaoEnviar({
         ? "botao botao-secundario"
         : "inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium text-grafite transition-colors hover:bg-sutil hover:text-tinta disabled:opacity-60";
   return (
-    <button type="submit" disabled={pending} className={`${estilo} ${className}`}>
-      {pending ? enviando : children}
+    <button type="submit" name={nome} value={valor} disabled={pending} className={`${estilo} ${className}`}>
+      {pending && esteBotao ? enviando : children}
     </button>
   );
 }
