@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Figtree } from "next/font/google";
 import "./globals.css";
 
@@ -8,7 +8,11 @@ export const metadata: Metadata = {
   title: { default: "LDS Academy", template: "%s · LDS Academy" },
   description: "Plataforma interna da Liga de Direito Societário e Mercado de Capitais (LDS·FDR).",
   robots: { index: false, follow: false },
+  // Adicionado à tela de início do iPhone, abre como app, com o nome curto da plataforma.
+  appleWebApp: { capable: true, title: "LDS Academy", statusBarStyle: "default" },
 };
+
+export const viewport: Viewport = { themeColor: "#ebece0" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

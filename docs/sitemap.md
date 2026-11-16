@@ -44,6 +44,7 @@ Os documentos da liga em PDF, por categoria: Estatuto e regimento · Eleições 
 - `/tira-duvidas/[id]`: pergunta, respostas, validação e resposta da diretoria.
 - `/conta`: meu perfil: foto (bucket privado `fotos`, visível aos membros) e troca de senha. Abre pelo nome no rodapé do menu.
 - `/conta/senha`: nova senha, destino do link de Esqueci a senha.
+- `/materiais/[id]/ler` e `/documentos/[id]/ler`: leitura do PDF no próprio site, com tela cheia e download.
 - `/materiais/[id]`: download de um anexo, por link temporário.
 - `/login`: entrar, primeiro acesso (criar senha) e esqueci a senha.
 - `/auth/callback`: retorno do link de nova senha.

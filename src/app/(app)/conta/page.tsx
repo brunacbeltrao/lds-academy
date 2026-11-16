@@ -12,7 +12,7 @@ export default async function ContaPage() {
   const [membro, fotos] = await Promise.all([getMembroAtual(), getFotos()]);
   return (
     <Pagina>
-      <CabecalhoDaPagina titulo="Meu perfil" descricao={`${membro.nome} · ${ROTULO_PAPEL[membro.papel]}`} />
+      <CabecalhoDaPagina titulo="Meu perfil" descricao={`${membro.nome} · ${ROTULO_PAPEL[membro.cargo]}`} />
       <section aria-labelledby="foto" className="cartao p-5 sm:p-6">
         <h2 id="foto" className="h3 mb-4">
           Foto de perfil
