@@ -25,9 +25,15 @@
 - Conteúdo do Drive "(cópia lds base)" carregado no banco: 42 obras e leis na Biblioteca (a partir do acervo original da liga), 6 materiais de eventos, 9 ciclos anteriores com 74 aulas e 3 competições.
 - Acervo organizado por tema e com as datas dos calendários de 2024.1, 2024.2 e 2025.1-2.
 
+- App instalável (PWA), com página sem conexão e convite para instalar.
+- Banco de professores, ligado às aulas.
+- Planejamento do ciclo: cronograma em rascunho, convites, publicação e início do ciclo.
+- Mural de oportunidades, com cartaz, lista de quem vai e destaque no Início.
+
 ## Próximas etapas
 
 - Informar as pastas originais de Eventos e Projetos (competições) no Drive da liga, que ainda apontam para a cópia.
 - Rascunho da IA no tira-dúvidas (depende da escolha do modelo; ver decisões).
 - Sincronizar o calendário com o Google Agenda.
-- Planejamento do ciclo 2027.1: cadastrar as aulas.
+- Planejamento do ciclo 2027.1: cadastrar as aulas na nova tela de planejamento.
+- Banco de professores: decidir as aulas dadas em dupla e completar contatos.

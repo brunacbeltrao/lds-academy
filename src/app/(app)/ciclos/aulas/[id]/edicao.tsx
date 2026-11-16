@@ -2,6 +2,8 @@
 
 import { useActionState, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { EscolhaDeProfessor } from "@/components/escolha-de-professor";
+import type { OpcaoDeProfessor } from "@/lib/professores";
 import { createClient } from "@/lib/supabase/client";
 import { registrarMaterial, salvarAula, type Resultado } from "./actions";
 
@@ -15,14 +17,15 @@ function Aviso({ estado }: { estado: Resultado }) {
   );
 }
 
-type Valores = { professor: string; professorBio: string; local: string; bibliografia: string };
+type Valores = { professor: string; professorId: string; professorBio: string; local: string; bibliografia: string };
 
-export function FormularioAula({ aulaId, valores }: { aulaId: string; valores: Valores }) {
+export function FormularioAula({ aulaId, valores, professores = [] }: { aulaId: string; valores: Valores; professores?: OpcaoDeProfessor[] }) {
   const [estado, acao, salvando] = useActionState<Resultado, FormData>(salvarAula, null);
 
   return (
     <form action={acao} className="flex flex-col gap-5">
       <input type="hidden" name="aulaId" value={aulaId} />
+      {professores.length > 0 ? <EscolhaDeProfessor professores={professores} padrao={valores.professorId} /> : null}
       <div>
         <label htmlFor="professor" className="rotulo-campo">
           Professor(a) que deu a aula

@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { ArrowLeft, ArrowUpRight, CalendarDays, Download, FileText, MapPin } from "lucide-react";
 import { AreaDeTexto, BotaoEnviar, Formulario } from "@/components/formulario";
 import { Lista, Pagina, Secao } from "@/components/ui";
+import type { OpcaoDeProfessor } from "@/lib/professores";
 import { formatarDataLonga, formatarHora, formatarTamanho, rotuloAula, rotuloDoCiclo, type Aula } from "@/lib/ciclos";
 import { apagarMaterial, justificarFalta } from "./actions";
 import { EnvioDeMateriais, FormularioAula } from "./edicao";
@@ -30,7 +31,17 @@ export type MinhaPresenca = {
 const ROTULO_PRESENCA = { presente: "Presença registrada", falta: "Falta registrada", justificada: "Falta justificada" } as const;
 const ROTULO_JUSTIFICATIVA = { pendente: "Em análise pela diretoria", aceita: "Aceita", recusada: "Recusada" } as const;
 
-export function ConteudoDaAula({ aula, diretoria, minha }: { aula: Aula; diretoria: boolean; minha: MinhaPresenca | null }) {
+export function ConteudoDaAula({
+  aula,
+  diretoria,
+  minha,
+  professores = [],
+}: {
+  aula: Aula;
+  diretoria: boolean;
+  minha: MinhaPresenca | null;
+  professores?: OpcaoDeProfessor[];
+}) {
   const leituras = (aula.bibliografia ?? "").split("\n").filter((linha) => linha.trim());
 
   return (
@@ -182,9 +193,11 @@ export function ConteudoDaAula({ aula, diretoria, minha }: { aula: Aula; diretor
           </div>
           <div className="prosa mt-6">
             <FormularioAula
+              professores={professores}
               aulaId={aula.id}
               valores={{
                 professor: aula.professor ?? "",
+                professorId: aula.professorId ?? "",
                 professorBio: aula.professorBio ?? "",
                 local: aula.local ?? "",
                 bibliografia: aula.bibliografia ?? "",

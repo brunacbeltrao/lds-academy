@@ -53,6 +53,13 @@ Etapas: vaga aberta → tema → redação → rascunho → revisão → ajustes
 - **Avisos:** enquanto não houver e-mail, cada pendência aparece em "Minhas pendências" (Início) e na fila da Produção.
 - **Publicado:** o artigo aparece na Biblioteca, em "Artigos produzidos pela liga", com o link do LinkedIn.
 
+## Novas áreas (novembro de 2026)
+
+- **App instalável (PWA):** a plataforma pode ser instalada no celular e no computador. Sem conexão, mostra uma página de aviso; nada da plataforma fica guardado no aparelho.
+- **Planejamento do ciclo:** qualquer membro da diretoria planeja (sem nível próprio para o diretor acadêmico; o ponto 2 abaixo segue em aberto). O cronograma nasce em rascunho e só aparece aos ligantes depois de publicado. Convites e notas ficam só com a diretoria e o conselho.
+- **Banco de professores:** na área da diretoria, com contato e histórico. A página da aula continua guardando o nome e a apresentação do professor, porque os ligantes não leem o banco. Carga inicial feita no banco a partir das aulas de 2026.2 com um só professor; as aulas dadas em dupla ficaram sem ficha, para a diretoria decidir.
+- **Mural de oportunidades:** só a diretoria publica. Cartaz em imagem opcional, lista de quem vai opcional (com limite de vagas) e destaque das abertas no Início. A oportunidade sai das abertas no dia seguinte ao prazo (ou à data do evento); sem data, fica até a diretoria remover.
+
 ## Em aberto
 
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.

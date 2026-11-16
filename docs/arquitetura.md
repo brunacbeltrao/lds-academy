@@ -41,6 +41,16 @@ docs/                       decisões de produto
 - O envio vai direto do navegador ao Storage (a RLS só deixa a diretoria enviar), porque arquivos grandes não passam pelas funções da Vercel. Depois do envio, uma ação no servidor registra o anexo em `aula_materiais`.
 - O download passa por `/materiais/[id]`, que confere o membro e redireciona para um link temporário de 60 segundos.
 
+## Instalação como app (PWA)
+
+- `src/app/manifest.ts`: nome, cores, ícones (`public/icones/`, inclusive a versão adaptável do Android) e atalhos.
+- `public/sw.js`: o service worker guarda só a página `public/offline.html`. Nenhuma página da plataforma fica no aparelho, porque todas exigem login e trazem dados dos membros. Registrado em produção por `src/components/registro-do-app.tsx`; o `next.config.ts` impede o cache do `sw.js`.
+- `src/components/instalar-app.tsx`: convite para instalar, no Início (celular, pode ser dispensado) e no perfil. No Android e no computador abre o pedido do navegador; no iPhone mostra o caminho pelo Compartilhar.
+
+## Cartazes do mural
+
+Bucket privado `mural` (JPG, PNG ou WebP até 5 MB). Mesmo desenho dos anexos: o navegador envia direto ao Storage (só a diretoria pode) e uma ação registra a oportunidade. A imagem é servida por `/oportunidades/[id]/cartaz`, que confere o membro e redireciona para um link temporário de 10 minutos.
+
 ## Documentos da liga
 
 Mesmo desenho dos anexos das aulas, em bucket privado separado (`documentos`), legível só pela diretoria e pelo conselho. Registro em `documentos`; download por `/documentos/[id]`.
@@ -66,4 +76,4 @@ Não há chave de serviço no app nesta etapa.
 
 ## Banco
 
-Tabelas: `membros`, `ciclos`, `aulas`, `aula_leituras`, `biblioteca_itens`, `favoritos`, `competicoes`, `equipes`, `equipe_membros`, `eventos`, `avisos`, `perguntas`, `respostas`, `presencas`, `justificativas`, `ia_trechos`, `aula_materiais`, `producoes`, `producao_participantes`, `producao_entregas`, `artigo_andamento`, `documentos`. Regras de acesso em `permissoes.md`.
+Tabelas: `membros`, `ciclos`, `aulas`, `aula_leituras`, `biblioteca_itens`, `favoritos`, `competicoes`, `equipes`, `equipe_membros`, `eventos`, `avisos`, `perguntas`, `respostas`, `presencas`, `justificativas`, `ia_trechos`, `aula_materiais`, `producoes`, `producao_participantes`, `producao_entregas`, `artigo_andamento`, `documentos`, `professores`, `aula_planejamento`, `oportunidades`, `oportunidade_interessados`. Regras de acesso em `permissoes.md`.

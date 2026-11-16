@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { InstalarApp } from "@/components/instalar-app";
 import { CabecalhoDaPagina, Pagina } from "@/components/ui";
 import { getFotos } from "@/lib/fotos";
 import { getMembroAtual } from "@/lib/membro";
@@ -25,6 +26,9 @@ export default async function ContaPage() {
         </h2>
         <FormularioSenha />
       </section>
+      <div className="mt-3">
+        <InstalarApp />
+      </div>
     </Pagina>
   );
 }

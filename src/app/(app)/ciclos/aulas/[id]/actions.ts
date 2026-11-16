@@ -24,10 +24,15 @@ export async function salvarAula(_: Resultado, formData: FormData): Promise<Resu
   const aulaId = String(formData.get("aulaId") ?? "");
   if (!UUID.test(aulaId)) return { ok: false, mensagem: "Aula inválida." };
 
+  // Professor do banco: só muda quando o formulário traz a escolha (o campo existe só se há banco).
+  const professorId = formData.has("professor_id") ? String(formData.get("professor_id") ?? "") : undefined;
+  if (professorId && !UUID.test(professorId)) return { ok: false, mensagem: "Professor inválido." };
+
   const supabase = await createClient();
   const { error } = await supabase
     .from("aulas")
     .update({
+      ...(professorId === undefined ? {} : { professor_id: professorId || null }),
       professor: texto(formData, "professor", 200),
       professor_bio: texto(formData, "professor_bio", 4000),
       local: texto(formData, "local", 200),

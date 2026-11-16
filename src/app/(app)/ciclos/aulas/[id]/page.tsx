@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAula } from "@/lib/ciclos";
 import { getMembroAtual } from "@/lib/membro";
+import { getOpcoesDeProfessores } from "@/lib/professores";
 import { createClient } from "@/lib/supabase/server";
 import { ConteudoDaAula, type MinhaPresenca } from "./conteudo";
 
@@ -23,5 +24,7 @@ export default async function AulaPage({ params }: PageProps<"/ciclos/aulas/[id]
     minha = { podeJustificar: true, presenca: presenca?.status ?? null, justificativa: justificativa ?? null };
   }
 
-  return <ConteudoDaAula aula={aula} diretoria={membro.papel === "diretoria"} minha={minha} />;
+  const diretoria = membro.papel === "diretoria";
+  const professores = diretoria ? await getOpcoesDeProfessores() : [];
+  return <ConteudoDaAula aula={aula} diretoria={diretoria} minha={minha} professores={professores} />;
 }

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Pin } from "lucide-react";
+import { CartaoOportunidade } from "@/components/cartao-oportunidade";
+import { InstalarApp } from "@/components/instalar-app";
 import { ProximoEncontro } from "@/components/proximo-encontro";
 import { CabecalhoDaPagina, Pagina, Painel } from "@/components/ui";
 import { pendenciasDeArtigos, type Pendencia } from "@/lib/artigo";
@@ -9,6 +11,7 @@ import { getCicloAtual, proximoEncontro } from "@/lib/ciclos";
 import { curta, diasAte, hoje, longa, quando } from "@/lib/datas";
 import { getFrequencia, LIMITE_DE_FALTAS, resumo } from "@/lib/frequencia";
 import { getMembroAtual } from "@/lib/membro";
+import { getOportunidadesAbertas } from "@/lib/oportunidades";
 import { getProducoes } from "@/lib/producao";
 import { getPerguntas, getRespostasPendentes } from "@/lib/tira-duvidas";
 import { createClient } from "@/lib/supabase/server";
@@ -19,7 +22,7 @@ export const metadata: Metadata = { title: "Início" };
 export default async function InicioPage() {
   const membro = await getMembroAtual();
   const gestao = membro.papel !== "ligante";
-  const [atual, avisos, perguntas, frequencia, producoes, filaRespostas, justificativasAbertas] = await Promise.all([
+  const [atual, avisos, perguntas, frequencia, producoes, filaRespostas, justificativasAbertas, oportunidades] = await Promise.all([
     getCicloAtual(),
     getAvisos(4),
     getPerguntas(5),
@@ -27,6 +30,7 @@ export default async function InicioPage() {
     getProducoes(),
     gestao ? getRespostasPendentes() : Promise.resolve([]),
     gestao ? contarJustificativasPendentes() : Promise.resolve(0),
+    getOportunidadesAbertas(membro.id, 3),
   ]);
 
   const primeiroNome = membro.nome.split(" ")[0];
@@ -85,6 +89,10 @@ export default async function InicioPage() {
   return (
     <Pagina larga>
       <CabecalhoDaPagina titulo={`Olá, ${primeiroNome}`} contexto={<span className="first-letter:uppercase">{longa(dataDeHoje)}</span>} />
+
+      <div className="mb-3 empty:hidden lg:hidden">
+        <InstalarApp dispensavel />
+      </div>
 
       <div className="grid gap-3 lg:grid-cols-3">
         <ProximoEncontro proximo={proximo} ciclo={atual?.ciclo.codigo ?? null} encontros={atual?.encontros ?? []} />
@@ -157,6 +165,16 @@ export default async function InicioPage() {
             </ul>
           )}
         </Painel>
+
+        {oportunidades.length > 0 ? (
+          <Painel titulo="Oportunidades" link={{ href: "/oportunidades", rotulo: "Ver o mural" }} className="lg:col-span-3">
+            <div className="grid gap-2.5 md:grid-cols-3">
+              {oportunidades.map((o) => (
+                <CartaoOportunidade key={o.id} oportunidade={o} compacto />
+              ))}
+            </div>
+          </Painel>
+        ) : null}
 
         <Painel titulo="Perguntas recentes" link={{ href: "/tira-duvidas", rotulo: "Tira-dúvidas" }} className="lg:col-span-2">
           {perguntas.length === 0 ? (

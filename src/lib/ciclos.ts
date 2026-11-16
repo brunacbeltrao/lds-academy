@@ -10,6 +10,7 @@ export type Ciclo = {
   descricao?: string | null;
   pasta_url?: string | null;
   status?: "planejado" | "atual" | "encerrado";
+  cronograma_publicado?: boolean;
 };
 
 export type CicloResumo = Required<Ciclo> & { aulas: number };
@@ -35,6 +36,7 @@ export type Aula = {
   data: string | null;
   local: string | null;
   professor: string | null;
+  professorId: string | null;
   professorBio: string | null;
   bibliografia: string | null;
   pastaUrl: string | null;
@@ -56,11 +58,17 @@ export async function getCicloAtual(): Promise<{ ciclo: Ciclo; encontros: Encont
     .maybeSingle();
   if (error) throw new Error(`Falha ao ler o ciclo atual: ${error.message}`);
   if (!ciclo) return null;
+  return { ciclo: ciclo as Ciclo, encontros: await getEncontrosDoCiclo(ciclo.id) };
+}
 
+/** Encontros publicados de um ciclo, em ordem de data (rascunhos do planejamento ficam de fora). */
+export async function getEncontrosDoCiclo(cicloId: string): Promise<Encontro[]> {
+  const supabase = await createClient();
   const { data: eventos, error: erroEventos } = await supabase
     .from("eventos")
     .select("id, titulo, tipo, inicio, local, descricao, aula:aulas(id, numero, professor, aula_materiais(count))")
-    .eq("ciclo_id", ciclo.id)
+    .eq("ciclo_id", cicloId)
+    .eq("publicado", true)
     .order("inicio");
   if (erroEventos) throw new Error(`Falha ao ler os encontros: ${erroEventos.message}`);
 
@@ -80,8 +88,7 @@ export async function getCicloAtual(): Promise<{ ciclo: Ciclo; encontros: Encont
       materiais: aula?.aula_materiais?.[0]?.count ?? 0,
     };
   });
-
-  return { ciclo: ciclo as Ciclo, encontros };
+  return encontros;
 }
 
 /** O PostgREST devolve relações "para um" como objeto ou lista de um item; isto normaliza. */
@@ -97,7 +104,7 @@ export async function getAula(id: string): Promise<Aula | null> {
   const { data, error } = await supabase
     .from("aulas")
     .select(
-      "id, numero, titulo, data, local, professor, professor_bio, bibliografia, pasta_url, ciclo:ciclos(id, codigo, titulo, status), aula_materiais(id, titulo, tamanho, criado_em)",
+      "id, numero, titulo, data, local, professor, professor_id, professor_bio, bibliografia, pasta_url, ciclo:ciclos(id, codigo, titulo, status), aula_materiais(id, titulo, tamanho, criado_em)",
     )
     .eq("id", id)
     .maybeSingle();
@@ -113,6 +120,7 @@ export async function getAula(id: string): Promise<Aula | null> {
     data: data.data,
     local: data.local,
     professor: data.professor,
+    professorId: data.professor_id,
     professorBio: data.professor_bio,
     bibliografia: data.bibliografia,
     pastaUrl: data.pasta_url,
@@ -195,7 +203,7 @@ export async function getCiclos(): Promise<CicloResumo[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("ciclos")
-    .select("id, codigo, titulo, inicio, fim, descricao, pasta_url, status, aulas(count)")
+    .select("id, codigo, titulo, inicio, fim, descricao, pasta_url, status, cronograma_publicado, aulas(count)")
     .order("codigo", { ascending: false });
   if (error) throw new Error(`Falha ao ler os ciclos: ${error.message}`);
   return (data ?? []).map(({ aulas, ...c }) => ({ ...(c as Required<Ciclo>), aulas: (aulas as { count: number }[])?.[0]?.count ?? 0 }));
