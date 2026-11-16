@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { ArrowLeft, ArrowUpRight, CalendarDays, Download, FileText, MapPin } from "lucide-react";
 import { AreaDeTexto, BotaoEnviar, Formulario } from "@/components/formulario";
 import { Lista, Pagina, Secao } from "@/components/ui";
-import { formatarDataLonga, formatarHora, formatarTamanho, rotuloAula, type Aula } from "@/lib/ciclos";
+import { formatarDataLonga, formatarHora, formatarTamanho, rotuloAula, rotuloDoCiclo, type Aula } from "@/lib/ciclos";
 import { apagarMaterial, justificarFalta } from "./actions";
 import { EnvioDeMateriais, FormularioAula } from "./edicao";
 
@@ -40,13 +40,13 @@ export function ConteudoDaAula({ aula, diretoria, minha }: { aula: Aula; diretor
         className="inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-grafite transition-colors hover:text-vinho"
       >
         <ArrowLeft aria-hidden="true" className="size-4" />
-        {aula.ciclo ? `Ciclo ${aula.ciclo.codigo}` : "Ciclos e aulas"}
+        {aula.ciclo ? `Ciclo ${rotuloDoCiclo(aula.ciclo.codigo)}` : "Ciclos e aulas"}
       </Link>
 
       <header className="mt-4 mb-8 sm:mb-10">
         <div className="flex flex-wrap gap-1.5">
           <span className="selo selo-suave">{rotuloAula(aula.numero)}</span>
-          {aula.ciclo ? <span className="selo">Ciclo {aula.ciclo.codigo}</span> : null}
+          {aula.ciclo ? <span className="selo">Ciclo {rotuloDoCiclo(aula.ciclo.codigo)}</span> : null}
         </div>
         <h1 className="h1 mt-3">{aula.titulo}</h1>
         <ul className="mt-4 flex flex-col gap-2 text-grafite sm:flex-row sm:flex-wrap sm:gap-x-6">

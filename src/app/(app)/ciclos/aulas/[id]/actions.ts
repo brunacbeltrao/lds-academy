@@ -98,6 +98,10 @@ export async function justificarFalta(_: Resultado, formData: FormData): Promise
   if (!motivo || motivo.length < 10) return { ok: false, mensagem: "Explique o motivo em pelo menos uma frase." };
 
   const supabase = await createClient();
+  const { data: aula } = await supabase.from("aulas").select("id, ciclo:ciclos(status)").eq("id", aulaId).maybeSingle();
+  const ciclo = Array.isArray(aula?.ciclo) ? aula.ciclo[0] : aula?.ciclo;
+  if (ciclo?.status !== "atual") return { ok: false, mensagem: "Só é possível justificar faltas de aulas do ciclo em curso." };
+
   const { error } = await supabase.from("justificativas").insert({ aula_id: aulaId, membro_id: membro.id, motivo });
   if (error) return { ok: false, mensagem: "Não foi possível enviar a justificativa. Tente de novo." };
   revalidatePath(`/ciclos/aulas/${aulaId}`);

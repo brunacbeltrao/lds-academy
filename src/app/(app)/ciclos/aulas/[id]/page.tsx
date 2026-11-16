@@ -12,9 +12,9 @@ export default async function AulaPage({ params }: PageProps<"/ciclos/aulas/[id]
   const [membro, aula] = await Promise.all([getMembroAtual(), getAula(id)]);
   if (!aula) notFound();
 
-  // Presença e justificativa só fazem sentido para aulas com data e para quem participa.
+  // Presença e justificativa só fazem sentido para aulas com data do ciclo em curso e para quem participa.
   let minha: MinhaPresenca | null = null;
-  if (aula.data && membro.papel !== "conselheiro") {
+  if (aula.data && aula.ciclo?.status === "atual" && membro.papel !== "conselheiro") {
     const supabase = await createClient();
     const [{ data: presenca }, { data: justificativa }] = await Promise.all([
       supabase.from("presencas").select("status").eq("aula_id", aula.id).eq("membro_id", membro.id).maybeSingle(),

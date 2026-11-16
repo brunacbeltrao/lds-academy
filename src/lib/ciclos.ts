@@ -38,7 +38,7 @@ export type Aula = {
   professorBio: string | null;
   bibliografia: string | null;
   pastaUrl: string | null;
-  ciclo: { id: string; codigo: string; titulo: string } | null;
+  ciclo: { id: string; codigo: string; titulo: string; status: "planejado" | "atual" | "encerrado" } | null;
   materiais: Material[];
 };
 
@@ -97,7 +97,7 @@ export async function getAula(id: string): Promise<Aula | null> {
   const { data, error } = await supabase
     .from("aulas")
     .select(
-      "id, numero, titulo, data, local, professor, professor_bio, bibliografia, pasta_url, ciclo:ciclos(id, codigo, titulo), aula_materiais(id, titulo, tamanho, criado_em)",
+      "id, numero, titulo, data, local, professor, professor_bio, bibliografia, pasta_url, ciclo:ciclos(id, codigo, titulo, status), aula_materiais(id, titulo, tamanho, criado_em)",
     )
     .eq("id", id)
     .maybeSingle();
@@ -116,7 +116,7 @@ export async function getAula(id: string): Promise<Aula | null> {
     professorBio: data.professor_bio,
     bibliografia: data.bibliografia,
     pastaUrl: data.pasta_url,
-    ciclo: um<{ id: string; codigo: string; titulo: string }>(data.ciclo),
+    ciclo: um<NonNullable<Aula["ciclo"]>>(data.ciclo),
     materiais: materiais.map(({ id, titulo, tamanho }) => ({ id, titulo, tamanho })),
   };
 }
@@ -156,10 +156,17 @@ export function formatarDiaDaSemana(iso: string): string {
   return new Intl.DateTimeFormat("pt-BR", { timeZone: FUSO, weekday: "long" }).format(new Date(iso));
 }
 
+/** "quarta-feira, 18 de novembro"; com o ano quando não é o ano corrente. */
 export function formatarDataLonga(iso: string): string {
-  return new Intl.DateTimeFormat("pt-BR", { timeZone: FUSO, weekday: "long", day: "numeric", month: "long" }).format(
-    new Date(iso),
-  );
+  const data = new Date(iso);
+  const outroAno = diaLocal(data).slice(0, 4) !== diaLocal(new Date()).slice(0, 4);
+  return new Intl.DateTimeFormat("pt-BR", {
+    timeZone: FUSO,
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    ...(outroAno ? { year: "numeric" } : {}),
+  }).format(data);
 }
 
 export function formatarHora(iso: string): string {
@@ -194,20 +201,84 @@ export async function getCiclos(): Promise<CicloResumo[]> {
   return (data ?? []).map(({ aulas, ...c }) => ({ ...(c as Required<Ciclo>), aulas: (aulas as { count: number }[])?.[0]?.count ?? 0 }));
 }
 
-/** Um ciclo e as suas aulas, para o acervo. */
-export async function getCiclo(codigo: string): Promise<{ ciclo: Required<Ciclo>; aulas: AulaDoAcervo[] } | null> {
+/** Um encontro do cronograma de um ciclo anterior; quando corresponde a uma aula do acervo, aponta para ela. */
+export type EncontroDoAcervo = {
+  id: string;
+  titulo: string;
+  tipo: Encontro["tipo"];
+  inicio: string;
+  aula: { id: string; numero: number | null; titulo: string; pasta_url: string | null } | null;
+};
+
+/**
+ * Um ciclo para o acervo: o cronograma datado (os encontros, em ordem) e as aulas do Drive
+ * que não aparecem em nenhum encontro do cronograma.
+ */
+export async function getCiclo(
+  codigo: string,
+): Promise<{ ciclo: Required<Ciclo>; cronograma: EncontroDoAcervo[]; semData: AulaDoAcervo[] } | null> {
   if (!/^[0-9.\-]{4,12}$/.test(codigo)) return null;
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("ciclos")
-    .select("id, codigo, titulo, inicio, fim, descricao, pasta_url, status, aulas(id, numero, titulo, data, professor, pasta_url)")
+    .select(
+      "id, codigo, titulo, inicio, fim, descricao, pasta_url, status, aulas(id, numero, titulo, data, professor, pasta_url), eventos(id, titulo, tipo, inicio, aula:aulas(id, numero, titulo, pasta_url))",
+    )
     .eq("codigo", codigo)
     .maybeSingle();
   if (error) throw new Error(`Falha ao ler o ciclo: ${error.message}`);
   if (!data) return null;
-  const { aulas, ...ciclo } = data;
-  const lista = ((aulas as AulaDoAcervo[]) ?? []).sort(
-    (a, b) => (a.data ?? "").localeCompare(b.data ?? "") || (a.numero ?? 99) - (b.numero ?? 99) || a.titulo.localeCompare(b.titulo),
-  );
-  return { ciclo: ciclo as Required<Ciclo>, aulas: lista };
+  const { aulas, eventos, ...ciclo } = data;
+
+  const cronograma = ((eventos as unknown as (Omit<EncontroDoAcervo, "aula"> & { aula: unknown })[]) ?? [])
+    .map((e) => ({ ...e, aula: um<EncontroDoAcervo["aula"]>(e.aula) }))
+    .sort((a, b) => a.inicio.localeCompare(b.inicio));
+  const noCronograma = new Set(cronograma.map((e) => e.aula?.id).filter(Boolean));
+  const semData = ((aulas as AulaDoAcervo[]) ?? [])
+    .filter((a) => !noCronograma.has(a.id))
+    .sort((a, b) => (a.data ?? "").localeCompare(b.data ?? "") || (a.numero ?? 99) - (b.numero ?? 99) || a.titulo.localeCompare(b.titulo));
+
+  return { ciclo: ciclo as Required<Ciclo>, cronograma, semData };
+}
+
+/** Período de um ciclo por extenso: "abril a julho de 2024", "novembro de 2024 a abril de 2025". */
+export function periodoDoCiclo(inicio: string | null, fim: string | null): string | null {
+  if (!inicio || !fim) return null;
+  const mes = (d: string) => new Intl.DateTimeFormat("pt-BR", { timeZone: FUSO, month: "long" }).format(new Date(`${d}T12:00:00-03:00`));
+  const [anoInicio, anoFim] = [inicio.slice(0, 4), fim.slice(0, 4)];
+  if (anoInicio !== anoFim) return `${mes(inicio)} de ${anoInicio} a ${mes(fim)} de ${anoFim}`;
+  return mes(inicio) === mes(fim) ? `${mes(inicio)} de ${anoInicio}` : `${mes(inicio)} a ${mes(fim)} de ${anoInicio}`;
+}
+
+/** Código do ciclo para leitura: "2025.1-2" vira "2025.1 e 2025.2". */
+export function rotuloDoCiclo(codigo: string): string {
+  const [ano, semestres] = codigo.split(".");
+  if (!semestres?.includes("-")) return codigo;
+  return semestres
+    .split("-")
+    .map((s) => `${ano}.${s}`)
+    .join(" e ");
+}
+
+/**
+ * Ciclos encerrados agrupados por tema (o título do ciclo). Temas com um só ciclo vão para
+ * "Outros temas". Grupos e ciclos do mais recente ao mais antigo.
+ */
+export function acervoPorTema(ciclos: CicloResumo[]): { tema: string; id: string; ciclos: CicloResumo[] }[] {
+  const ordenados = [...ciclos].sort((a, b) => b.codigo.localeCompare(a.codigo));
+  const porTitulo = new Map<string, CicloResumo[]>();
+  for (const c of ordenados) porTitulo.set(c.titulo, [...(porTitulo.get(c.titulo) ?? []), c]);
+  const grupos = [...porTitulo.entries()].filter(([, lista]) => lista.length > 1).map(([tema, lista]) => ({ tema, ciclos: lista }));
+  const outros = [...porTitulo.values()].filter((lista) => lista.length === 1).flat();
+  if (outros.length > 0) grupos.push({ tema: "Outros temas", ciclos: outros });
+  return grupos.map((g) => ({ ...g, id: `tema-${slug(g.tema)}` }));
+}
+
+function slug(texto: string): string {
+  return texto
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 }
