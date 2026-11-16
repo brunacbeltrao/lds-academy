@@ -34,7 +34,7 @@
 
 - **Regularização:** aba da diretoria (conselho em leitura) com os documentos da liga em PDF, por categoria. Os arquivos ficam no Storage, em bucket privado próprio, fora do alcance dos ligantes.
 
-- **Links do Drive:** biblioteca, acervo de ciclos e competições apontam para a pasta "(cópia lds base)" no Drive da diretoria. Para os membros abrirem, a pasta precisa estar compartilhada com eles (ou com quem tiver o link).
+- **Links do Drive:** biblioteca e acervo de ciclos apontam para o Drive original da liga (pasta "Grupo de Estudos", com a Biblioteca e os semestres, e a pasta do ciclo de M&A de 2025). Quando a pasta exata de uma aula não está visível na busca do Drive, o link leva à pasta do semestre. Os materiais de eventos e as competições ainda apontam para a cópia da diretoria, até a liga informar as pastas originais.
 
 ## Em aberto
 
