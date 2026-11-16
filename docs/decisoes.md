@@ -26,3 +26,4 @@
 2. **Aceitar justificativas dá ao diretor acadêmico uma permissão própria: isso vira um nível?** Hoje qualquer membro da diretoria pode decidir.
 3. **Em quanto tempo a diretoria valida uma resposta antes de a dúvida ficar parada?**
 4. **Envio de e-mail do login.** O serviço de e-mail padrão do Supabase serve só para testes (poucos envios por hora). Antes de abrir aos ligantes, definir um serviço de envio próprio ou outro método de login.
+5. **Proteção de acesso da Vercel.** O projeto está com a "Vercel Authentication" ligada em todos os endereços `vercel.app`: só entra quem está logado na conta da Vercel. Serve para a fase de construção, mas impede o acesso dos ligantes. Antes de abrir, definir entre um domínio próprio da liga ou liberar o endereço de produção.

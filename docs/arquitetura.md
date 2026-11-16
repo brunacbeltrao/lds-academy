@@ -45,6 +45,7 @@ Não há chave de serviço no app nesta etapa.
 ## Configuração feita fora do repositório
 
 - **Supabase → Authentication → URL Configuration:** a "Site URL" e as "Redirect URLs" precisam conter o endereço do app na Vercel (com `/auth/callback`), senão o link do e-mail não volta para o site.
+- **Vercel:** projeto `lds-academy` no time BRUNA, funções em São Paulo (`gru1`), produção no branch `main` e preview nos demais.
 - **Lista de membros:** mantida direto no banco até existir a tela de Gestão.
 
 ## Banco
