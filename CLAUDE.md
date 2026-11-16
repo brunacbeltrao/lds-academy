@@ -25,7 +25,7 @@ Leia `docs/`: é a fonte das decisões de produto.
 5. **Toda mudança de estrutura do banco é uma migração** em `supabase/migrations/`, com o mesmo SQL aplicado no projeto. Não altere o banco sem gravar o arquivo.
 6. **Permissão se confere no servidor e no banco.** Esconder um item do menu não é controle de acesso: a Gestão chama `exigirGestao()`, toda ação de escrita da gestão chama `exigirDiretoria()` e a RLS repete a regra. O conselheiro lê tudo e não escreve nada.
 7. **Interface em português do Brasil**, clara e direta, sem emoji. Código (nomes de tabelas, rotas, funções de domínio) também em português.
-8. **Visual**: siga `docs/identidade-visual.md`. Uma só fonte (Figtree), fundo claro, vinho só como destaque, sem títulos em serifa ou itálico, sem rótulos em caixa alta, sem faixa colorida lateral em cartões. Use as classes de `src/app/globals.css` e as peças de `src/components/ui.tsx`. Nunca redesenhar ou recolorir o brasão.
+8. **Visual**: siga `docs/identidade-visual.md`. Uma só fonte (Figtree), fundo bege da liga, vinho só como destaque, sem títulos em serifa ou itálico, sem rótulos em caixa alta, sem faixa colorida lateral em cartões. Use as classes de `src/app/globals.css` e as peças de `src/components/ui.tsx`. Nunca redesenhar ou recolorir o brasão.
 
 ## Comandos
 

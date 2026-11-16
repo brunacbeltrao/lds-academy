@@ -2,7 +2,7 @@
 
 /*
  * LDS Academy · base visual
- * Estratégia de cor contida: neutros levemente puxados para o matiz do vinho e o vinho da liga
+ * Estratégia de cor contida: o bege da liga no fundo, superfícies brancas e o vinho da liga
  * como único destaque (ações, item ativo, próximo encontro). Uma só família tipográfica.
  */
 :root {
@@ -12,11 +12,11 @@
   --lds-vinho-borda: #efc9d1;
   --lds-tinta: #231c1e;
   --lds-grafite: #635a5c;
-  --lds-fundo: #faf9f9;
+  --lds-fundo: #ebece0;
   --lds-superficie: #ffffff;
-  --lds-sutil: #f3f1f1;
-  --lds-linha: #e7e3e3;
-  --lds-linha-forte: #cdc7c8;
+  --lds-sutil: #f4f4ec;
+  --lds-linha: #d9d9cb;
+  --lds-linha-forte: #bdbcab;
 }
 
 @theme inline {

@@ -6,7 +6,7 @@ A plataforma usa uma versão própria, feita para tela, da identidade da LDS·FD
 
 ## Cor
 
-Estratégia contida: neutros levemente puxados para o matiz do vinho e um só acento.
+Estratégia contida: o bege da liga no fundo, superfícies brancas e um só acento.
 
 | Token | Valor | Uso |
 | --- | --- | --- |
@@ -15,11 +15,11 @@ Estratégia contida: neutros levemente puxados para o matiz do vinho e um só ac
 | `vinho-suave` | `#FBEFF1` | Fundo de destaque (item ativo, próximo encontro, avisos) |
 | `vinho-borda` | `#EFC9D1` | Borda dos destaques; sublinhado de links |
 | `tinta` | `#231C1E` | Texto e títulos |
-| `grafite` | `#635A5C` | Texto secundário (6:1 sobre o fundo) |
-| `fundo` | `#FAF9F9` | Fundo da página |
+| `grafite` | `#635A5C` | Texto secundário (5,6:1 sobre o bege) |
+| `fundo` | `#EBECE0` | Fundo da página: o bege da liga, mantido a pedido da diretoria |
 | `superficie` | `#FFFFFF` | Cartões, campos e menu |
-| `sutil` | `#F3F1F1` | Hover neutro, selos, painel de edição |
-| `linha` / `linha-forte` | `#E7E3E3` / `#CDC7C8` | Bordas |
+| `sutil` | `#F4F4EC` | Hover neutro, selos, painel de edição |
+| `linha` / `linha-forte` | `#D9D9CB` / `#BDBCAB` | Bordas |
 
 - O vinho cheio aparece em poucos lugares: botões, selos e o painel do próximo encontro, no Início. Nunca como fundo de menu ou de página.
 - Texto sempre com contraste de pelo menos 4,5:1. Não usar cinza claro "por elegância".
