@@ -199,7 +199,7 @@ export function FluxoDoArtigo({ p, v, fotos, membros, revisoes, temasOutros, esp
               ? `Revisão com ${revisor}${revisorDeFora ? ", de fora da lista: envie a ele o link do rascunho e registre o parecer aqui" : ""}.`
               : `A semana de revisão não começa sem revisor: designe até a entrega${p.entrega ? `, ${longa(p.entrega)}` : ""}. Os autores não aparecem na lista.`}
           </p>
-          <Formulario acao={designarRevisor} className="mt-4 grid gap-4 sm:grid-cols-2">
+          <Formulario acao={designarRevisor} className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <input type="hidden" name="producao_id" value={p.id} />
             <Escolha
               nome="revisor"
@@ -245,7 +245,7 @@ export function FluxoDoArtigo({ p, v, fotos, membros, revisoes, temasOutros, esp
       passos.push(
         <Passo key="decidir" titulo="Decida o próximo passo" destaque>
           <Parecer p={p} />
-          <Formulario acao={decidirReescrita} className="mt-4 grid gap-4 sm:grid-cols-2">
+          <Formulario acao={decidirReescrita} className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <input type="hidden" name="producao_id" value={p.id} />
             <Escolha
               nome="decisao"
@@ -530,7 +530,7 @@ function FormularioDeParecer({ p, titulo, recolhido = false }: { p: Producao; ti
 
 function FormularioDeData({ p, padrao, botao }: { p: Producao; padrao: string | null; botao: string }) {
   return (
-    <Formulario acao={moverArtigo} className="mt-3 grid gap-4 sm:grid-cols-2">
+    <Formulario acao={moverArtigo} className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
       <input type="hidden" name="producao_id" value={p.id} />
       <Campo nome="publicacao" tipo="date" rotulo="Segunda-feira de publicação" padrao={padrao ?? ""} ajuda="Os prazos de rascunho e revisão são recalculados a partir dela." />
       <div className="flex flex-col justify-end">
@@ -604,7 +604,7 @@ function FerramentasDaDiretoria({ p, membros, espacoLivre }: { p: Producao; memb
         </Recolhivel>
       ) : null}
       <Recolhivel titulo="Corrigir dados do artigo">
-        <Formulario acao={salvarProducao} className="grid gap-4 sm:grid-cols-2">
+        <Formulario acao={salvarProducao} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <input type="hidden" name="producao_id" value={p.id} />
           <input type="hidden" name="status" value={p.status} />
           <Campo nome="tema" rotulo="Tema" padrao={p.tema ?? ""} maxLength={300} className="sm:col-span-2" />
@@ -615,7 +615,7 @@ function FerramentasDaDiretoria({ p, membros, espacoLivre }: { p: Producao; memb
           <fieldset className="sm:col-span-2">
             <legend className="rotulo-campo">Autoria</legend>
             <p className="mb-2 text-sm text-grafite">Quem está marcado vê o artigo como seu, registra o tema e envia o rascunho. O revisor é designado pelo diretor acadêmico.</p>
-            <div className="grid max-h-64 gap-x-4 overflow-y-auto rounded-[0.625rem] border border-linha-forte bg-superficie px-3 py-1 sm:grid-cols-2">
+            <div className="grid grid-cols-1 max-h-64 gap-x-4 overflow-y-auto rounded-[0.625rem] border border-linha-forte bg-superficie px-3 py-1 sm:grid-cols-2">
               {autores.map((m) => (
                 <label key={m.id} className="flex min-h-10 cursor-pointer items-center gap-2.5 text-sm text-tinta">
                   <input type="checkbox" name="autor_ids" value={m.id} defaultChecked={p.participantes.some((x) => x.id === m.id && x.papel === "autor")} className="size-4 shrink-0 accent-vinho" />

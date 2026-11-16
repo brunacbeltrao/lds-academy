@@ -101,16 +101,16 @@ export function InstalarApp({ dispensavel = false }: { dispensavel?: boolean }) 
           </>
         ) : situacao === "iphone" ? (
           <ol className="mt-1 flex flex-col gap-1.5 text-[0.9375rem] text-grafite">
-            <li className="flex flex-wrap items-center gap-1.5">
-              1. No Safari, toque em
-              <span className="inline-flex items-center gap-1 font-medium text-tinta">
+            <li>
+              1. No Safari, toque em{" "}
+              <span className="inline-flex items-center gap-1 align-bottom font-medium whitespace-nowrap text-tinta">
                 <Share aria-hidden="true" className="size-4" strokeWidth={1.75} />
                 Compartilhar
               </span>
             </li>
-            <li className="flex flex-wrap items-center gap-1.5">
-              2. Escolha
-              <span className="inline-flex items-center gap-1 font-medium text-tinta">
+            <li>
+              2. Escolha{" "}
+              <span className="inline-flex items-center gap-1 align-bottom font-medium whitespace-nowrap text-tinta">
                 <SquarePlus aria-hidden="true" className="size-4" strokeWidth={1.75} />
                 Adicionar à Tela de Início
               </span>

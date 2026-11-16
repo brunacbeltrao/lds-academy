@@ -94,7 +94,7 @@ export default async function InicioPage() {
         <InstalarApp dispensavel />
       </div>
 
-      <div className="grid gap-3 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
         <ProximoEncontro proximo={proximo} ciclo={atual?.ciclo.codigo ?? null} encontros={atual?.encontros ?? []} />
 
         <Painel titulo="Minha frequência" link={{ href: "/trajetoria", rotulo: "Detalhes" }}>
@@ -168,7 +168,7 @@ export default async function InicioPage() {
 
         {oportunidades.length > 0 ? (
           <Painel titulo="Oportunidades" link={{ href: "/oportunidades", rotulo: "Ver o mural" }} className="lg:col-span-3">
-            <div className="grid gap-2.5 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-2.5 md:grid-cols-3">
               {oportunidades.map((o) => (
                 <CartaoOportunidade key={o.id} oportunidade={o} compacto />
               ))}

@@ -4,7 +4,7 @@ import type { Professor } from "@/lib/professores";
 /** Campos da ficha do professor, usados no cadastro e na edição. */
 export function CamposDoProfessor({ professor, prefixo }: { professor?: Professor; prefixo: string }) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <Campo nome="nome" rotulo="Nome" obrigatorio maxLength={200} padrao={professor?.nome} prefixo={prefixo} className="sm:col-span-2" />
       <Campo nome="instituicao" rotulo="Escritório, universidade ou órgão" maxLength={200} padrao={professor?.instituicao ?? undefined} prefixo={prefixo} />
       <Campo

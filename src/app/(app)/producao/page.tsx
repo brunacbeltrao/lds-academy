@@ -118,7 +118,7 @@ export default async function ProducaoPage({ searchParams }: PageProps<"/produca
       ) : null}
 
       {ativa === "orientacoes" ? (
-        <div className="grid gap-3 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           <section className="cartao p-4 sm:p-6">
             <h2 className="h3 mb-4">Carrosséis do Instagram</h2>
             <Lista itens={ORIENTACOES_CARROSSEL} />
@@ -196,10 +196,10 @@ function NovaVaga({ membros, sugestao }: { membros: MembroDaLista[]; sugestao: s
   return (
     <div className="mb-5">
       <Recolhivel titulo="Abrir vaga de artigo">
-        <Formulario acao={criarArtigo} resetar className="grid gap-4 sm:grid-cols-2">
+        <Formulario acao={criarArtigo} resetar className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <fieldset className="sm:col-span-2">
             <legend className="rotulo-campo">Quem escreve (dupla ou trio)</legend>
-            <div className="grid max-h-64 gap-x-4 overflow-y-auto rounded-[0.625rem] border border-linha-forte bg-superficie px-3 py-1 sm:grid-cols-2">
+            <div className="grid grid-cols-1 max-h-64 gap-x-4 overflow-y-auto rounded-[0.625rem] border border-linha-forte bg-superficie px-3 py-1 sm:grid-cols-2">
               {candidatos.map((m) => (
                 <label key={m.id} className="flex min-h-11 cursor-pointer items-center gap-2.5 text-sm text-tinta">
                   <input type="checkbox" name="autor_ids" value={m.id} className="size-[1.125rem] shrink-0 accent-vinho" />

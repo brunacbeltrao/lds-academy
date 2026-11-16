@@ -35,7 +35,7 @@ export function Recolhivel({ titulo, children, abertoInicial = false }: { titulo
       <div
         id={id}
         inert={!aberto}
-        className={`grid transition-[grid-template-rows] duration-300 ease-saida ${aberto ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+        className={`grid grid-cols-1 transition-[grid-template-rows] duration-300 ease-saida ${aberto ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
       >
         <div className="overflow-hidden">
           <div

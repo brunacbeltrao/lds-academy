@@ -75,7 +75,7 @@ export function ConteudoDoPlanejamento({
       {diretoria ? (
         <div className="mt-8">
           <Recolhivel titulo="Criar ciclo" abertoInicial={planejados.length === 0}>
-            <Formulario acao={criarCiclo} className="grid gap-4 sm:grid-cols-2">
+            <Formulario acao={criarCiclo} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Campo nome="codigo" rotulo="Código" obrigatorio padrao={sugestao} maxLength={12} ajuda="Ano e semestre, como 2027.1." />
               <Campo nome="titulo" rotulo="Tema do ciclo" obrigatorio maxLength={200} placeholder="Ex.: Fusões e Aquisições" />
               <Campo nome="inicio" rotulo="Primeiro encontro" tipo="date" />

@@ -149,7 +149,7 @@ export default async function CompeticoesPage() {
 
       {diretoria ? (
         <Recolhivel titulo="Nova competição ou edição">
-          <Formulario acao={criarCompeticao} resetar className="grid gap-4 sm:grid-cols-2">
+          <Formulario acao={criarCompeticao} resetar className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Campo nome="nome" rotulo="Nome" obrigatorio maxLength={200} placeholder="Ex.: Sociecap" />
             <Campo nome="edicao" rotulo="Edição" maxLength={50} placeholder="Ex.: 2027" />
             <Campo nome="inicio" rotulo="Início" tipo="date" />

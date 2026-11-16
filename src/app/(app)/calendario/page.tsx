@@ -170,7 +170,7 @@ export default async function CalendarioPage({ searchParams }: PageProps<"/calen
       {diretoria ? (
         <div className="mt-6">
           <Recolhivel titulo="Novo evento no calendário">
-            <Formulario acao={criarEvento} resetar className="grid gap-4 sm:grid-cols-2">
+            <Formulario acao={criarEvento} resetar className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Campo nome="titulo" rotulo="Título" obrigatorio maxLength={200} className="sm:col-span-2" />
               <Escolha
                 nome="tipo"
