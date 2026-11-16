@@ -1,14 +1,13 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 
-export type Aviso = { id: string; titulo: string; corpo: string; fixado: boolean; publicadoEm: string };
+export type Aviso = { id: string; titulo: string; corpo: string; fixado: boolean; publicado_em: string; autor: string | null };
 
-/** Avisos da diretoria: fixados primeiro, depois do mais novo para o mais antigo. */
-export async function getAvisos(limite = 60): Promise<Aviso[]> {
+export async function getAvisos(limite = 50): Promise<Aviso[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("avisos")
-    .select("id, titulo, corpo, fixado, publicado_em")
+    .select("id, titulo, corpo, fixado, publicado_em, autor:membros(nome)")
     .order("fixado", { ascending: false })
     .order("publicado_em", { ascending: false })
     .limit(limite);
@@ -18,6 +17,7 @@ export async function getAvisos(limite = 60): Promise<Aviso[]> {
     titulo: a.titulo,
     corpo: a.corpo,
     fixado: a.fixado,
-    publicadoEm: a.publicado_em,
+    publicado_em: a.publicado_em,
+    autor: (Array.isArray(a.autor) ? a.autor[0] : a.autor)?.nome ?? null,
   }));
 }

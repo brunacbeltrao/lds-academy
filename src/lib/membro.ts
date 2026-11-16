@@ -4,7 +4,11 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 export type Papel = "ligante" | "diretoria" | "conselheiro";
-export type Membro = { id: string; nome: string; email: string; papel: Papel };
+/**
+ * `papel` é o papel efetivo, que decide as permissões: quem tem acesso de diretoria
+ * conta como diretoria. `cargo` é o que aparece na tela (o papel registrado).
+ */
+export type Membro = { id: string; nome: string; papel: Papel; cargo: Papel; diretorAcademico: boolean };
 
 /**
  * Membro logado, conferido no servidor a cada requisição.
@@ -18,12 +22,15 @@ export const getMembroAtual = cache(async (): Promise<Membro> => {
 
   const { data: membro } = await supabase
     .from("membros")
-    .select("id, nome, email, papel, ativo")
+    .select("id, nome, papel, ativo, acesso_diretoria, diretor_academico")
     .eq("user_id", userId)
     .maybeSingle();
 
   if (!membro || !membro.ativo) redirect("/auth/sair?erro=inativo");
-  return { id: membro.id, nome: membro.nome, email: membro.email, papel: membro.papel as Papel };
+  const cargo = membro.papel as Papel;
+  const papel: Papel = membro.acesso_diretoria && cargo !== "conselheiro" ? "diretoria" : cargo;
+  // Diretor acadêmico só vale com permissões de diretoria (a função do banco repete a regra).
+  return { id: membro.id, nome: membro.nome, papel, cargo, diretorAcademico: papel === "diretoria" && Boolean(membro.diretor_academico) };
 });
 
 /** Gestão: a diretoria gere e o conselho acompanha em modo leitura. Ligantes não entram. */

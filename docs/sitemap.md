@@ -11,12 +11,13 @@ Entrada única: **LDS Academy**, com login por lista de membros. Fonte: quadro "
 | Ciclos e aulas | `/ciclos` | Ciclo atual: 2026.2, Ciclo-base de Direito Societário · Próximo ciclo: 2027.1, M&A · Ciclos anteriores, abertos a todos · Página da aula: slides, leituras e apostila |
 | Biblioteca | `/biblioteca` | Doutrina por tema, autor e ciclo · Legislação e jurisprudência · Apostilas da liga · Artigos produzidos pela liga · Busca e favoritos |
 | Competições | `/competicoes` | Sociecap, CMNA e outras · Edital, regras e prazos · Casos e peças de edições anteriores · Equipes: acesso só da equipe e da diretoria · Trilha de preparação e treinos |
+| Oportunidades | `/oportunidades` | Mural de vagas de estágio, cursos, eventos, concursos e conteúdos · Abertas e encerradas pelo prazo · Filtro por tipo · Cartaz em imagem · Lista de quem vai (botão "Vou") · As abertas aparecem no Início |
 | Produção | `/producao` | Carrosséis do Instagram · Mini-artigos do LinkedIn · Orientações · Banco de temas |
 | Tira-dúvidas | `/tira-duvidas` | Feed público por ciclo e tema · Perguntar, em público ou privado · Respostas dos ligantes (nas públicas) · Rascunho da IA com base na biblioteca · Validação da diretoria antes de publicar |
 | Minha trajetória | `/trajetoria` | Presença, faltas e justificativas (limite de 3) · Leituras e aulas concluídas · Minhas perguntas e respostas · Minhas equipes de competição |
 | A Liga | `/a-liga` | O que é a LDS·FDR · Cargos · Regras do Grupo de Estudos · Eventos · Código de Conduta |
 
-As abas "Produção" e "A Liga" não estavam no mapa original; foram acrescentadas em novembro de 2026.
+As abas "Produção", "A Liga" e "Oportunidades" não estavam no mapa original; foram acrescentadas em novembro de 2026.
 
 ## Gestão (diretoria e conselho)
 
@@ -25,6 +26,14 @@ Não aparece no menu do ligante e é bloqueada no servidor. A diretoria gere; o 
 ### Regularização (`/regularizacao`)
 
 Os documentos da liga em PDF, por categoria: Estatuto e regimento · Eleições (editais, propostas, resultados) · Atas e assembleias · Registros e cadastros · Outros. A diretoria envia e remove; o conselho lê. Download por `/documentos/[id]`.
+
+### Professores (`/professores`)
+
+Banco de professores: quem já deu ou pode dar aula, com instituição, temas, contato (e-mail, WhatsApp, LinkedIn), apresentação, observações da diretoria e as aulas dadas na liga. Busca por nome, tema ou escritório. Ficha em `/professores/[id]`. A diretoria cadastra e edita; o conselho lê.
+
+### Planejamento do ciclo (`/gestao/planejamento`)
+
+A diretoria cria o próximo ciclo e monta o cronograma em rascunho (`/gestao/planejamento/[codigo]`): aulas e eventos, preenchimento automático das quartas-feiras, professor do banco, situação do convite (a convidar, convite enviado, confirmado, recusou) e notas internas. Depois publica para os ligantes (aba Próximo ciclo e Calendário) e, no começo do semestre, inicia o ciclo, que vira o atual; o anterior vai para o acervo. O conselho lê.
 
 ### Gestão (`/gestao`)
 
@@ -38,8 +47,17 @@ Os documentos da liga em PDF, por categoria: Estatuto e regimento · Eleições 
 
 ## Outras rotas
 
-- `/ciclos/aulas/[id]`: página da aula, com professor, bibliografia e anexos; a diretoria edita ali mesmo.
+- `/ciclos/aulas/[id]`: página da aula, com professor, bibliografia, anexos, pasta do Drive, presença e justificativa de falta; a diretoria edita ali mesmo.
+- `/ciclos/acervo/[codigo]`: um ciclo anterior, com o cronograma datado (quando há calendário) e as aulas do Drive. Na aba Acervo de `/ciclos`, os ciclos ficam agrupados por tema.
+- `/producao/[id]`: página de uma publicação. Nos mini-artigos, o fluxo completo: etapas, prazos, o que cada pessoa faz agora (tema, rascunho, revisor, parecer, ajustes, conferência, publicação) e o andamento. Nos carrosséis, entregas e edição pela diretoria.
+- `/tira-duvidas/[id]`: pergunta, respostas, validação e resposta da diretoria.
+- `/conta`: meu perfil: foto (bucket privado `fotos`, visível aos membros) e troca de senha. Abre pelo nome no rodapé do menu.
+- `/conta/senha`: nova senha, destino do link de Esqueci a senha.
+- `/materiais/[id]/ler` e `/documentos/[id]/ler`: leitura do PDF no próprio site, com tela cheia e download.
 - `/materiais/[id]`: download de um anexo, por link temporário.
-- `/login`: pedido do link de acesso.
-- `/auth/callback`: retorno do link de acesso.
+- `/oportunidades/[id]`: uma oportunidade, com cartaz, prazo, link, contato, botão "Vou" e, para a diretoria e o conselho, a lista de quem vai; a diretoria edita ali mesmo.
+- `/oportunidades/[id]/cartaz`: imagem do cartaz, por link temporário.
+- `/offline.html`: página mostrada pelo app instalado quando não há internet.
+- `/login`: entrar, primeiro acesso (criar senha) e esqueci a senha.
+- `/auth/callback`: retorno do link de nova senha.
 - `/auth/sair`: encerra a sessão.

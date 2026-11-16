@@ -16,19 +16,24 @@
 - Aba "A Liga", com regras do Grupo de Estudos e Código de Conduta.
 - Página de cada aula, com professor, bibliografia e anexos em PDF; edição pela diretoria.
 - Área de Produção, com carrosséis e mini-artigos.
+- Fluxo do mini-artigo: vaga, tema, rascunho, revisor, parecer, ajustes, conferência final e publicação, com pendências no Início e artigos publicados na Biblioteca.
 - Aba Regularização, com os documentos da liga.
 - Redesenho da interface (Figtree, fundo bege da liga, vinho como destaque).
-- Chamada na página da aula: a diretoria registra presença, falta ou falta justificada; o conselho vê em modo leitura; cada membro vê a própria presença.
-- Seção "Depois da aula": slides, apostila (links) e resumo, editados pela diretoria na página da aula.
-- Avisos da diretoria no Início: publicar, corrigir, fixar no topo e remover.
 
-## Próximas etapas (a definir a ordem)
+- Login por e-mail e senha; e-mails de acesso em `membros_acesso`, visíveis só à diretoria e ao conselho.
+- Plataforma completa (novembro de 2026): Início com avisos, pendências, frequência e prazos; Ciclos com abas (ciclo atual em cartões, próximo ciclo e acervo de 2021.2 a 2026.1 com as pastas do Drive); Calendário mensal; Biblioteca com busca, filtros e favoritos; Competições com equipes; Produção com páginas por publicação, autores, revisores e entregas; Tira-dúvidas com validação; Minha trajetória; Gestão com membros, frequência, justificativas, avisos e fila.
+- Conteúdo do Drive "(cópia lds base)" carregado no banco: 42 obras e leis na Biblioteca (a partir do acervo original da liga), 6 materiais de eventos, 9 ciclos anteriores com 74 aulas e 3 competições.
+- Acervo organizado por tema e com as datas dos calendários de 2024.1, 2024.2 e 2025.1-2.
 
-- Gestão de membros: tela para a diretoria manter a lista oficial.
-- Envio de e-mail próprio para o login, antes de abrir aos ligantes.
-- Produção: edição do calendário pela diretoria.
-- Biblioteca: cadastro dos links do Drive, busca e favoritos.
-- Calendário no Início.
-- Tira-dúvidas: perguntas, respostas, fila de validação e rascunho da IA.
-- Competições: edições, equipes e materiais.
-- Minha trajetória: presença, justificativas e progresso.
+- App instalável (PWA), com página sem conexão e convite para instalar.
+- Banco de professores, ligado às aulas.
+- Planejamento do ciclo: cronograma em rascunho, convites, publicação e início do ciclo.
+- Mural de oportunidades, com cartaz, lista de quem vai e destaque no Início.
+
+## Próximas etapas
+
+- Informar as pastas originais de Eventos e Projetos (competições) no Drive da liga, que ainda apontam para a cópia.
+- Rascunho da IA no tira-dúvidas (depende da escolha do modelo; ver decisões).
+- Sincronizar o calendário com o Google Agenda.
+- Planejamento do ciclo 2027.1: cadastrar as aulas na nova tela de planejamento.
+- Banco de professores: decidir as aulas dadas em dupla e completar contatos.

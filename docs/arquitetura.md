@@ -27,17 +27,29 @@ docs/                       decisões de produto
 
 ## Login por lista de membros
 
-1. A diretoria cadastra a pessoa em `membros` (e-mail em minúsculas, papel, ativo).
-2. A pessoa informa o e-mail em `/login` e recebe um link de acesso.
-3. No primeiro acesso, um gatilho em `auth.users` confere a lista: se o e-mail não está ativo em `membros`, o cadastro é recusado; se está, a conta é vinculada à linha do membro.
-4. `/auth/callback` troca o código do link pela sessão, guardada em cookies.
-5. Para tirar o acesso de alguém, basta marcar `ativo = false`: as políticas deixam de valer para a pessoa e o app encerra a sessão no acesso seguinte.
+1. A diretoria cadastra a pessoa em `membros` (nome, papel, ativo) e, quando tiver, o e-mail em minúsculas. Sem e-mail, o nome fica na lista mas ninguém cria conta por ele. A carga de nomes é feita direto no banco, nunca em migração.
+2. No primeiro acesso, a pessoa abre a aba Primeiro acesso em `/login`, informa o e-mail e cria a senha.
+3. Um gatilho em `auth.users` confere a lista: se o e-mail não está ativo em `membros`, o cadastro é recusado; se está, a conta é vinculada à linha do membro (e o papel vem dela).
+4. Nos acessos seguintes, e-mail e senha. Trocar a senha: `/conta/senha` (ícone de chave no menu).
+5. Esqueci a senha: o Supabase envia um link; `/auth/callback?proximo=/conta/senha` troca o código pela sessão e leva à tela de nova senha.
+6. Para tirar o acesso de alguém, basta marcar `ativo = false`: as políticas deixam de valer para a pessoa e o app encerra a sessão no acesso seguinte.
+7. No Supabase (Authentication → Sign In / Providers → Email), "Confirm email" fica desligado: a lista de membros já é a verificação, e assim o cadastro não depende do envio de e-mail.
 
 ## Anexos das aulas
 
 - Bucket privado `materiais` no Storage do Supabase: só PDF, até 50 MB por arquivo.
 - O envio vai direto do navegador ao Storage (a RLS só deixa a diretoria enviar), porque arquivos grandes não passam pelas funções da Vercel. Depois do envio, uma ação no servidor registra o anexo em `aula_materiais`.
 - O download passa por `/materiais/[id]`, que confere o membro e redireciona para um link temporário de 60 segundos.
+
+## Instalação como app (PWA)
+
+- `src/app/manifest.ts`: nome, cores, ícones (`public/icones/`, inclusive a versão adaptável do Android) e atalhos.
+- `public/sw.js`: o service worker guarda só a página `public/offline.html`. Nenhuma página da plataforma fica no aparelho, porque todas exigem login e trazem dados dos membros. Registrado em produção por `src/components/registro-do-app.tsx`; o `next.config.ts` impede o cache do `sw.js`.
+- `src/components/instalar-app.tsx`: convite para instalar, no Início (celular, pode ser dispensado) e no perfil. No Android e no computador abre o pedido do navegador; no iPhone mostra o caminho pelo Compartilhar.
+
+## Cartazes do mural
+
+Bucket privado `mural` (JPG, PNG ou WebP até 5 MB). Mesmo desenho dos anexos: o navegador envia direto ao Storage (só a diretoria pode) e uma ação registra a oportunidade. A imagem é servida por `/oportunidades/[id]/cartaz`, que confere o membro e redireciona para um link temporário de 10 minutos.
 
 ## Documentos da liga
 
@@ -64,4 +76,4 @@ Não há chave de serviço no app nesta etapa.
 
 ## Banco
 
-Tabelas: `membros`, `ciclos`, `aulas`, `aula_leituras`, `biblioteca_itens`, `favoritos`, `competicoes`, `equipes`, `equipe_membros`, `eventos`, `avisos`, `perguntas`, `respostas`, `presencas`, `justificativas`, `ia_trechos`, `aula_materiais`, `producoes`, `documentos`. Regras de acesso em `permissoes.md`.
+Tabelas: `membros`, `ciclos`, `aulas`, `aula_leituras`, `biblioteca_itens`, `favoritos`, `competicoes`, `equipes`, `equipe_membros`, `eventos`, `avisos`, `perguntas`, `respostas`, `presencas`, `justificativas`, `ia_trechos`, `aula_materiais`, `producoes`, `producao_participantes`, `producao_entregas`, `artigo_andamento`, `documentos`, `professores`, `aula_planejamento`, `oportunidades`, `oportunidade_interessados`. Regras de acesso em `permissoes.md`.

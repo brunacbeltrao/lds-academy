@@ -1,9 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { aulaJaComecou } from "@/lib/ciclos";
-import { exigirDiretoria } from "@/lib/membro";
-import { ehStatusPresenca } from "@/lib/presenca-formato";
+import { exigirDiretoria, getMembroAtual } from "@/lib/membro";
 import { createClient } from "@/lib/supabase/server";
 
 export type Resultado = { ok: boolean; mensagem: string } | null;
@@ -15,46 +13,30 @@ function texto(formData: FormData, campo: string, limite: number): string | null
   return valor ? valor.slice(0, limite) : null;
 }
 
-/** Link opcional: vazio vira null; precisa ser http(s). Devolve undefined se for inválido. */
-function link(formData: FormData, campo: string): string | null | undefined {
-  const valor = String(formData.get(campo) ?? "").trim();
-  if (!valor) return null;
-  try {
-    const url = new URL(valor);
-    if (url.protocol !== "https:" && url.protocol !== "http:") return undefined;
-    return url.toString().slice(0, 1000);
-  } catch {
-    return undefined;
-  }
-}
-
 function atualizar(aulaId: string) {
   revalidatePath(`/ciclos/aulas/${aulaId}`);
   revalidatePath("/ciclos");
 }
 
-/** Professor, apresentação, local, bibliografia e o material de depois da aula. Só diretoria. */
+/** Professor, apresentação, local e bibliografia da aula. Só diretoria. */
 export async function salvarAula(_: Resultado, formData: FormData): Promise<Resultado> {
   await exigirDiretoria();
   const aulaId = String(formData.get("aulaId") ?? "");
   if (!UUID.test(aulaId)) return { ok: false, mensagem: "Aula inválida." };
 
-  const slides = link(formData, "slides_url");
-  const apostila = link(formData, "apostila_url");
-  if (slides === undefined) return { ok: false, mensagem: "O link dos slides precisa começar com https://" };
-  if (apostila === undefined) return { ok: false, mensagem: "O link da apostila precisa começar com https://" };
+  // Professor do banco: só muda quando o formulário traz a escolha (o campo existe só se há banco).
+  const professorId = formData.has("professor_id") ? String(formData.get("professor_id") ?? "") : undefined;
+  if (professorId && !UUID.test(professorId)) return { ok: false, mensagem: "Professor inválido." };
 
   const supabase = await createClient();
   const { error } = await supabase
     .from("aulas")
     .update({
+      ...(professorId === undefined ? {} : { professor_id: professorId || null }),
       professor: texto(formData, "professor", 200),
       professor_bio: texto(formData, "professor_bio", 4000),
       local: texto(formData, "local", 200),
       bibliografia: texto(formData, "bibliografia", 8000),
-      resumo: texto(formData, "resumo", 8000),
-      slides_url: slides,
-      apostila_url: apostila,
     })
     .eq("id", aulaId);
 
@@ -111,41 +93,24 @@ export async function apagarMaterial(formData: FormData): Promise<void> {
   atualizar(material.aula_id);
 }
 
-/**
- * Salva a chamada da aula. Grava só o que mudou, para que a data de registro de cada
- * presença continue sendo a da última alteração. Só diretoria, a partir do dia da aula.
- */
-export async function salvarChamada(_: Resultado, formData: FormData): Promise<Resultado> {
-  await exigirDiretoria();
+/** O membro justifica a falta (antes ou depois da aula). A diretoria decide na Gestão. */
+export async function justificarFalta(_: Resultado, formData: FormData): Promise<Resultado> {
+  const membro = await getMembroAtual();
+  if (membro.papel === "conselheiro") return { ok: false, mensagem: "O conselho acompanha em modo leitura." };
   const aulaId = String(formData.get("aulaId") ?? "");
+  const motivo = texto(formData, "motivo", 2000);
   if (!UUID.test(aulaId)) return { ok: false, mensagem: "Aula inválida." };
+  if (!motivo || motivo.length < 10) return { ok: false, mensagem: "Explique o motivo em pelo menos uma frase." };
 
   const supabase = await createClient();
-  const { data: aula } = await supabase.from("aulas").select("id, data").eq("id", aulaId).maybeSingle();
-  if (!aula) return { ok: false, mensagem: "Aula não encontrada." };
-  if (!aulaJaComecou(aula.data)) return { ok: false, mensagem: "A chamada abre no dia da aula." };
+  const { data: aula } = await supabase.from("aulas").select("id, ciclo:ciclos(status)").eq("id", aulaId).maybeSingle();
+  const ciclo = Array.isArray(aula?.ciclo) ? aula.ciclo[0] : aula?.ciclo;
+  if (ciclo?.status !== "atual") return { ok: false, mensagem: "Só é possível justificar faltas de aulas do ciclo em curso." };
 
-  const [membros, atuais] = await Promise.all([
-    supabase.from("membros").select("id").eq("ativo", true).in("papel", ["ligante", "diretoria"]),
-    supabase.from("presencas").select("membro_id, status").eq("aula_id", aulaId),
-  ]);
-  if (membros.error || atuais.error) return { ok: false, mensagem: "Não foi possível ler a chamada. Tente de novo." };
-
-  const anteriores = new Map((atuais.data ?? []).map((p) => [p.membro_id as string, p.status as string]));
-  const agora = new Date().toISOString();
-  const mudancas = (membros.data ?? []).flatMap((m) => {
-    const status = formData.get(`presenca:${m.id}`);
-    if (!ehStatusPresenca(status) || anteriores.get(m.id) === status) return [];
-    return [{ aula_id: aulaId, membro_id: m.id, status, registrada_em: agora }];
-  });
-
-  if (mudancas.length === 0) return { ok: true, mensagem: "Nada mudou desde o último registro." };
-
-  const { error } = await supabase.from("presencas").upsert(mudancas, { onConflict: "aula_id,membro_id" });
-  if (error) return { ok: false, mensagem: "Não foi possível salvar a chamada. Tente de novo." };
-  atualizar(aulaId);
-  return {
-    ok: true,
-    mensagem: mudancas.length === 1 ? "Chamada salva: 1 registro atualizado." : `Chamada salva: ${mudancas.length} registros atualizados.`,
-  };
+  const { error } = await supabase.from("justificativas").insert({ aula_id: aulaId, membro_id: membro.id, motivo });
+  if (error) return { ok: false, mensagem: "Não foi possível enviar a justificativa. Tente de novo." };
+  revalidatePath(`/ciclos/aulas/${aulaId}`);
+  revalidatePath("/trajetoria");
+  revalidatePath("/");
+  return { ok: true, mensagem: "Justificativa enviada. A diretoria acadêmica vai analisar." };
 }
