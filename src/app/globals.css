@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+/* Tokens do design system LDS·FDR (padrão de novembro de 2026: vinho, bege, Playfair Display e Raleway). */
+:root {
+  --lds-vinho: #a7002e;
+  --lds-vinho-profundo: #8e0027;
+  --lds-vinho-press: #74001f;
+  --lds-bege: #ebece0;
+  --lds-papel: #f6f6ee;
+  --lds-bege-2: #e2e3d4;
+  --lds-tinta: #2a2324;
+  --lds-grafite: #6b6460;
+  --lds-rosa: #f5e3e4;
+  --lds-rosa-claro: #f2c9d2;
+  --lds-filete: #cfcdbf;
+  --lds-filete-forte: #b5b2a3;
+  --lds-filete-vinho: #c9506c;
+}
+
+@theme inline {
+  --color-vinho: var(--lds-vinho);
+  --color-vinho-profundo: var(--lds-vinho-profundo);
+  --color-vinho-press: var(--lds-vinho-press);
+  --color-bege: var(--lds-bege);
+  --color-bege-2: var(--lds-bege-2);
+  --color-papel: var(--lds-papel);
+  --color-tinta: var(--lds-tinta);
+  --color-grafite: var(--lds-grafite);
+  --color-rosa: var(--lds-rosa);
+  --color-rosa-claro: var(--lds-rosa-claro);
+  --color-filete: var(--lds-filete);
+  --color-filete-forte: var(--lds-filete-forte);
+  --color-filete-vinho: var(--lds-filete-vinho);
+  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-raleway), "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+  background: var(--lds-bege);
+}
+
+body {
+  background: var(--lds-bege);
+  color: var(--lds-tinta);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+/* Títulos: Playfair Display em itálico, peso 500, caixa mista. */
+.titulo {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--lds-vinho);
+}
+
+/* Rótulos: Raleway 600, caixa alta rastreada. */
+.rotulo {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+:focus-visible {
+  outline: 2px solid var(--lds-vinho);
+  outline-offset: 2px;
+}
