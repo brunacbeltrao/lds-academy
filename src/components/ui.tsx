@@ -1,15 +1,31 @@
 import type { ReactNode } from "react";
 
-/** Moldura das páginas da área logada. */
-export function Pagina({ children }: { children: ReactNode }) {
-  return <div className="mx-auto w-full max-w-4xl px-5 py-8 sm:px-8 sm:py-12">{children}</div>;
+export { Recolhivel } from "./recolhivel";
+
+/** Moldura das páginas da área logada. Os blocos de primeiro nível entram em sequência. */
+export function Pagina({ children, larga = false }: { children: ReactNode; larga?: boolean }) {
+  return (
+    <div className={`entrada mx-auto w-full px-5 pt-8 pb-16 sm:px-8 sm:pt-12 lg:px-12 ${larga ? "max-w-6xl" : "max-w-4xl"}`}>{children}</div>
+  );
 }
 
-export function CabecalhoDaPagina({ titulo, descricao, children }: { titulo: string; descricao?: string; children?: ReactNode }) {
+export function CabecalhoDaPagina({
+  titulo,
+  descricao,
+  contexto,
+  children,
+}: {
+  titulo: string;
+  descricao?: string;
+  /** Linha curta acima do título (ex.: o ciclo em curso). */
+  contexto?: ReactNode;
+  children?: ReactNode;
+}) {
   return (
-    <header className="mb-8 sm:mb-10">
+    <header className="mb-9 sm:mb-12">
+      {contexto ? <p className="mb-2.5 text-sm font-medium text-grafite">{contexto}</p> : null}
       <h1 className="h1">{titulo}</h1>
-      {descricao ? <p className="prosa mt-3 text-lg text-grafite">{descricao}</p> : null}
+      {descricao ? <p className="prosa mt-3 text-[1.0625rem] leading-relaxed text-grafite sm:text-lg">{descricao}</p> : null}
       {children}
     </header>
   );
@@ -17,12 +33,12 @@ export function CabecalhoDaPagina({ titulo, descricao, children }: { titulo: str
 
 export function Secao({ id, titulo, descricao, children }: { id?: string; titulo: string; descricao?: string; children: ReactNode }) {
   return (
-    <section id={id} aria-labelledby={id ? `${id}-titulo` : undefined} className="scroll-mt-24 border-t border-linha py-8 first:border-t-0 first:pt-0 sm:py-10">
+    <section id={id} aria-labelledby={id ? `${id}-titulo` : undefined} className="scroll-mt-24 border-t border-linha py-9 first:border-t-0 first:pt-0 sm:py-12">
       <h2 id={id ? `${id}-titulo` : undefined} className="h2">
         {titulo}
       </h2>
       {descricao ? <p className="prosa mt-2 text-grafite">{descricao}</p> : null}
-      <div className="mt-5">{children}</div>
+      <div className="mt-6">{children}</div>
     </section>
   );
 }
@@ -30,9 +46,9 @@ export function Secao({ id, titulo, descricao, children }: { id?: string; titulo
 /** Lista com marcadores discretos, para regras e orientações. */
 export function Lista({ itens }: { itens: ReactNode[] }) {
   return (
-    <ul className="prosa flex flex-col gap-2.5">
+    <ul className="prosa flex flex-col gap-3">
       {itens.map((item, i) => (
-        <li key={i} className="relative pl-5 before:absolute before:top-[0.65em] before:left-0.5 before:size-1.5 before:rounded-full before:bg-vinho/50">
+        <li key={i} className="relative pl-6 before:absolute before:top-[0.72em] before:left-1 before:h-px before:w-2.5 before:bg-vinho">
           {item}
         </li>
       ))}
@@ -43,13 +59,13 @@ export function Lista({ itens }: { itens: ReactNode[] }) {
 /** Atalhos para as seções de uma página longa. */
 export function Atalhos({ itens }: { itens: { id: string; rotulo: string }[] }) {
   return (
-    <nav aria-label="Seções desta página" className="mt-5">
+    <nav aria-label="Seções desta página" className="mt-6">
       <ul className="flex flex-wrap gap-2">
         {itens.map((s) => (
           <li key={s.id}>
             <a
               href={`#${s.id}`}
-              className="inline-flex min-h-9 items-center rounded-full border border-linha bg-superficie px-3.5 text-sm font-medium text-tinta transition-colors hover:border-linha-forte hover:bg-sutil"
+              className="inline-flex min-h-9 items-center rounded-full bg-superficie px-3.5 text-sm font-medium text-tinta shadow-cartao ring-1 ring-linha transition-[background-color,box-shadow,transform] duration-150 ease-saida hover:ring-linha-forte active:scale-[0.97]"
             >
               {s.rotulo}
             </a>
@@ -57,20 +73,5 @@ export function Atalhos({ itens }: { itens: { id: string; rotulo: string }[] }) 
         ))}
       </ul>
     </nav>
-  );
-}
-
-/** Conteúdo que abre e fecha (orientações longas). */
-export function Recolhivel({ titulo, children }: { titulo: string; children: ReactNode }) {
-  return (
-    <details className="cartao group">
-      <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 rounded-[0.875rem] px-4 py-3 font-semibold text-tinta transition-colors hover:bg-sutil sm:px-5 [&::-webkit-details-marker]:hidden">
-        {titulo}
-        <svg aria-hidden="true" viewBox="0 0 20 20" className="size-5 shrink-0 text-grafite transition-transform duration-200 ease-saida group-open:rotate-180" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-          <path d="m5 7.5 5 5 5-5" />
-        </svg>
-      </summary>
-      <div className="border-t border-linha px-4 py-5 sm:px-5">{children}</div>
-    </details>
   );
 }

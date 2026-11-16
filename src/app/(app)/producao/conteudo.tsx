@@ -1,6 +1,10 @@
+import { LinhaDoTempo, type Momento } from "@/components/linha-do-tempo";
 import { Atalhos, CabecalhoDaPagina, Lista, Pagina, Recolhivel, Secao } from "@/components/ui";
 import { ehAutor, formatarData, ROTULO_STATUS, type Producao } from "@/lib/producao-formato";
 import { BANCO_DE_TEMAS, ORIENTACOES_ARTIGO, ORIENTACOES_CARROSSEL, TIPOS_DE_POST } from "@/lib/producao-orientacoes";
+
+const nomeDoMes = (data: string) =>
+  new Intl.DateTimeFormat("pt-BR", { timeZone: "UTC", month: "long" }).format(new Date(`${data}T12:00:00Z`));
 
 function Calendario({ itens, nome, hoje, artigo }: { itens: Producao[]; nome: string; hoje: string; artigo: boolean }) {
   const ano = hoje.slice(0, 4);
@@ -8,36 +12,31 @@ function Calendario({ itens, nome, hoje, artigo }: { itens: Producao[]; nome: st
   if (itens.length === 0) return <p className="cartao p-5 text-grafite">Nenhuma publicação cadastrada.</p>;
 
   return (
-    <ol className="flex flex-col gap-2.5">
-      {itens.map((p) => {
-        const proxima = p.id === proximaId;
+    <LinhaDoTempo
+      itens={itens.map((p) => {
+        const momento: Momento = p.id === proximaId ? "proximo" : p.publicacao < hoje ? "passado" : "futuro";
         const minha = ehAutor(p.autores, nome);
-        const passada = p.publicacao < hoje;
         const outroAno = p.publicacao.slice(0, 4) !== ano;
-        return (
-          <li
-            key={p.id}
-            className={`flex gap-4 rounded-[0.875rem] border p-4 sm:gap-5 sm:p-5 ${
-              proxima ? "border-vinho-borda bg-vinho-suave" : "border-linha bg-superficie"
-            }`}
-          >
-            <div className="w-14 shrink-0 sm:w-16">
-              <p className={`text-lg leading-tight font-bold tabular-nums ${passada ? "text-grafite" : "text-tinta"}`}>
-                {p.publicacao.slice(8, 10)}/{p.publicacao.slice(5, 7)}
-              </p>
-              <p className="text-xs text-grafite">{outroAno ? p.publicacao.slice(0, 4) : artigo ? "segunda" : "terça"}</p>
-            </div>
-            <div className="min-w-0 flex-1">
+        return {
+          id: p.id,
+          dia: p.publicacao.slice(8, 10),
+          apoio: outroAno ? p.publicacao.slice(0, 4) : artigo ? "segunda" : "terça",
+          grupo: outroAno ? `${nomeDoMes(p.publicacao)} de ${p.publicacao.slice(0, 4)}` : nomeDoMes(p.publicacao),
+          momento,
+          conteudo: (
+            <>
               <div className="flex flex-wrap items-center gap-1.5">
                 <span className="selo">
                   {artigo ? "Artigo" : "Post"} {String(p.numero ?? "").padStart(2, "0")}
                 </span>
-                {proxima ? <span className="selo selo-vinho">Próxima</span> : null}
-                {minha ? <span className="selo selo-suave border border-vinho-borda">Sua autoria</span> : null}
+                {momento === "proximo" ? <span className="selo selo-vinho">Próxima</span> : null}
+                {minha ? <span className="selo selo-suave">Sua autoria</span> : null}
                 {p.status !== "a_definir" ? <span className="selo">{ROTULO_STATUS[p.status]}</span> : null}
               </div>
-              <h3 className={`mt-1.5 ${p.tema ? "h3" : "text-[1.0625rem] text-grafite"}`}>{p.tema ?? "Tema a definir"}</h3>
-              <p className="mt-0.5 text-[0.9375rem] text-tinta">{p.autores ?? "Autores a definir"}</p>
+              <h4 className={`mt-2 ${p.tema ? `h3 ${momento === "passado" ? "text-grafite" : ""}` : "text-[1.0625rem] text-grafite"}`}>
+                {p.tema ?? "Tema a definir"}
+              </h4>
+              <p className={`mt-0.5 text-[0.9375rem] ${momento === "passado" ? "text-grafite" : "text-tinta"}`}>{p.autores ?? "Autores a definir"}</p>
               <p className="mt-1.5 text-sm text-grafite">
                 {artigo ? (
                   <>
@@ -48,11 +47,11 @@ function Calendario({ itens, nome, hoje, artigo }: { itens: Producao[]; nome: st
                   <>Entrega até segunda, {formatarData(p.entrega, ano)}, às 18h</>
                 )}
               </p>
-            </div>
-          </li>
-        );
+            </>
+          ),
+        };
       })}
-    </ol>
+    />
   );
 }
 
@@ -77,7 +76,7 @@ export function ConteudoDaProducao({ producoes, nome, hoje }: { producoes: Produ
         descricao="Posts semanais em dupla, às terças-feiras, acompanhando os temas do ciclo. O objetivo é criar conteúdo de autoridade e dar visibilidade aos membros e à liga."
       >
         <Calendario itens={carrosseis} nome={nome} hoje={hoje} artigo={false} />
-        <div className="mt-5 flex flex-col gap-2.5">
+        <div className="mt-8 flex flex-col gap-2.5">
           <Recolhivel titulo="Orientações para o carrossel">
             <Lista itens={ORIENTACOES_CARROSSEL} />
           </Recolhivel>
@@ -100,7 +99,7 @@ export function ConteudoDaProducao({ producoes, nome, hoje }: { producoes: Produ
         descricao="Textos mais aprofundados, em dupla ou trio, com revisão. Cada artigo leva duas semanas de redação e até uma de revisão; como os ciclos se sobrepõem, há uma publicação a cada duas semanas, às segundas-feiras."
       >
         <Calendario itens={artigos} nome={nome} hoje={hoje} artigo />
-        <div className="mt-5 flex flex-col gap-2.5">
+        <div className="mt-8 flex flex-col gap-2.5">
           {ORIENTACOES_ARTIGO.map((bloco) => (
             <Recolhivel key={bloco.titulo} titulo={bloco.titulo}>
               <Lista itens={bloco.itens} />

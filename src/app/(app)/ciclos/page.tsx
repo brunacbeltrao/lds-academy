@@ -20,11 +20,11 @@ export default async function CiclosPage() {
       <section aria-labelledby="ciclo-atual">
         {atual ? (
           <>
-            <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+            <div className="mb-7 flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
               <h2 id="ciclo-atual" className="h2">
                 {atual.ciclo.titulo}
               </h2>
-              <p className="text-[0.9375rem] text-grafite">
+              <p className="numeral text-[0.9375rem] text-grafite">
                 Ciclo {atual.ciclo.codigo}
                 {atual.ciclo.inicio && atual.ciclo.fim
                   ? ` · ${formatarDia(atual.ciclo.inicio + "T12:00:00-03:00")} a ${formatarDia(atual.ciclo.fim + "T12:00:00-03:00")}`

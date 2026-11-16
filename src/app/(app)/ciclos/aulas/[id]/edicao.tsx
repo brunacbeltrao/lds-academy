@@ -9,7 +9,7 @@ const LIMITE = 50 * 1024 * 1024;
 function Aviso({ estado }: { estado: Resultado }) {
   if (!estado) return null;
   return (
-    <p role="status" className={`aviso ${estado.ok ? "aviso-ok" : "aviso-erro"}`}>
+    <p role="status" className={`aviso surgir ${estado.ok ? "aviso-ok" : "aviso-erro"}`}>
       {estado.mensagem}
     </p>
   );
