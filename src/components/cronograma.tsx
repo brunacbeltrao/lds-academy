@@ -1,45 +1,58 @@
-import {
-  ehHoje,
-  formatarDia,
-  formatarDiaDaSemana,
-  jaPassou,
-  rotuloEncontro,
-  type Encontro,
-} from "@/lib/ciclos";
+import Link from "next/link";
+import { ChevronRight, Paperclip } from "lucide-react";
+import { ehHoje, formatarDia, formatarDiaDaSemana, jaPassou, rotuloEncontro, type Encontro } from "@/lib/ciclos";
 
-/** Cronograma do ciclo: uma linha por encontro, com o de hoje ou o próximo em destaque. */
+/** Cronograma do ciclo: um card por encontro; os de aula levam à página da aula. */
 export function Cronograma({ encontros, proximoId }: { encontros: Encontro[]; proximoId: string | null }) {
   return (
-    <ol className="border-t border-filete">
+    <ol className="flex flex-col gap-2.5">
       {encontros.map((e) => {
         const destaque = e.id === proximoId;
         const passado = jaPassou(e);
-        return (
-          <li
-            key={e.id}
-            aria-current={destaque ? "true" : undefined}
-            className={`grid grid-cols-[5.75rem_1fr] gap-x-4 border-b border-filete px-3 py-4 sm:grid-cols-[5rem_6.5rem_1fr_auto] sm:items-baseline sm:px-4 ${
-              destaque ? "border-l-4 border-l-vinho bg-rosa" : "border-l-4 border-l-transparent"
-            }`}
-          >
-            <div className="row-span-2 sm:row-span-1">
-              <p className={`text-lg font-bold tabular-nums ${passado ? "text-grafite" : "text-tinta"}`}>
+        const conteudo = (
+          <>
+            <div className="w-14 shrink-0 sm:w-16">
+              <p className={`text-lg leading-tight font-bold tabular-nums ${passado ? "text-grafite" : "text-tinta"}`}>
                 {formatarDia(e.inicio)}
               </p>
-              <p className="text-xs text-grafite sm:hidden">{formatarDiaDaSemana(e.inicio)}</p>
+              <p className="text-xs text-grafite">{formatarDiaDaSemana(e.inicio).replace("-feira", "")}</p>
             </div>
-            <p className="rotulo text-grafite">
-              {rotuloEncontro(e)}
-              <span className="hidden font-normal normal-case tracking-normal sm:block">
-                {formatarDiaDaSemana(e.inicio)}
-              </span>
-            </p>
-            <p className={`col-start-2 sm:col-start-3 ${passado ? "text-grafite" : "font-semibold text-tinta"}`}>
-              {e.titulo}
-            </p>
-            <p className="rotulo col-start-2 mt-1 text-vinho sm:col-start-4 sm:mt-0 sm:text-right">
-              {destaque ? (ehHoje(e) ? "Hoje" : "Próximo") : passado ? <span className="text-grafite">Realizado</span> : ""}
-            </p>
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="selo">{rotuloEncontro(e)}</span>
+                {destaque ? <span className="selo selo-vinho">{ehHoje(e) ? "Hoje" : "Próximo"}</span> : null}
+                {e.tipo === "aula" && e.materiais > 0 ? (
+                  <span className="selo">
+                    <Paperclip aria-hidden="true" className="size-3" />
+                    {e.materiais} {e.materiais === 1 ? "anexo" : "anexos"}
+                  </span>
+                ) : null}
+              </div>
+              <h3 className="h3 mt-1.5">{e.titulo}</h3>
+              {e.professor ? (
+                <p className="mt-0.5 text-[0.9375rem] text-grafite">
+                  com <span className="font-medium text-tinta">{e.professor}</span>
+                </p>
+              ) : e.tipo === "aula" ? (
+                <p className="mt-0.5 text-[0.9375rem] text-grafite">Professor a informar</p>
+              ) : null}
+              {e.descricao ? <p className="mt-1 text-[0.9375rem] text-grafite">{e.descricao}</p> : null}
+            </div>
+            {e.aulaId ? <ChevronRight aria-hidden="true" className="size-5 shrink-0 self-center text-linha-forte transition-colors group-hover:text-vinho" /> : null}
+          </>
+        );
+        const classes = `flex gap-4 rounded-[0.875rem] border p-4 sm:gap-5 sm:p-5 ${
+          destaque ? "border-vinho-borda bg-vinho-suave" : "border-linha bg-superficie"
+        }`;
+        return (
+          <li key={e.id} aria-current={destaque ? "true" : undefined}>
+            {e.aulaId ? (
+              <Link href={`/ciclos/aulas/${e.aulaId}`} className={`group ${classes} transition-colors duration-150 hover:border-linha-forte`}>
+                {conteudo}
+              </Link>
+            ) : (
+              <div className={classes}>{conteudo}</div>
+            )}
           </li>
         );
       })}

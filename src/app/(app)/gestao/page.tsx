@@ -18,7 +18,6 @@ export default async function GestaoPage() {
   await exigirGestao();
   return (
     <PaginaArea
-      rotulo="Gestão · diretoria e conselho"
       titulo="Gestão"
       descricao="Administração da liga: membros, frequência, planejamento e curadoria. A diretoria gere; o conselho acompanha em modo leitura."
       blocos={BLOCOS}

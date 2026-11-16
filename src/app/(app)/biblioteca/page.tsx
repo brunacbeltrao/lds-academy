@@ -14,7 +14,6 @@ const BLOCOS: Bloco[] = [
 export default function BibliotecaPage() {
   return (
     <PaginaArea
-      rotulo="Biblioteca"
       titulo="Biblioteca"
       descricao="O acervo da liga, organizado por tema, autor e ciclo. Os itens abrem no Drive da liga."
       blocos={BLOCOS}

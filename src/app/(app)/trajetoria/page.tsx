@@ -13,7 +13,6 @@ const BLOCOS: Bloco[] = [
 export default function TrajetoriaPage() {
   return (
     <PaginaArea
-      rotulo="Minha trajetória"
       titulo="Minha trajetória"
       descricao="O registro individual de participação na liga."
       blocos={BLOCOS}

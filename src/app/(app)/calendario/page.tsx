@@ -13,7 +13,6 @@ const BLOCOS: Bloco[] = [
 export default function CalendarioPage() {
   return (
     <PaginaArea
-      rotulo="Calendário"
       titulo="Calendário"
       descricao="Aulas, eventos e competições da liga em um só calendário."
       blocos={BLOCOS}

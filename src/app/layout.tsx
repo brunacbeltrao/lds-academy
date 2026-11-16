@@ -1,19 +1,8 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Raleway } from "next/font/google";
+import { Figtree } from "next/font/google";
 import "./globals.css";
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const raleway = Raleway({
-  variable: "--font-raleway",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-});
+const figtree = Figtree({ variable: "--font-figtree", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: { default: "LDS Academy", template: "%s · LDS Academy" },
@@ -23,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${playfair.variable} ${raleway.variable} h-full antialiased`}>
+    <html lang="pt-BR" className={`${figtree.variable} h-full antialiased`}>
       <body className="min-h-full">{children}</body>
     </html>
   );

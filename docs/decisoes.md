@@ -16,7 +16,7 @@
 
 - **Stack:** Next.js na Vercel e Supabase (Postgres, Auth, RLS, pgvector). Tudo na nuvem.
 - **Login:** link de acesso por e-mail, sem senha, restrito à lista de membros. Quem não está na lista não consegue criar conta: o banco recusa.
-- **Identidade visual:** padrão de novembro de 2026 do design system (vinho `#A7002E`, bege `#EBECE0`, Playfair Display e Raleway). O padrão anterior (Cormorant Garamond, Source Serif 4, Inter) não é usado.
+- **Identidade visual:** começou com o padrão de novembro de 2026 do design system (Playfair Display e Raleway) e foi substituída pela identidade própria para tela descrita mais abaixo.
 - **Repositório:** sem PDFs, sem segredos e sem dados pessoais.
 - **Supabase:** projeto `lds-academy`, região de São Paulo (`sa-east-1`), na organização pessoal da Bruna.
 
@@ -27,6 +27,11 @@
 - **Justificativas:** aceitas antes ou depois da aula.
 - **Ciclo 2026.2:** chama-se "Ciclo-base de Direito Societário", como no cronograma oficial.
 
+- **Bibliografia das aulas:** cada aula tem professor, apresentação, bibliografia em texto e **anexos em PDF enviados à plataforma** (não links). Os arquivos ficam no Storage do Supabase, em bucket privado, e nunca no repositório. A Biblioteca geral segue prevista com links do Drive.
+- **Produção:** nova área com o calendário dos carrosséis do Instagram (terças-feiras) e dos mini-artigos do LinkedIn (quinzenais, às segundas), com autores, prazos e orientações.
+- **Visual:** a plataforma tem identidade própria para tela (ver `identidade-visual.md`): fonte Figtree, fundo claro, vinho só como destaque. O design system da liga segue valendo para redes e apostila.
+- **Cronograma real:** em 16/09 foi a aula de Acordo de Acionistas e em 23/09 a de Atos Constitutivos (invertidas em relação ao cronograma impresso). Houve uma aula extra de Litígios Societários numa sexta-feira.
+
 ## Em aberto
 
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.
@@ -35,3 +40,6 @@
 4. **Envio de e-mail do login.** O serviço de e-mail padrão do Supabase serve só para testes (poucos envios por hora). Antes de abrir aos ligantes, definir um serviço de envio próprio ou outro método de login.
 5. **Proteção de acesso da Vercel.** O projeto está com a "Vercel Authentication" ligada em todos os endereços `vercel.app`: só entra quem está logado na conta da Vercel. Serve para a fase de construção, mas impede o acesso dos ligantes. Antes de abrir, definir entre um domínio próprio da liga ou liberar o endereço de produção.
 6. **Faltas: avisos.** Definir o que a plataforma faz quando o membro se aproxima das três faltas sem justificativa (aviso ao membro, alerta à diretoria).
+7. **Direitos autorais dos anexos.** Os PDFs de bibliografia ficam restritos aos membros, mas trechos e livros inteiros têm regras diferentes. Definir o que pode ser anexado.
+8. **Edição da Produção.** O calendário de carrosséis e mini-artigos é só leitura; temas, autores, revisores e status ainda são alterados direto no banco. Falta a tela de edição para a diretoria.
+9. **Datas a confirmar.** A aula extra de Litígios Societários foi registrada em 06/11 (data deduzida das mensagens). A aula de Atos Constitutivos teve dois professores e só um foi identificado.

@@ -14,7 +14,6 @@ const BLOCOS: Bloco[] = [
 export default function CompeticoesPage() {
   return (
     <PaginaArea
-      rotulo="Competições"
       titulo="Competições"
       descricao="Editais e prazos das competições, com o espaço de trabalho de cada equipe."
       blocos={BLOCOS}

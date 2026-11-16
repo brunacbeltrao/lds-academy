@@ -8,7 +8,6 @@ export const metadata: Metadata = { title: "Ciclos e aulas" };
 const BLOCOS: Bloco[] = [
   { titulo: "Próximo ciclo", descricao: "2027.1 · M&A." },
   { titulo: "Ciclos anteriores", descricao: "Acervo por tema, aberto a todos os membros." },
-  { titulo: "Página da aula", descricao: "Slides, leituras e apostila de cada encontro." },
 ];
 
 export default async function CiclosPage() {
@@ -17,29 +16,26 @@ export default async function CiclosPage() {
   const aulas = atual?.encontros.filter((e) => e.tipo === "aula").length ?? 0;
 
   return (
-    <PaginaArea
-      rotulo="Ciclos e aulas"
-      titulo="Ciclos e aulas"
-      descricao="O ciclo em curso, o próximo e o acervo dos ciclos anteriores, aberto a todos os membros."
-      blocos={BLOCOS}
-    >
-      <section aria-labelledby="ciclo-atual" className="mt-10">
+    <PaginaArea titulo="Ciclos e aulas" descricao="O cronograma do ciclo em curso, com professor, bibliografia e anexos de cada aula." blocos={BLOCOS}>
+      <section aria-labelledby="ciclo-atual">
         {atual ? (
           <>
-            <p className="rotulo text-grafite">Ciclo atual · {atual.ciclo.codigo}</p>
-            <h2 id="ciclo-atual" className="titulo mt-1 text-3xl">
-              {atual.ciclo.titulo}
-            </h2>
-            <p className="mt-2 mb-6 text-grafite">
-              {atual.ciclo.inicio && atual.ciclo.fim
-                ? `De ${formatarDia(atual.ciclo.inicio + "T12:00:00-03:00")} a ${formatarDia(atual.ciclo.fim + "T12:00:00-03:00")} · `
-                : ""}
-              {aulas} aulas · encontros às 20h, nas salas da FDR
-            </p>
+            <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+              <h2 id="ciclo-atual" className="h2">
+                {atual.ciclo.titulo}
+              </h2>
+              <p className="text-[0.9375rem] text-grafite">
+                Ciclo {atual.ciclo.codigo}
+                {atual.ciclo.inicio && atual.ciclo.fim
+                  ? ` · ${formatarDia(atual.ciclo.inicio + "T12:00:00-03:00")} a ${formatarDia(atual.ciclo.fim + "T12:00:00-03:00")}`
+                  : ""}
+                {` · ${aulas} aulas`}
+              </p>
+            </div>
             <Cronograma encontros={atual.encontros} proximoId={proximo?.id ?? null} />
           </>
         ) : (
-          <p className="border border-filete bg-papel p-6 text-grafite">Nenhum ciclo em curso no momento.</p>
+          <p className="cartao p-5 text-grafite">Nenhum ciclo em curso no momento.</p>
         )}
       </section>
     </PaginaArea>

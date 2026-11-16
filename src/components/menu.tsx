@@ -4,10 +4,39 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import {
+  CalendarDays,
+  GraduationCap,
+  House,
+  Landmark,
+  Library,
+  LogOut,
+  Menu as IconeMenu,
+  MessagesSquare,
+  PenLine,
+  Settings,
+  TrendingUp,
+  Trophy,
+  X,
+  type LucideIcon,
+} from "lucide-react";
 import type { ItemMenu } from "@/lib/navegacao";
 
 type Papel = "ligante" | "diretoria" | "conselheiro";
 const ROTULO_PAPEL: Record<Papel, string> = { ligante: "Ligante", diretoria: "Diretoria", conselheiro: "Conselho" };
+
+const ICONES: Record<string, LucideIcon> = {
+  "/": House,
+  "/calendario": CalendarDays,
+  "/ciclos": GraduationCap,
+  "/biblioteca": Library,
+  "/competicoes": Trophy,
+  "/producao": PenLine,
+  "/tira-duvidas": MessagesSquare,
+  "/trajetoria": TrendingUp,
+  "/a-liga": Landmark,
+  "/gestao": Settings,
+};
 
 type Props = { itens: ItemMenu[]; nome: string; papel: Papel };
 
@@ -32,18 +61,18 @@ export function Menu({ itens, nome, papel }: Props) {
 
   const link = (item: ItemMenu) => {
     const atual = ativo(pathname, item.href);
+    const Icone = ICONES[item.href] ?? House;
     return (
       <li key={item.href}>
         <Link
           href={item.href}
           aria-current={atual ? "page" : undefined}
           onClick={() => setAberto(false)}
-          className={`block border-l-4 py-2.5 pr-4 pl-5 text-[0.95rem] transition-colors focus-visible:outline-bege ${
-            atual
-              ? "border-bege bg-vinho-profundo font-semibold text-bege"
-              : "border-transparent text-bege/85 hover:bg-vinho-profundo hover:text-bege"
+          className={`flex min-h-11 items-center gap-3 rounded-lg px-3 text-[0.9375rem] transition-colors duration-150 ${
+            atual ? "bg-vinho-suave font-semibold text-vinho" : "font-medium text-tinta hover:bg-sutil"
           }`}
         >
+          <Icone aria-hidden="true" className={`size-[1.125rem] shrink-0 ${atual ? "text-vinho" : "text-grafite"}`} strokeWidth={1.75} />
           {item.rotulo}
         </Link>
       </li>
@@ -52,59 +81,70 @@ export function Menu({ itens, nome, papel }: Props) {
 
   return (
     <>
-      {/* Barra do topo, só no celular */}
-      <header className="sticky top-0 z-30 flex items-center justify-between bg-vinho px-4 py-3 md:hidden">
-        <Link href="/" aria-label="LDS Academy, início" className="focus-visible:outline-bege">
-          <Image src="/marca/lockup-branco.png" alt="LDS·FDR" width={120} height={48} priority className="h-9 w-auto" />
+      {/* Barra do topo, só em telas pequenas */}
+      <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-linha bg-superficie px-4 lg:hidden">
+        <Link href="/" aria-label="LDS Academy, início" className="rounded-md">
+          <Image src="/marca/lockup-vinho.png" alt="LDS·FDR" width={119} height={44} priority className="h-8 w-auto" />
         </Link>
         <button
           type="button"
           onClick={() => setAberto((v) => !v)}
           aria-expanded={aberto}
           aria-controls="menu-principal"
-          className="rotulo border border-filete-vinho px-3 py-2 text-bege focus-visible:outline-bege"
+          aria-label={aberto ? "Fechar menu" : "Abrir menu"}
+          className="flex size-11 items-center justify-center rounded-lg text-tinta transition-colors hover:bg-sutil"
         >
-          {aberto ? "Fechar" : "Menu"}
+          {aberto ? <X aria-hidden="true" className="size-5" /> : <IconeMenu aria-hidden="true" className="size-5" />}
         </button>
       </header>
 
-      {aberto && (
-        <button
-          type="button"
-          aria-label="Fechar menu"
-          tabIndex={-1}
-          onClick={() => setAberto(false)}
-          className="fixed inset-0 z-30 bg-tinta/40 md:hidden"
-        />
-      )}
+      <button
+        type="button"
+        aria-label="Fechar menu"
+        tabIndex={-1}
+        onClick={() => setAberto(false)}
+        className={`fixed inset-0 z-30 bg-tinta/30 transition-opacity duration-200 lg:hidden ${
+          aberto ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      />
 
       <nav
         id="menu-principal"
         aria-label="Menu principal"
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col overflow-y-auto bg-vinho text-bege transition-transform duration-200 motion-reduce:transition-none md:translate-x-0 ${
-          aberto ? "translate-x-0" : "invisible -translate-x-full md:visible"
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col overflow-y-auto border-r border-linha bg-superficie transition-transform duration-300 ease-saida lg:translate-x-0 ${
+          aberto ? "translate-x-0" : "invisible -translate-x-full lg:visible"
         }`}
       >
-        <Link href="/" className="block px-5 pt-8 pb-6 focus-visible:outline-bege" aria-label="LDS Academy, início">
-          <Image src="/marca/lockup-branco.png" alt="LDS·FDR" width={180} height={72} priority className="h-auto w-40" />
-          <span className="rotulo mt-4 block text-rosa-claro">LDS Academy</span>
+        <Link href="/" onClick={() => setAberto(false)} className="mx-3 mt-4 block rounded-lg px-3 py-3" aria-label="LDS Academy, início">
+          <Image src="/marca/lockup-vinho.png" alt="LDS·FDR" width={140} height={52} priority className="h-10 w-auto" />
+          <span className="mt-2 block text-sm font-medium text-grafite">LDS Academy</span>
         </Link>
 
-        <ul className="flex flex-col border-t border-filete-vinho py-3">{principais.map(link)}</ul>
+        <ul className="mt-3 flex flex-col gap-0.5 px-3">{principais.map(link)}</ul>
 
         {gestao.length > 0 && (
-          <>
-            <p className="rotulo border-t border-filete-vinho px-5 pt-4 pb-1 text-rosa-claro">Diretoria e conselho</p>
-            <ul className="flex flex-col pb-3">{gestao.map(link)}</ul>
-          </>
+          <div className="mx-3 mt-4 border-t border-linha pt-4">
+            <p className="px-3 pb-1.5 text-xs font-semibold text-grafite">Diretoria e conselho</p>
+            <ul className="flex flex-col gap-0.5">{gestao.map(link)}</ul>
+          </div>
         )}
 
-        <div className="mt-auto border-t border-filete-vinho px-5 py-5">
-          <p className="truncate font-semibold text-bege">{nome}</p>
-          <p className="rotulo mt-0.5 text-rosa-claro">{ROTULO_PAPEL[papel]}</p>
-          <form action="/auth/sair" method="post" className="mt-3">
-            <button type="submit" className="text-sm text-bege/85 underline underline-offset-4 hover:text-bege focus-visible:outline-bege">
-              Sair
+        <div className="mt-auto flex items-center gap-3 border-t border-linha px-4 py-4">
+          <span aria-hidden="true" className="flex size-9 shrink-0 items-center justify-center rounded-full bg-vinho-suave text-sm font-bold text-vinho">
+            {nome.trim().charAt(0).toUpperCase()}
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-semibold text-tinta">{nome}</p>
+            <p className="text-xs text-grafite">{ROTULO_PAPEL[papel]}</p>
+          </div>
+          <form action="/auth/sair" method="post">
+            <button
+              type="submit"
+              aria-label="Sair"
+              title="Sair"
+              className="flex size-10 items-center justify-center rounded-lg text-grafite transition-colors hover:bg-sutil hover:text-tinta"
+            >
+              <LogOut aria-hidden="true" className="size-[1.125rem]" strokeWidth={1.75} />
             </button>
           </form>
         </div>

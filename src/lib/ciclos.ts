@@ -7,7 +7,26 @@ export type Encontro = {
   titulo: string;
   tipo: "aula" | "evento" | "competicao" | "prazo" | "outro";
   inicio: string;
+  local: string | null;
+  descricao: string | null;
   numero: number | null;
+  aulaId: string | null;
+  professor: string | null;
+  materiais: number;
+};
+
+export type Material = { id: string; titulo: string; tamanho: number | null };
+export type Aula = {
+  id: string;
+  numero: number | null;
+  titulo: string;
+  data: string | null;
+  local: string | null;
+  professor: string | null;
+  professorBio: string | null;
+  bibliografia: string | null;
+  ciclo: { codigo: string; titulo: string } | null;
+  materiais: Material[];
 };
 
 const FUSO = "America/Recife";
@@ -27,18 +46,65 @@ export async function getCicloAtual(): Promise<{ ciclo: Ciclo; encontros: Encont
 
   const { data: eventos, error: erroEventos } = await supabase
     .from("eventos")
-    .select("id, titulo, tipo, inicio, aula:aulas(numero)")
+    .select("id, titulo, tipo, inicio, local, descricao, aula:aulas(id, numero, professor, aula_materiais(count))")
     .eq("ciclo_id", ciclo.id)
     .order("inicio");
   if (erroEventos) throw new Error(`Falha ao ler os encontros: ${erroEventos.message}`);
 
-  const encontros = (eventos ?? []).map((e) => {
-    const aula = e.aula as { numero: number | null } | { numero: number | null }[] | null;
-    const numero = Array.isArray(aula) ? (aula[0]?.numero ?? null) : (aula?.numero ?? null);
-    return { id: e.id, titulo: e.titulo, tipo: e.tipo, inicio: e.inicio, numero } as Encontro;
+  type AulaEmbutida = { id: string; numero: number | null; professor: string | null; aula_materiais: { count: number }[] };
+  const encontros = (eventos ?? []).map((e): Encontro => {
+    const aula = um<AulaEmbutida>(e.aula);
+    return {
+      id: e.id,
+      titulo: e.titulo,
+      tipo: e.tipo,
+      inicio: e.inicio,
+      local: e.local,
+      descricao: e.descricao,
+      numero: aula?.numero ?? null,
+      aulaId: aula?.id ?? null,
+      professor: aula?.professor ?? null,
+      materiais: aula?.aula_materiais?.[0]?.count ?? 0,
+    };
   });
 
   return { ciclo: ciclo as Ciclo, encontros };
+}
+
+/** O PostgREST devolve relações "para um" como objeto ou lista de um item; isto normaliza. */
+function um<T>(valor: unknown): T | null {
+  if (Array.isArray(valor)) return (valor[0] as T) ?? null;
+  return (valor as T) ?? null;
+}
+
+/** Uma aula com professor, bibliografia e anexos. Null se não existe ou o membro não pode vê-la. */
+export async function getAula(id: string): Promise<Aula | null> {
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("aulas")
+    .select(
+      "id, numero, titulo, data, local, professor, professor_bio, bibliografia, ciclo:ciclos(codigo, titulo), aula_materiais(id, titulo, tamanho, criado_em)",
+    )
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw new Error(`Falha ao ler a aula: ${error.message}`);
+  if (!data) return null;
+  const materiais = [...((data.aula_materiais as (Material & { criado_em: string })[]) ?? [])].sort((a, b) =>
+    a.criado_em.localeCompare(b.criado_em),
+  );
+  return {
+    id: data.id,
+    numero: data.numero,
+    titulo: data.titulo,
+    data: data.data,
+    local: data.local,
+    professor: data.professor,
+    professorBio: data.professor_bio,
+    bibliografia: data.bibliografia,
+    ciclo: um<{ codigo: string; titulo: string }>(data.ciclo),
+    materiais: materiais.map(({ id, titulo, tamanho }) => ({ id, titulo, tamanho })),
+  };
 }
 
 /** O encontro de hoje (até o fim do dia) ou o próximo; null se o ciclo terminou. */
@@ -81,7 +147,16 @@ export function formatarHora(iso: string): string {
   return m === "00" ? `${Number(h)}h` : `${Number(h)}h${m}`;
 }
 
+export function rotuloAula(numero: number | null): string {
+  return numero ? `Aula ${String(numero).padStart(2, "0")}` : "Aula extra";
+}
+
+export function formatarTamanho(bytes: number | null): string {
+  if (!bytes) return "";
+  return bytes < 1024 * 1024 ? `${Math.max(1, Math.round(bytes / 1024))} KB` : `${(bytes / 1024 / 1024).toFixed(1).replace(".", ",")} MB`;
+}
+
 export function rotuloEncontro(e: Encontro): string {
-  if (e.tipo === "aula") return e.numero ? `Aula ${String(e.numero).padStart(2, "0")}` : "Aula";
+  if (e.tipo === "aula") return rotuloAula(e.numero);
   return "Evento";
 }

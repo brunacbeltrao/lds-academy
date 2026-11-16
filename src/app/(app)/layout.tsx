@@ -10,12 +10,12 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
     <>
       <a
         href="#conteudo"
-        className="rotulo sr-only z-50 bg-bege px-4 py-3 text-vinho focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+        className="sr-only z-50 rounded-lg bg-superficie px-4 py-3 font-semibold text-vinho focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
       >
         Pular para o conteúdo
       </a>
       <Menu itens={itens} nome={membro.nome} papel={membro.papel} />
-      <main id="conteudo" className="min-h-screen md:pl-64">
+      <main id="conteudo" className="min-h-screen lg:pl-64">
         {children}
       </main>
     </>

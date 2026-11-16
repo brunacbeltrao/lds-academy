@@ -14,7 +14,6 @@ const BLOCOS: Bloco[] = [
 export default function TiraDuvidasPage() {
   return (
     <PaginaArea
-      rotulo="Tira-dúvidas"
       titulo="Tira-dúvidas"
       descricao="Perguntas públicas ou privadas. Toda resposta passa pela diretoria antes de ser publicada."
       blocos={BLOCOS}

@@ -16,7 +16,7 @@ src/
     login/                  tela e ação de login
     auth/callback, auth/sair
     (app)/                  área logada: layout com o menu e as páginas das áreas
-  components/               menu e esqueleto das áreas
+  components/               menu, cronograma e peças de interface (ui.tsx)
   lib/
     membro.ts               getMembroAtual() e exigirDiretoria()
     navegacao.ts            itens do menu
@@ -32,6 +32,16 @@ docs/                       decisões de produto
 3. No primeiro acesso, um gatilho em `auth.users` confere a lista: se o e-mail não está ativo em `membros`, o cadastro é recusado; se está, a conta é vinculada à linha do membro.
 4. `/auth/callback` troca o código do link pela sessão, guardada em cookies.
 5. Para tirar o acesso de alguém, basta marcar `ativo = false`: as políticas deixam de valer para a pessoa e o app encerra a sessão no acesso seguinte.
+
+## Anexos das aulas
+
+- Bucket privado `materiais` no Storage do Supabase: só PDF, até 50 MB por arquivo.
+- O envio vai direto do navegador ao Storage (a RLS só deixa a diretoria enviar), porque arquivos grandes não passam pelas funções da Vercel. Depois do envio, uma ação no servidor registra o anexo em `aula_materiais`.
+- O download passa por `/materiais/[id]`, que confere o membro e redireciona para um link temporário de 60 segundos.
+
+## Dados que não passam pelo repositório
+
+Nomes de membros, professores, autores e revisores ficam só no banco. Cargas de dados com nomes de pessoas são feitas direto no banco, sem arquivo de migração; migrações trazem só estrutura e dados sem pessoas (como o cronograma do ciclo).
 
 ## Variáveis de ambiente
 
@@ -50,4 +60,4 @@ Não há chave de serviço no app nesta etapa.
 
 ## Banco
 
-Tabelas: `membros`, `ciclos`, `aulas`, `aula_leituras`, `biblioteca_itens`, `favoritos`, `competicoes`, `equipes`, `equipe_membros`, `eventos`, `avisos`, `perguntas`, `respostas`, `presencas`, `justificativas`, `ia_trechos`. Regras de acesso em `permissoes.md`.
+Tabelas: `membros`, `ciclos`, `aulas`, `aula_leituras`, `biblioteca_itens`, `favoritos`, `competicoes`, `equipes`, `equipe_membros`, `eventos`, `avisos`, `perguntas`, `respostas`, `presencas`, `justificativas`, `ia_trechos`, `aula_materiais`, `producoes`. Regras de acesso em `permissoes.md`.

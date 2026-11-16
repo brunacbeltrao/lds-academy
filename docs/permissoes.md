@@ -12,6 +12,7 @@ Três papéis: **ligante** (associado acadêmico), **diretoria** (associado dire
 | Biblioteca | Busca, lê (links do Drive) e favorita | Cadastra links do Drive e classifica |
 | Competições | Só quem está na equipe selecionada | Toda a diretoria acompanha; cria edições e monta equipes |
 | Tira-dúvidas | Pergunta (pública ou privada) e responde as públicas | Valida respostas, responde as privadas e modera |
+| Produção | Consulta calendário e orientações | Mantém o calendário |
 | A Liga | Lê | Lê |
 | Gestão | Sem acesso | Acesso total |
 
@@ -24,6 +25,8 @@ Todas as tabelas têm RLS. As políticas usam funções do schema `privado` (`is
 | `membros` | Lê só a própria linha | Lê e gere todas |
 | `ciclos`, `biblioteca_itens`, `aula_leituras`, `eventos`, `avisos`, `competicoes` | Lê | Lê e escreve |
 | `aulas` | Lê as publicadas | Lê e escreve todas |
+| `aula_materiais` e arquivos do bucket `materiais` | Lê e baixa | Envia, registra e apaga |
+| `producoes` | Lê | Lê e escreve |
 | `favoritos` | Só os próprios | Só os próprios |
 | `equipes`, `equipe_membros` | Só das equipes de que participa | Lê e gere todas |
 | `perguntas` | Lê as públicas e as próprias; cria as suas | Lê todas; edita e apaga |
