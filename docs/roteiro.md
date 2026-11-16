@@ -29,6 +29,7 @@
 - Banco de professores, ligado às aulas.
 - Planejamento do ciclo: cronograma em rascunho, convites, publicação e início do ciclo.
 - Mural de oportunidades, com cartaz, lista de quem vai e destaque no Início.
+- Seção "Depois da aula" na página da aula: resumo, slides e apostila (links), editados pela diretoria no painel da aula.
 
 ## Próximas etapas
 

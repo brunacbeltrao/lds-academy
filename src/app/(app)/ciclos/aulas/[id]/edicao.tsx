@@ -17,7 +17,16 @@ function Aviso({ estado }: { estado: Resultado }) {
   );
 }
 
-type Valores = { professor: string; professorId: string; professorBio: string; local: string; bibliografia: string };
+type Valores = {
+  professor: string;
+  professorId: string;
+  professorBio: string;
+  local: string;
+  bibliografia: string;
+  resumo: string;
+  slidesUrl: string;
+  apostilaUrl: string;
+};
 
 export function FormularioAula({ aulaId, valores, professores = [] }: { aulaId: string; valores: Valores; professores?: OpcaoDeProfessor[] }) {
   const [estado, acao, salvando] = useActionState<Resultado, FormData>(salvarAula, null);
@@ -50,6 +59,31 @@ export function FormularioAula({ aulaId, valores, professores = [] }: { aulaId: 
         </label>
         <textarea id="bibliografia" name="bibliografia" defaultValue={valores.bibliografia} rows={6} maxLength={8000} placeholder="Uma referência por linha. Os PDFs são anexados logo abaixo." className="campo" />
       </div>
+      <fieldset className="mt-3 flex flex-col gap-5 border-t border-linha-forte pt-8">
+        <legend className="sr-only">Depois da aula</legend>
+        <div aria-hidden="true">
+          <p className="h3">Depois da aula</p>
+          <p className="mt-1 text-sm text-grafite">Aparece para os membros numa seção própria, abaixo da bibliografia.</p>
+        </div>
+        <div>
+          <label htmlFor="slides_url" className="rotulo-campo">
+            Link dos slides
+          </label>
+          <input id="slides_url" name="slides_url" type="url" inputMode="url" defaultValue={valores.slidesUrl} maxLength={1000} placeholder="https://drive.google.com/…" className="campo" />
+        </div>
+        <div>
+          <label htmlFor="apostila_url" className="rotulo-campo">
+            Link da apostila
+          </label>
+          <input id="apostila_url" name="apostila_url" type="url" inputMode="url" defaultValue={valores.apostilaUrl} maxLength={1000} placeholder="https://drive.google.com/…" className="campo" />
+        </div>
+        <div>
+          <label htmlFor="resumo" className="rotulo-campo">
+            Resumo e pontos-chave
+          </label>
+          <textarea id="resumo" name="resumo" defaultValue={valores.resumo} rows={6} maxLength={8000} placeholder="O que foi discutido, conclusões e indicações do professor. Uma linha em branco separa parágrafos." className="campo" />
+        </div>
+      </fieldset>
       <div className="flex flex-wrap items-center gap-3">
         <button type="submit" disabled={salvando} className="botao">
           {salvando ? "Salvando…" : "Salvar aula"}

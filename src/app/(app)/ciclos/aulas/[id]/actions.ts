@@ -13,12 +13,25 @@ function texto(formData: FormData, campo: string, limite: number): string | null
   return valor ? valor.slice(0, limite) : null;
 }
 
+/** Link opcional: vazio vira null; precisa ser http(s). Devolve undefined se for inválido. */
+function link(formData: FormData, campo: string): string | null | undefined {
+  const valor = String(formData.get(campo) ?? "").trim();
+  if (!valor) return null;
+  try {
+    const url = new URL(valor);
+    if (url.protocol !== "https:" && url.protocol !== "http:") return undefined;
+    return url.toString().slice(0, 1000);
+  } catch {
+    return undefined;
+  }
+}
+
 function atualizar(aulaId: string) {
   revalidatePath(`/ciclos/aulas/${aulaId}`);
   revalidatePath("/ciclos");
 }
 
-/** Professor, apresentação, local e bibliografia da aula. Só diretoria. */
+/** Professor, apresentação, local, bibliografia e o material de depois da aula. Só diretoria. */
 export async function salvarAula(_: Resultado, formData: FormData): Promise<Resultado> {
   await exigirDiretoria();
   const aulaId = String(formData.get("aulaId") ?? "");
@@ -27,6 +40,11 @@ export async function salvarAula(_: Resultado, formData: FormData): Promise<Resu
   // Professor do banco: só muda quando o formulário traz a escolha (o campo existe só se há banco).
   const professorId = formData.has("professor_id") ? String(formData.get("professor_id") ?? "") : undefined;
   if (professorId && !UUID.test(professorId)) return { ok: false, mensagem: "Professor inválido." };
+
+  const slides = link(formData, "slides_url");
+  const apostila = link(formData, "apostila_url");
+  if (slides === undefined) return { ok: false, mensagem: "O link dos slides precisa começar com https://" };
+  if (apostila === undefined) return { ok: false, mensagem: "O link da apostila precisa começar com https://" };
 
   const supabase = await createClient();
   const { error } = await supabase
@@ -37,6 +55,9 @@ export async function salvarAula(_: Resultado, formData: FormData): Promise<Resu
       professor_bio: texto(formData, "professor_bio", 4000),
       local: texto(formData, "local", 200),
       bibliografia: texto(formData, "bibliografia", 8000),
+      resumo: texto(formData, "resumo", 8000),
+      slides_url: slides,
+      apostila_url: apostila,
     })
     .eq("id", aulaId);
 

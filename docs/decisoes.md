@@ -60,6 +60,8 @@ Etapas: vaga aberta → tema → redação → rascunho → revisão → ajustes
 - **Banco de professores:** na área da diretoria, com contato e histórico. A página da aula continua guardando o nome e a apresentação do professor, porque os ligantes não leem o banco. Carga inicial feita no banco a partir das aulas de 2026.2 com um só professor; as aulas dadas em dupla ficaram sem ficha, para a diretoria decidir.
 - **Mural de oportunidades:** só a diretoria publica. Cartaz em imagem opcional, lista de quem vai opcional (com limite de vagas) e destaque das abertas no Início. A oportunidade sai das abertas no dia seguinte ao prazo (ou à data do evento); sem data, fica até a diretoria remover.
 
+- **Depois da aula:** slides e apostila entram como links (Drive, Canva), não como arquivos; o resumo é texto livre. A seção aparece quando há conteúdo ou depois que a aula passou.
+
 ## Em aberto
 
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.
