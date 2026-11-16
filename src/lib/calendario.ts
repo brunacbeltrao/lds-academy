@@ -28,7 +28,7 @@ export async function getEventos(de: string, ate: string): Promise<Evento[]> {
   const inicio = `${de}T00:00:00-03:00`;
   const fim = `${ate}T23:59:59-03:00`;
   const [{ data, error }, { data: producoes }] = await Promise.all([
-    supabase.from("eventos").select("id, titulo, tipo, inicio, fim, local, descricao, aula_id").gte("inicio", inicio).lte("inicio", fim).order("inicio"),
+    supabase.from("eventos").select("id, titulo, tipo, inicio, fim, local, descricao, aula_id").eq("publicado", true).gte("inicio", inicio).lte("inicio", fim).order("inicio"),
     supabase.from("producoes").select("id, tipo, numero, tema, publicacao").gte("publicacao", de).lte("publicacao", ate),
   ]);
   if (error) throw new Error(`Falha ao ler o calendário: ${error.message}`);

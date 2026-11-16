@@ -70,6 +70,12 @@ export default async function GestaoPage({ searchParams }: PageProps<"/gestao">)
         descricao={diretoria ? "Administração da liga: membros, frequência, avisos e a fila do tira-dúvidas." : "Acompanhamento da liga, em modo leitura para o conselho."}
         acoes={
           <>
+            <Link href="/gestao/planejamento" className="botao">
+              Planejamento do ciclo
+            </Link>
+            <Link href="/professores" className="botao botao-secundario">
+              Professores
+            </Link>
             <Link href="/regularizacao" className="botao botao-secundario">
               Documentos da liga
             </Link>
