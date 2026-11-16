@@ -130,6 +130,14 @@ export function formatarDia(iso: string): string {
   return new Intl.DateTimeFormat("pt-BR", { timeZone: FUSO, day: "2-digit", month: "2-digit" }).format(new Date(iso));
 }
 
+/** Dia e mês curtos, para a "folha de calendário" (ex.: { dia: "18", mes: "nov" }). */
+export function partesDaData(iso: string): { dia: string; mes: string } {
+  const d = new Date(iso);
+  const dia = new Intl.DateTimeFormat("pt-BR", { timeZone: FUSO, day: "2-digit" }).format(d);
+  const mes = new Intl.DateTimeFormat("pt-BR", { timeZone: FUSO, month: "short" }).format(d).replace(".", "");
+  return { dia, mes };
+}
+
 export function formatarDiaDaSemana(iso: string): string {
   return new Intl.DateTimeFormat("pt-BR", { timeZone: FUSO, weekday: "long" }).format(new Date(iso));
 }

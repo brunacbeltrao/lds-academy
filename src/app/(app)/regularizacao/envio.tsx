@@ -112,7 +112,7 @@ export function EnvioDeDocumento() {
           {enviando ? "Enviando…" : "Adicionar documento"}
         </button>
         {estado ? (
-          <p role="status" className={`aviso ${estado.ok ? "aviso-ok" : "aviso-erro"}`}>
+          <p role="status" className={`aviso surgir ${estado.ok ? "aviso-ok" : "aviso-erro"}`}>
             {estado.mensagem}
           </p>
         ) : null}

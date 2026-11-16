@@ -18,9 +18,15 @@ export default async function InicioPage() {
   const [membro, atual] = await Promise.all([getMembroAtual(), getCicloAtual()]);
   const primeiroNome = membro.nome.split(" ")[0];
   const proximo = atual ? proximoEncontro(atual.encontros) : null;
+  const hoje = new Intl.DateTimeFormat("pt-BR", { timeZone: "America/Recife", weekday: "long", day: "numeric", month: "long" }).format(new Date());
 
   return (
-    <PaginaArea titulo={`Olá, ${primeiroNome}`} descricao="O que vem a seguir na liga." blocos={BLOCOS}>
+    <PaginaArea
+      titulo={`Olá, ${primeiroNome}`}
+      descricao="O que vem a seguir na liga."
+      contexto={<span className="inline-block first-letter:uppercase">{hoje}</span>}
+      blocos={BLOCOS}
+    >
       <ProximoEncontro proximo={proximo} ciclo={atual?.ciclo.codigo ?? null} />
     </PaginaArea>
   );
