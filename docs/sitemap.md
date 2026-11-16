@@ -20,7 +20,13 @@ As abas "Produção" e "A Liga" não estavam no mapa original; foram acrescentad
 
 ## Gestão (diretoria e conselho)
 
-Rota `/gestao`. Não aparece no menu do ligante e é bloqueada no servidor. A diretoria gere; o conselho só lê.
+Não aparece no menu do ligante e é bloqueada no servidor. A diretoria gere; o conselho só lê.
+
+### Regularização (`/regularizacao`)
+
+Os documentos da liga em PDF, por categoria: Estatuto e regimento · Eleições (editais, propostas, resultados) · Atas e assembleias · Registros e cadastros · Outros. A diretoria envia e remove; o conselho lê. Download por `/documentos/[id]`.
+
+### Gestão (`/gestao`)
 
 - Membros e papéis (lista oficial)
 - Frequência e justificativas (decide o acadêmico)

@@ -32,6 +32,8 @@
 - **Visual:** a plataforma tem identidade própria para tela (ver `identidade-visual.md`): fonte Figtree, fundo bege da liga, vinho só como destaque. O design system da liga segue valendo para redes e apostila.
 - **Cronograma real:** em 16/09 foi a aula de Acordo de Acionistas e em 23/09 a de Atos Constitutivos (invertidas em relação ao cronograma impresso). Houve uma aula extra de Litígios Societários numa sexta-feira.
 
+- **Regularização:** aba da diretoria (conselho em leitura) com os documentos da liga em PDF, por categoria. Os arquivos ficam no Storage, em bucket privado próprio, fora do alcance dos ligantes.
+
 ## Em aberto
 
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.

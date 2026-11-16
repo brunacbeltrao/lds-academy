@@ -11,5 +11,6 @@ export const MENU: ItemMenu[] = [
   { href: "/tira-duvidas", rotulo: "Tira-dúvidas", resumo: "Perguntas públicas ou privadas, validadas pela diretoria." },
   { href: "/trajetoria", rotulo: "Minha trajetória", resumo: "Presença, leituras, perguntas e equipes." },
   { href: "/a-liga", rotulo: "A Liga", resumo: "O que é a liga, regras do Grupo de Estudos e Código de Conduta." },
+  { href: "/regularizacao", rotulo: "Regularização", resumo: "Documentos da liga: estatuto, eleições, atas e registros.", gestao: true },
   { href: "/gestao", rotulo: "Gestão", resumo: "Membros, frequência, planejamento e curadoria.", gestao: true },
 ];

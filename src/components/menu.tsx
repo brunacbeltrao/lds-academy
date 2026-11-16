@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   CalendarDays,
+  FileCheck,
   GraduationCap,
   House,
   Landmark,
@@ -35,6 +36,7 @@ const ICONES: Record<string, LucideIcon> = {
   "/tira-duvidas": MessagesSquare,
   "/trajetoria": TrendingUp,
   "/a-liga": Landmark,
+  "/regularizacao": FileCheck,
   "/gestao": Settings,
 };
 
