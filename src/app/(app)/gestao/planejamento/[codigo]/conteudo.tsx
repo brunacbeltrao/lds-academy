@@ -92,7 +92,7 @@ export function EditorDoCiclo({
         )}
 
         {editavel ? (
-          <div className="mt-6 grid gap-3 lg:grid-cols-[1fr_20rem]">
+          <div className="mt-6 grid items-start gap-3 lg:grid-cols-[1fr_20rem]">
             <Recolhivel titulo="Adicionar encontro">
               <Formulario acao={adicionarEncontro} resetar className="grid gap-4 sm:grid-cols-2">
                 <input type="hidden" name="ciclo_id" value={ciclo.id} />
@@ -156,6 +156,7 @@ export function EditorDoCiclo({
                 <p className="mt-1 text-[0.9375rem] text-grafite">
                   Quando o semestre começar: este ciclo vira o atual (Início, frequência e justificativas) e o ciclo em curso vai para o acervo.
                 </p>
+                {ciclo.cronograma_publicado ? (
                 <Formulario
                   acao={iniciarCiclo}
                   confirmar={`Iniciar o ciclo ${ciclo.codigo}? O ciclo em curso será encerrado e irá para o acervo.`}
@@ -166,7 +167,9 @@ export function EditorDoCiclo({
                     Iniciar o ciclo {ciclo.codigo}
                   </BotaoEnviar>
                 </Formulario>
-                {!ciclo.cronograma_publicado ? <p className="mt-2 text-sm text-grafite">Disponível depois de publicar o cronograma.</p> : null}
+                ) : (
+                  <p className="mt-3 text-sm font-medium text-tinta">Disponível depois de publicar o cronograma.</p>
+                )}
               </div>
             </div>
           </Secao>
