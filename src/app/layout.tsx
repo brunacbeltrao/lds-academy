@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Figtree } from "next/font/google";
+import { RegistroDoApp } from "@/components/registro-do-app";
 import "./globals.css";
 
 const figtree = Figtree({ variable: "--font-figtree", subsets: ["latin"] });
@@ -17,7 +18,10 @@ export const viewport: Viewport = { themeColor: "#ebece0" };
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-BR" className={`${figtree.variable} h-full antialiased`}>
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        {children}
+        <RegistroDoApp />
+      </body>
     </html>
   );
 }

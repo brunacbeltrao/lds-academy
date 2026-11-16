@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Pin } from "lucide-react";
+import { InstalarApp } from "@/components/instalar-app";
 import { ProximoEncontro } from "@/components/proximo-encontro";
 import { CabecalhoDaPagina, Pagina, Painel } from "@/components/ui";
 import { pendenciasDeArtigos, type Pendencia } from "@/lib/artigo";
@@ -85,6 +86,10 @@ export default async function InicioPage() {
   return (
     <Pagina larga>
       <CabecalhoDaPagina titulo={`Olá, ${primeiroNome}`} contexto={<span className="first-letter:uppercase">{longa(dataDeHoje)}</span>} />
+
+      <div className="mb-3 empty:hidden lg:hidden">
+        <InstalarApp dispensavel />
+      </div>
 
       <div className="grid gap-3 lg:grid-cols-3">
         <ProximoEncontro proximo={proximo} ciclo={atual?.ciclo.codigo ?? null} encontros={atual?.encontros ?? []} />
