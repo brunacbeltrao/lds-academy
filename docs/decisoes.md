@@ -34,6 +34,10 @@
 
 - **Regularização:** aba da diretoria (conselho em leitura) com os documentos da liga em PDF, por categoria. Os arquivos ficam no Storage, em bucket privado próprio, fora do alcance dos ligantes.
 
+- **Chamada:** fica na página de cada aula e abre no dia da aula. Entram todos os membros ativos que frequentam o Grupo de Estudos (ligantes e diretoria); o conselho só lê. Por enquanto, a diretoria marca "justificada" direto na chamada; o fluxo de justificativas enviadas pelo ligante virá com a Minha trajetória.
+- **Depois da aula:** slides e apostila entram como links (Drive, Canva), não como arquivos; o resumo é texto livre.
+- **Avisos:** publicados pela diretoria no próprio Início. Fixados aparecem no topo; dos demais, os quatro mais recentes ficam abertos e o resto em "Avisos anteriores". O nome de quem publicou não aparece, porque o ligante não lê a lista de membros.
+
 ## Em aberto
 
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.

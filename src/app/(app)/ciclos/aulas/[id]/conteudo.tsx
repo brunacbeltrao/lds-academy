@@ -1,27 +1,75 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowLeft, CalendarDays, FileText, MapPin } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, ArrowUpRight, BookOpen, CalendarDays, FileText, MapPin, Presentation, UserCheck } from "lucide-react";
+import { comLinks, TextoLivre } from "@/components/texto";
 import { Lista, Pagina, Secao } from "@/components/ui";
-import { formatarDataLonga, formatarHora, formatarTamanho, rotuloAula, type Aula } from "@/lib/ciclos";
+import {
+  aulaJaComecou,
+  aulaJaPassou,
+  formatarDataLonga,
+  formatarHora,
+  formatarTamanho,
+  rotuloAula,
+  type Aula,
+} from "@/lib/ciclos";
+import type { Papel } from "@/lib/membro";
+import { MINHA_PRESENCA, type LinhaDaChamada, type StatusPresenca } from "@/lib/presenca-formato";
 import { apagarMaterial } from "./actions";
+import { Chamada } from "./chamada";
 import { EnvioDeMateriais, FormularioAula } from "./edicao";
 
-/** Transforma endereços https em links, mantendo o resto do texto. */
-function comLinks(texto: string): ReactNode[] {
-  return texto.split(/(https?:\/\/[^\s]+)/g).map((parte, i) =>
-    /^https?:\/\//.test(parte) ? (
-      <a key={i} href={parte} target="_blank" rel="noopener noreferrer" className="link break-all">
-        {parte}
+type Props = {
+  aula: Aula;
+  papel: Papel;
+  /** Lista da chamada: só para diretoria e conselho. */
+  chamada: LinhaDaChamada[] | null;
+  /** Presença do próprio membro (ligantes e diretoria). */
+  minhaPresenca: StatusPresenca | null;
+  agora?: Date;
+};
+
+/** Link externo em cartão, no mesmo desenho dos anexos. */
+function LinkExterno({ href, titulo, detalhe, icone }: { href: string; titulo: string; detalhe: string; icone: ReactNode }) {
+  return (
+    <li>
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="cartao group flex items-center gap-3 p-3 transition-colors hover:border-linha-forte sm:gap-4 sm:p-4"
+      >
+        <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-vinho-suave text-vinho">
+          {icone}
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block font-medium text-tinta group-hover:text-vinho">{titulo}</span>
+          <span className="block text-sm text-grafite">{detalhe}</span>
+        </span>
+        <ArrowUpRight aria-hidden="true" className="size-5 shrink-0 text-linha-forte transition-colors group-hover:text-vinho" />
+        <span className="sr-only">(abre em nova aba)</span>
       </a>
-    ) : (
-      parte
-    ),
+    </li>
   );
 }
 
-/** Página da aula: professor, bibliografia, anexos e, para a diretoria, a edição. */
-export function ConteudoDaAula({ aula, diretoria }: { aula: Aula; diretoria: boolean }) {
+function origem(url: string): string {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, "");
+    if (host.endsWith("drive.google.com") || host.endsWith("docs.google.com")) return "Google Drive";
+    if (host.endsWith("canva.com")) return "Canva";
+    return host;
+  } catch {
+    return "Link externo";
+  }
+}
+
+/** Página da aula: professor, bibliografia, anexos, depois da aula e, para a gestão, chamada e edição. */
+export function ConteudoDaAula({ aula, papel, chamada, minhaPresenca, agora = new Date() }: Props) {
+  const diretoria = papel === "diretoria";
   const leituras = (aula.bibliografia ?? "").split("\n").filter((linha) => linha.trim());
+  const temPosAula = Boolean(aula.resumo || aula.slidesUrl || aula.apostilaUrl);
+  const passou = aulaJaPassou(aula.data, agora);
+  const chamadaAberta = aulaJaComecou(aula.data, agora);
 
   return (
     <Pagina>
@@ -52,6 +100,12 @@ export function ConteudoDaAula({ aula, diretoria }: { aula: Aula; diretoria: boo
             <li className="flex items-center gap-2">
               <MapPin aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={1.75} />
               {aula.local}
+            </li>
+          ) : null}
+          {minhaPresenca ? (
+            <li className="flex items-center gap-2">
+              <UserCheck aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={1.75} />
+              <span className="font-medium text-tinta">{MINHA_PRESENCA[minhaPresenca]}</span>
             </li>
           ) : null}
         </ul>
@@ -109,6 +163,53 @@ export function ConteudoDaAula({ aula, diretoria }: { aula: Aula; diretoria: boo
         )}
       </Secao>
 
+      {temPosAula || passou ? (
+        <Secao titulo="Depois da aula">
+          {aula.resumo ? <TextoLivre texto={aula.resumo} className="text-tinta" /> : null}
+          {aula.slidesUrl || aula.apostilaUrl ? (
+            <ul className={`flex flex-col gap-2 ${aula.resumo ? "mt-6" : ""}`}>
+              {aula.slidesUrl ? (
+                <LinkExterno
+                  href={aula.slidesUrl}
+                  titulo="Slides da aula"
+                  detalhe={origem(aula.slidesUrl)}
+                  icone={<Presentation className="size-5" strokeWidth={1.75} />}
+                />
+              ) : null}
+              {aula.apostilaUrl ? (
+                <LinkExterno
+                  href={aula.apostilaUrl}
+                  titulo="Apostila"
+                  detalhe={origem(aula.apostilaUrl)}
+                  icone={<BookOpen className="size-5" strokeWidth={1.75} />}
+                />
+              ) : null}
+            </ul>
+          ) : null}
+          {!temPosAula ? <p className="text-grafite">Slides e resumo ainda não publicados.</p> : null}
+        </Secao>
+      ) : null}
+
+      {chamada ? (
+        <section aria-labelledby="chamada" className="mb-6 rounded-2xl bg-sutil p-5 sm:p-8">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <h2 id="chamada" className="h2">
+              Chamada
+            </h2>
+            <span className="selo border border-linha-forte bg-superficie">{diretoria ? "Só diretoria" : "Modo leitura"}</span>
+          </div>
+          <div className="mt-5">
+            {chamadaAberta ? (
+              <Chamada aulaId={aula.id} linhas={chamada} editavel={diretoria} />
+            ) : (
+              <p className="text-grafite">
+                {aula.data ? "A chamada abre no dia da aula." : "A chamada abre quando a aula tiver data."}
+              </p>
+            )}
+          </div>
+        </section>
+      ) : null}
+
       {diretoria ? (
         <section aria-labelledby="editar-aula" className="mt-2 rounded-2xl bg-sutil p-5 sm:p-8">
           <div className="flex flex-wrap items-center gap-2.5">
@@ -125,6 +226,9 @@ export function ConteudoDaAula({ aula, diretoria }: { aula: Aula; diretoria: boo
                 professorBio: aula.professorBio ?? "",
                 local: aula.local ?? "",
                 bibliografia: aula.bibliografia ?? "",
+                resumo: aula.resumo ?? "",
+                slidesUrl: aula.slidesUrl ?? "",
+                apostilaUrl: aula.apostilaUrl ?? "",
               }}
             />
             <div className="mt-8 border-t border-linha-forte pt-8">

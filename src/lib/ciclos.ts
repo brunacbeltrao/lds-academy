@@ -25,6 +25,9 @@ export type Aula = {
   professor: string | null;
   professorBio: string | null;
   bibliografia: string | null;
+  resumo: string | null;
+  slidesUrl: string | null;
+  apostilaUrl: string | null;
   ciclo: { codigo: string; titulo: string } | null;
   materiais: Material[];
 };
@@ -84,7 +87,7 @@ export async function getAula(id: string): Promise<Aula | null> {
   const { data, error } = await supabase
     .from("aulas")
     .select(
-      "id, numero, titulo, data, local, professor, professor_bio, bibliografia, ciclo:ciclos(codigo, titulo), aula_materiais(id, titulo, tamanho, criado_em)",
+      "id, numero, titulo, data, local, professor, professor_bio, bibliografia, resumo, slides_url, apostila_url, ciclo:ciclos(codigo, titulo), aula_materiais(id, titulo, tamanho, criado_em)",
     )
     .eq("id", id)
     .maybeSingle();
@@ -102,6 +105,9 @@ export async function getAula(id: string): Promise<Aula | null> {
     professor: data.professor,
     professorBio: data.professor_bio,
     bibliografia: data.bibliografia,
+    resumo: data.resumo,
+    slidesUrl: data.slides_url,
+    apostilaUrl: data.apostila_url,
     ciclo: um<{ codigo: string; titulo: string }>(data.ciclo),
     materiais: materiais.map(({ id, titulo, tamanho }) => ({ id, titulo, tamanho })),
   };
@@ -121,6 +127,16 @@ export function ehHoje(encontro: Encontro, agora = new Date()): boolean {
   return diaLocal(new Date(encontro.inicio)) === diaLocal(agora);
 }
 
+/** A aula já aconteceu ou é hoje (a chamada abre no dia da aula). Sem data, não. */
+export function aulaJaComecou(dataIso: string | null, agora = new Date()): boolean {
+  return dataIso !== null && diaLocal(new Date(dataIso)) <= diaLocal(agora);
+}
+
+/** A aula é de um dia anterior a hoje. */
+export function aulaJaPassou(dataIso: string | null, agora = new Date()): boolean {
+  return dataIso !== null && diaLocal(new Date(dataIso)) < diaLocal(agora);
+}
+
 /** Data no fuso de Recife como AAAA-MM-DD, para comparar dias. */
 function diaLocal(data: Date): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: FUSO }).format(data);
@@ -136,6 +152,13 @@ export function formatarDiaDaSemana(iso: string): string {
 
 export function formatarDataLonga(iso: string): string {
   return new Intl.DateTimeFormat("pt-BR", { timeZone: FUSO, weekday: "long", day: "numeric", month: "long" }).format(
+    new Date(iso),
+  );
+}
+
+/** "16 de novembro de 2026" */
+export function formatarDataCompleta(iso: string): string {
+  return new Intl.DateTimeFormat("pt-BR", { timeZone: FUSO, day: "numeric", month: "long", year: "numeric" }).format(
     new Date(iso),
   );
 }

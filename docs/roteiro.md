@@ -18,6 +18,9 @@
 - Área de Produção, com carrosséis e mini-artigos.
 - Aba Regularização, com os documentos da liga.
 - Redesenho da interface (Figtree, fundo bege da liga, vinho como destaque).
+- Chamada na página da aula: a diretoria registra presença, falta ou falta justificada; o conselho vê em modo leitura; cada membro vê a própria presença.
+- Seção "Depois da aula": slides, apostila (links) e resumo, editados pela diretoria na página da aula.
+- Avisos da diretoria no Início: publicar, corrigir, fixar no topo e remover.
 
 ## Próximas etapas (a definir a ordem)
 
@@ -25,7 +28,7 @@
 - Envio de e-mail próprio para o login, antes de abrir aos ligantes.
 - Produção: edição do calendário pela diretoria.
 - Biblioteca: cadastro dos links do Drive, busca e favoritos.
-- Calendário e avisos no Início.
+- Calendário no Início.
 - Tira-dúvidas: perguntas, respostas, fila de validação e rascunho da IA.
 - Competições: edições, equipes e materiais.
 - Minha trajetória: presença, justificativas e progresso.
