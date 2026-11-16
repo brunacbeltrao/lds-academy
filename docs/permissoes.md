@@ -14,6 +14,7 @@ Três papéis: **ligante** (associado acadêmico), **diretoria** (associado dire
 | Tira-dúvidas | Pergunta (pública ou privada) e responde as públicas | Valida respostas, responde as privadas e modera |
 | Produção | Consulta calendário e orientações | Mantém o calendário |
 | A Liga | Lê | Lê |
+| Regularização | Sem acesso | Mantém os documentos da liga |
 | Gestão | Sem acesso | Acesso total |
 
 ## Como isso está no banco (RLS)
@@ -27,6 +28,7 @@ Todas as tabelas têm RLS. As políticas usam funções do schema `privado` (`is
 | `aulas` | Lê as publicadas | Lê e escreve todas |
 | `aula_materiais` e arquivos do bucket `materiais` | Lê e baixa | Envia, registra e apaga |
 | `producoes` | Lê | Lê e escreve |
+| `documentos` e arquivos do bucket `documentos` | Sem acesso | Envia, registra e apaga (o conselho lê) |
 | `favoritos` | Só os próprios | Só os próprios |
 | `equipes`, `equipe_membros` | Só das equipes de que participa | Lê e gere todas |
 | `perguntas` | Lê as públicas e as próprias; cria as suas | Lê todas; edita e apaga |

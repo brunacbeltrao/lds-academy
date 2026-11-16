@@ -39,6 +39,10 @@ docs/                       decisões de produto
 - O envio vai direto do navegador ao Storage (a RLS só deixa a diretoria enviar), porque arquivos grandes não passam pelas funções da Vercel. Depois do envio, uma ação no servidor registra o anexo em `aula_materiais`.
 - O download passa por `/materiais/[id]`, que confere o membro e redireciona para um link temporário de 60 segundos.
 
+## Documentos da liga
+
+Mesmo desenho dos anexos das aulas, em bucket privado separado (`documentos`), legível só pela diretoria e pelo conselho. Registro em `documentos`; download por `/documentos/[id]`.
+
 ## Dados que não passam pelo repositório
 
 Nomes de membros, professores, autores e revisores ficam só no banco. Cargas de dados com nomes de pessoas são feitas direto no banco, sem arquivo de migração; migrações trazem só estrutura e dados sem pessoas (como o cronograma do ciclo).
@@ -60,4 +64,4 @@ Não há chave de serviço no app nesta etapa.
 
 ## Banco
 
-Tabelas: `membros`, `ciclos`, `aulas`, `aula_leituras`, `biblioteca_itens`, `favoritos`, `competicoes`, `equipes`, `equipe_membros`, `eventos`, `avisos`, `perguntas`, `respostas`, `presencas`, `justificativas`, `ia_trechos`, `aula_materiais`, `producoes`. Regras de acesso em `permissoes.md`.
+Tabelas: `membros`, `ciclos`, `aulas`, `aula_leituras`, `biblioteca_itens`, `favoritos`, `competicoes`, `equipes`, `equipe_membros`, `eventos`, `avisos`, `perguntas`, `respostas`, `presencas`, `justificativas`, `ia_trechos`, `aula_materiais`, `producoes`, `documentos`. Regras de acesso em `permissoes.md`.
