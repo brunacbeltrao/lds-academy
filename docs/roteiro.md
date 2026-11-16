@@ -9,11 +9,15 @@
 - Casca de navegação com as sete áreas e a Gestão.
 - Primeiro deploy.
 
+## Feito depois da fundação
+
+- Ciclo 2026.2 cadastrado (14 aulas e 3 eventos); cronograma em Ciclos e aulas e próximo encontro no Início.
+
 ## Próximas etapas (a definir a ordem)
 
 - Gestão de membros: tela para a diretoria manter a lista oficial.
 - Envio de e-mail próprio para o login, antes de abrir aos ligantes.
-- Ciclos e aulas: cadastro do ciclo 2026.2 e página da aula.
+- Ciclos e aulas: página de cada aula (slides, leituras e apostila).
 - Biblioteca: cadastro dos links do Drive, busca e favoritos.
 - Calendário e avisos no Início.
 - Tira-dúvidas: perguntas, respostas, fila de validação e rascunho da IA.

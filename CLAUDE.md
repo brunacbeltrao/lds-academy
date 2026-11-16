@@ -13,6 +13,7 @@ Leia `docs/`: é a fonte das decisões de produto.
 - `docs/decisoes.md`: o que está decidido e o que está em aberto. Não resolva um ponto em aberto por conta própria: pergunte.
 - `docs/identidade-visual.md`: cores, fontes e regras de uso da marca.
 - `docs/arquitetura.md`: stack, estrutura de pastas, login e operação.
+- `docs/liga.md`: o que é a liga, cargos, regras do Grupo de Estudos e Código de Conduta.
 - `docs/roteiro.md`: etapas feitas e por fazer.
 
 ## Regras fixas

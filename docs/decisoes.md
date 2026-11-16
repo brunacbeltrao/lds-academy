@@ -10,7 +10,7 @@
 - **Biblioteca:** links do Drive, sem upload de livros.
 - **Ciclos anteriores:** abertos a todos, como acervo por tema.
 - **Diretoria:** sem níveis por enquanto.
-- **Presença:** registrada; o diretor acadêmico aceita ou recusa justificativas. Limite de 3 faltas.
+- **Presença:** registrada; o diretor acadêmico aceita ou recusa justificativas. Limite de 3 faltas sem justificativa (ver `liga.md`).
 
 ## Decidido na Etapa 1 (fundação)
 
@@ -27,3 +27,6 @@
 3. **Em quanto tempo a diretoria valida uma resposta antes de a dúvida ficar parada?**
 4. **Envio de e-mail do login.** O serviço de e-mail padrão do Supabase serve só para testes (poucos envios por hora). Antes de abrir aos ligantes, definir um serviço de envio próprio ou outro método de login.
 5. **Proteção de acesso da Vercel.** O projeto está com a "Vercel Authentication" ligada em todos os endereços `vercel.app`: só entra quem está logado na conta da Vercel. Serve para a fase de construção, mas impede o acesso dos ligantes. Antes de abrir, definir entre um domínio próprio da liga ou liberar o endereço de produção.
+6. **Conselheiros.** A liga tem três cargos (acadêmicos, diretores e conselheiros), mas a plataforma só tem dois papéis. Definir se os conselheiros entram na plataforma e o que veem: como ligantes, como diretoria ou com um papel próprio (por exemplo, leitura de tudo, sem gestão).
+7. **Conteúdo institucional.** O mapa do site não tem lugar para o Código de Conduta, as regras do Grupo de Estudos e a apresentação da liga (`liga.md`). Definir se viram uma página da plataforma e onde ela fica.
+8. **Faltas.** O mapa fala em "limite de 3"; a regra da liga é exclusão ao atingir três faltas sem justificativa plausível, com justificativa antecipada. Definir o que a plataforma faz ao chegar perto do limite (aviso ao membro, alerta à diretoria) e se aceita justificativa depois da aula.
