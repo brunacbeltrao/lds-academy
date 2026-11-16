@@ -16,7 +16,10 @@ Três papéis: **ligante** (associado acadêmico), **diretoria** (associado dire
 | Tira-dúvidas | Pergunta (pública ou privada) e responde as públicas | Valida respostas, responde as privadas e modera |
 | Produção | Consulta calendário e orientações. Nos seus artigos: registra o tema, envia o rascunho e conclui os ajustes; como revisor, registra o parecer | Abre vagas, muda datas, marca como publicado. Só o diretor acadêmico designa revisores, recusa temas, decide sobre "Reescrever" e faz a conferência final |
 | A Liga | Lê | Lê |
+| Oportunidades | Lê o mural e marca "Vou" quando há lista | Publica, edita, fixa e remove; vê os nomes da lista (o conselho também vê) |
 | Regularização | Sem acesso | Mantém os documentos da liga |
+| Professores | Sem acesso | Mantém o banco de professores (o conselho lê) |
+| Planejamento do ciclo | Vê o cronograma depois de publicado | Monta o cronograma em rascunho, publica e inicia o ciclo (qualquer membro da diretoria; o conselho lê) |
 | Gestão | Sem acesso | Acesso total |
 
 ## Como isso está no banco (RLS)
@@ -27,7 +30,12 @@ Todas as tabelas têm RLS. As políticas usam funções do schema `privado` (`is
 | --- | --- | --- |
 | `membros` (nome, papel, situação) | Lê todas, para ver os colegas | Lê e gere todas |
 | `membros_acesso` (e-mail de acesso) | Lê só o próprio | Lê e gere todos (o conselho lê) |
-| `ciclos`, `biblioteca_itens`, `aula_leituras`, `eventos`, `avisos`, `competicoes` | Lê | Lê e escreve |
+| `ciclos`, `biblioteca_itens`, `aula_leituras`, `avisos`, `competicoes` | Lê | Lê e escreve |
+| `eventos` | Lê os publicados (`publicado`); os rascunhos do planejamento ficam ocultos | Lê e escreve todos (o conselho lê todos) |
+| `professores` | Sem acesso | Lê e escreve (o conselho lê) |
+| `aula_planejamento` (convite e notas da aula) | Sem acesso | Lê e escreve (o conselho lê) |
+| `oportunidades` e cartazes do bucket `mural` | Lê | Lê, publica, edita e apaga |
+| `oportunidade_interessados` | Lê todas (para contar); entra e sai só com o próprio nome, se a oportunidade pede lista e há vaga (`privado.tem_vaga()`) | Lê e tira qualquer um |
 | `aulas` | Lê as publicadas | Lê e escreve todas |
 | `aula_materiais` e arquivos do bucket `materiais` | Lê e baixa | Envia, registra e apaga |
 | `producoes` | Lê; o autor altera só o tema do próprio artigo, até a entrega do rascunho | Lê e escreve (revisor de fora e recusa de tema: só o diretor acadêmico) |
