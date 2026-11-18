@@ -7,6 +7,8 @@ export type AulaDoProfessor = {
   titulo: string;
   data: string | null;
   ciclo: { codigo: string; titulo: string } | null;
+  /** Notas dadas pelos membros (1 a 5), sem quem deu. */
+  notas: number[];
 };
 
 export type Professor = {
@@ -27,18 +29,20 @@ export type Professor = {
 export type OpcaoDeProfessor = { id: string; nome: string; apresentacao: string | null; disponivel: boolean };
 
 const CAMPOS = "id, nome, apresentacao, instituicao, temas, email, telefone, linkedin, observacoes, disponivel";
-const AULAS = "aulas(id, numero, titulo, data, ciclo:ciclos(codigo, titulo))";
+const AULAS = "aulas(id, numero, titulo, data, ciclo:ciclos(codigo, titulo), avaliacoes_aula(nota))";
 
 function um<T>(valor: unknown): T | null {
   if (Array.isArray(valor)) return (valor[0] as T) ?? null;
   return (valor as T) ?? null;
 }
 
-type Linha = Omit<Professor, "aulas"> & { aulas: (Omit<AulaDoProfessor, "ciclo"> & { ciclo: unknown })[] | null };
+type Linha = Omit<Professor, "aulas"> & {
+  aulas: (Omit<AulaDoProfessor, "ciclo" | "notas"> & { ciclo: unknown; avaliacoes_aula?: { nota: number }[] | null })[] | null;
+};
 
 function montar(linha: Linha): Professor {
   const aulas = (linha.aulas ?? [])
-    .map((a) => ({ ...a, ciclo: um<AulaDoProfessor["ciclo"]>(a.ciclo) }))
+    .map(({ avaliacoes_aula, ...a }) => ({ ...a, ciclo: um<AulaDoProfessor["ciclo"]>(a.ciclo), notas: (avaliacoes_aula ?? []).map((x) => x.nota) }))
     // Mais recentes primeiro; sem data, pelo código do ciclo.
     .sort((a, b) => (b.data ?? b.ciclo?.codigo ?? "").localeCompare(a.data ?? a.ciclo?.codigo ?? ""));
   return { ...linha, aulas };

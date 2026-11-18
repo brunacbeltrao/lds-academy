@@ -73,6 +73,9 @@ export default async function GestaoPage({ searchParams }: PageProps<"/gestao">)
             <Link href="/gestao/planejamento" className="botao">
               Planejamento do ciclo
             </Link>
+            <Link href="/gestao/relatorio" className="botao botao-secundario">
+              Relatório do ciclo
+            </Link>
             <Link href="/professores" className="botao botao-secundario">
               Professores
             </Link>

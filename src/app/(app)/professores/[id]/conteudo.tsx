@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowUpRight, Mail, MessageCircle, Phone } from "lucide-reac
 import { BotaoEnviar, Formulario } from "@/components/formulario";
 import { CabecalhoDaPagina, Pagina, Recolhivel, Secao, Vazio } from "@/components/ui";
 import { rotuloAula } from "@/lib/ciclos";
+import { media, plural } from "@/lib/avaliacao-formato";
 import { curta } from "@/lib/datas";
 import { linkDoWhatsapp, type Professor } from "@/lib/professores";
 import { removerProfessor, salvarProfessor } from "../actions";
@@ -20,6 +21,7 @@ export function FichaDoProfessor({ professor, diretoria }: { professor: Professo
       : null,
     professor.linkedin ? { href: professor.linkedin, rotulo: "LinkedIn", Icone: ArrowUpRight, externo: true } : null,
   ].filter((c) => c !== null);
+  const todasAsNotas = professor.aulas.flatMap((a) => a.notas);
 
   return (
     <Pagina>
@@ -34,6 +36,11 @@ export function FichaDoProfessor({ professor, diretoria }: { professor: Professo
           <span className="selo">
             {professor.aulas.length === 0 ? "Ainda sem aula na liga" : `${professor.aulas.length} ${professor.aulas.length === 1 ? "aula" : "aulas"} na liga`}
           </span>
+          {todasAsNotas.length > 0 ? (
+            <span className="selo">
+              Nota média {media(todasAsNotas)} · {plural(todasAsNotas.length, "avaliação", "avaliações")}
+            </span>
+          ) : null}
         </div>
       </CabecalhoDaPagina>
 
@@ -77,7 +84,14 @@ export function FichaDoProfessor({ professor, diretoria }: { professor: Professo
               <li key={a.id}>
                 <Link href={`/ciclos/aulas/${a.id}`} className="cartao cartao-link flex flex-col gap-0.5 p-4">
                   <span className="text-sm text-grafite">
-                    {[a.ciclo ? `Ciclo ${a.ciclo.codigo}` : null, rotuloAula(a.numero), a.data ? curta(a.data) : null].filter(Boolean).join(" · ")}
+                    {[
+                      a.ciclo ? `Ciclo ${a.ciclo.codigo}` : null,
+                      rotuloAula(a.numero),
+                      a.data ? curta(a.data) : null,
+                      a.notas.length > 0 ? `nota ${media(a.notas)} (${plural(a.notas.length, "avaliação", "avaliações")})` : null,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
                   </span>
                   <span className="font-medium text-tinta">{a.titulo}</span>
                 </Link>

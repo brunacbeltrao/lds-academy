@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CabecalhoDaPagina, Cartao, Grade, Numero, nomeCurto, Pagina, Secao, Vazio } from "@/components/ui";
+import { getMinhasMarcacoes } from "@/lib/aproveitamento";
 import { rotuloAula } from "@/lib/ciclos";
 import { getCompeticoes } from "@/lib/competicoes";
 import { curta } from "@/lib/datas";
@@ -15,7 +16,14 @@ export const metadata: Metadata = { title: "Minha trajetória" };
 
 export default async function TrajetoriaPage() {
   const membro = await getMembroAtual();
-  const [frequencia, perguntas, competicoes, producoes] = await Promise.all([getFrequencia(membro.id), getPerguntas(), getCompeticoes(), getProducoes()]);
+  const [frequencia, perguntas, competicoes, producoes, marcacoes] = await Promise.all([
+    getFrequencia(membro.id),
+    getPerguntas(),
+    getCompeticoes(),
+    getProducoes(),
+    getMinhasMarcacoes(membro.id),
+  ]);
+  const leiturasFeitas = frequencia.filter((l) => marcacoes.leituras.has(l.aulaId)).length;
   const r = resumo(frequencia);
   const minhasPerguntas = perguntas.filter((p) => p.autor?.id === membro.id);
   const minhasRespostas = perguntas.flatMap((p) => p.respostas.filter((x) => x.autor?.id === membro.id).map((x) => ({ ...x, pergunta: p })));
@@ -33,7 +41,10 @@ export default async function TrajetoriaPage() {
         <Numero rotulo="Respostas validadas" valor={minhasRespostas.filter((x) => x.status === "validada").length} detalhe={`${minhasPerguntas.length} perguntas feitas`} />
       </Grade>
 
-      <Secao titulo="Aulas do ciclo" descricao="O registro de presença é feito pela diretoria depois de cada encontro.">
+      <Secao
+        titulo="Aulas do ciclo"
+        descricao={`O registro de presença é feito pela diretoria depois de cada encontro. Leituras marcadas como feitas: ${leiturasFeitas} de ${frequencia.length}.`}
+      >
         {frequencia.length === 0 ? (
           <Vazio titulo="Nenhuma aula realizada ainda" />
         ) : (
@@ -45,6 +56,11 @@ export default async function TrajetoriaPage() {
                   <span className="min-w-0 flex-1">
                     <span className="block text-sm font-semibold text-vinho">{rotuloAula(l.numero)}</span>
                     <span className="block truncate text-tinta">{l.titulo}</span>
+                    <span className="block text-sm text-grafite">
+                      {[marcacoes.leituras.has(l.aulaId) ? "Leitura feita" : "Leitura não marcada", marcacoes.avaliadas.has(l.aulaId) ? "aula avaliada" : null]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </span>
                   </span>
                   <SeloPresenca linha={l} />
                 </Link>

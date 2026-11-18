@@ -31,6 +31,10 @@ Os documentos da liga em PDF, por categoria: Estatuto e regimento · Eleições 
 
 Banco de professores: quem já deu ou pode dar aula, com instituição, temas, contato (e-mail, WhatsApp, LinkedIn), apresentação, observações da diretoria e as aulas dadas na liga. Busca por nome, tema ou escritório. Ficha em `/professores/[id]`. A diretoria cadastra e edita; o conselho lê.
 
+### Relatório do ciclo (`/gestao/relatorio`)
+
+Resumo de um ciclo (o atual, ou outro escolhido): aulas realizadas, presença média, leitura feita, nota média das aulas, aula por aula (presença, leitura, nota e material pós-aula), membros perto do limite de faltas, justificativas, produção publicada, perguntas e oportunidades no período, e os comentários das avaliações sem nomes. Pode ser impresso ou salvo em PDF (o menu some na impressão). Diretoria e conselho.
+
 ### Planejamento do ciclo (`/gestao/planejamento`)
 
 A diretoria cria o próximo ciclo e monta o cronograma em rascunho (`/gestao/planejamento/[codigo]`): aulas e eventos, preenchimento automático das quartas-feiras, professor do banco, situação do convite (a convidar, convite enviado, confirmado, recusou) e notas internas. Depois publica para os ligantes (aba Próximo ciclo e Calendário) e, no começo do semestre, inicia o ciclo, que vira o atual; o anterior vai para o acervo. O conselho lê.
@@ -47,7 +51,7 @@ A diretoria cria o próximo ciclo e monta o cronograma em rascunho (`/gestao/pla
 
 ## Outras rotas
 
-- `/ciclos/aulas/[id]`: página da aula, com professor, bibliografia, anexos, pasta do Drive, presença e justificativa de falta; a diretoria edita ali mesmo.
+- `/ciclos/aulas/[id]`: página da aula, com professor, bibliografia (e o botão "Fiz a leitura"), anexos, pasta do Drive, depois da aula, avaliação da aula, presença e justificativa de falta; para a diretoria e o conselho, o retorno da aula (leituras e avaliações, sem nomes); a diretoria edita ali mesmo.
 - `/ciclos/acervo/[codigo]`: um ciclo anterior, com o cronograma datado (quando há calendário) e as aulas do Drive. Na aba Acervo de `/ciclos`, os ciclos ficam agrupados por tema.
 - `/producao/[id]`: página de uma publicação. Nos mini-artigos, o fluxo completo: etapas, prazos, o que cada pessoa faz agora (tema, rascunho, revisor, parecer, ajustes, conferência, publicação) e o andamento. Nos carrosséis, entregas e edição pela diretoria.
 - `/tira-duvidas/[id]`: pergunta, respostas, validação e resposta da diretoria.

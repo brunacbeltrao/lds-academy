@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getMeuAproveitamento, getRetornoDaAula } from "@/lib/aproveitamento";
 import { getAula } from "@/lib/ciclos";
 import { getMembroAtual } from "@/lib/membro";
 import { getOpcoesDeProfessores } from "@/lib/professores";
@@ -25,6 +26,15 @@ export default async function AulaPage({ params }: PageProps<"/ciclos/aulas/[id]
   }
 
   const diretoria = membro.papel === "diretoria";
-  const professores = diretoria ? await getOpcoesDeProfessores() : [];
-  return <ConteudoDaAula aula={aula} diretoria={diretoria} minha={minha} professores={professores} />;
+  const gestao = membro.papel !== "ligante";
+  const cicloAtual = aula.ciclo?.status === "atual";
+  const [professores, aproveitamento, retorno] = await Promise.all([
+    diretoria ? getOpcoesDeProfessores() : [],
+    // Leitura e avaliação: as mesmas condições da presença (aula com data do ciclo em curso, quem participa).
+    minha ? getMeuAproveitamento(aula.id, membro.id) : null,
+    gestao && cicloAtual ? getRetornoDaAula(aula.id) : null,
+  ]);
+  return (
+    <ConteudoDaAula aula={aula} diretoria={diretoria} minha={minha} professores={professores} aproveitamento={aproveitamento} retorno={retorno} />
+  );
 }
