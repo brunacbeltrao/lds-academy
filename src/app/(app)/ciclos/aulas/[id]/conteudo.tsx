@@ -1,8 +1,10 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowLeft, ArrowUpRight, BookOpen, CalendarDays, Download, FileText, MapPin, Presentation } from "lucide-react";
+import { BotaoDeLeitura, FormularioDeAvaliacao, RetornoDaAulaPainel } from "@/components/aproveitamento";
 import { AreaDeTexto, BotaoEnviar, Formulario } from "@/components/formulario";
 import { Lista, Pagina, Secao } from "@/components/ui";
+import type { MinhaAvaliacao, RetornoDaAula } from "@/lib/aproveitamento";
 import type { OpcaoDeProfessor } from "@/lib/professores";
 import { dia, hoje } from "@/lib/datas";
 import { formatarDataLonga, formatarHora, formatarTamanho, rotuloAula, rotuloDoCiclo, type Aula } from "@/lib/ciclos";
@@ -90,15 +92,23 @@ export function ConteudoDaAula({
   diretoria,
   minha,
   professores = [],
+  aproveitamento = null,
+  retorno = null,
 }: {
   aula: Aula;
   diretoria: boolean;
   minha: MinhaPresenca | null;
   professores?: OpcaoDeProfessor[];
+  /** Leitura e avaliação do próprio membro (ligantes e diretoria, aulas do ciclo em curso). */
+  aproveitamento?: { leituraFeita: boolean; avaliacao: MinhaAvaliacao | null } | null;
+  /** Leituras e avaliações de todos, sem nomes (diretoria e conselho). */
+  retorno?: RetornoDaAula | null;
 }) {
   const leituras = (aula.bibliografia ?? "").split("\n").filter((linha) => linha.trim());
   const temPosAula = Boolean(aula.resumo || aula.slidesUrl || aula.apostilaUrl);
   const aulaPassou = aula.data !== null && dia(aula.data) < hoje();
+  const aulaComecou = aula.data !== null && new Date(aula.data) <= new Date();
+  const temLeitura = leituras.length > 0 || aula.materiais.length > 0;
 
   return (
     <Pagina>
@@ -190,7 +200,11 @@ export function ConteudoDaAula({
         )}
       </Secao>
 
-      <Secao titulo="Bibliografia">
+      <Secao
+        id="bibliografia"
+        titulo="Bibliografia"
+        acao={aproveitamento && temLeitura ? <BotaoDeLeitura aulaId={aula.id} feita={aproveitamento.leituraFeita} /> : undefined}
+      >
         {leituras.length > 0 ? (
           <Lista itens={leituras.map((linha) => comLinks(linha))} />
         ) : (
@@ -254,6 +268,31 @@ export function ConteudoDaAula({
           ) : null}
           {!temPosAula ? <p className="text-grafite">Slides e resumo ainda não publicados.</p> : null}
         </Secao>
+      ) : null}
+
+      {aproveitamento && aulaComecou ? (
+        <Secao
+          id="avaliacao"
+          titulo="Avaliar a aula"
+          descricao={aproveitamento.avaliacao ? "Você já avaliou esta aula. Pode corrigir a nota ou o comentário." : "Leva menos de um minuto e ajuda a diretoria a planejar os próximos ciclos."}
+        >
+          <FormularioDeAvaliacao aulaId={aula.id} minha={aproveitamento.avaliacao} />
+        </Secao>
+      ) : null}
+
+      {retorno ? (
+        <section aria-labelledby="retorno-da-aula" className="mb-6 rounded-2xl bg-sutil p-5 sm:p-8">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <h2 id="retorno-da-aula" className="h2">
+              Retorno da aula
+            </h2>
+            <span className="selo border border-linha-forte bg-superficie">Diretoria e conselho</span>
+          </div>
+          <p className="prosa mt-1.5 text-grafite">Leituras marcadas e avaliações dos membros. Os nomes de quem avaliou não aparecem.</p>
+          <div className="mt-5">
+            <RetornoDaAulaPainel retorno={retorno} aulaComecou={aulaComecou} />
+          </div>
+        </section>
       ) : null}
 
       {diretoria ? (

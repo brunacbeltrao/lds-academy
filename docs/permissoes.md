@@ -52,6 +52,8 @@ O fluxo do mini-artigo usa gatilhos no banco (`privado.producoes_antes_de_gravar
 | `respostas` | Lê as validadas e as próprias; responde só a perguntas públicas, sempre como pendente | Lê todas; cria, valida, recusa e apaga |
 | `presencas` | Lê as próprias | Registra e lê todas |
 | `justificativas` | Envia e acompanha as próprias | Lê todas e decide |
+| `leituras_feitas` | Marca e desmarca as próprias (aulas do ciclo em curso) | Marca as próprias; lê todas (o conselho também lê) |
+| `avaliacoes_aula` | Avalia e corrige a própria (aulas do ciclo em curso que já começaram) | Avalia as próprias; lê todas, e a tela mostra sem nomes (o conselho também lê) |
 | `ia_trechos` | Sem acesso | Lê e escreve |
 
 Quem não está logado não lê nada. Quem está logado mas foi desativado na lista (`ativo = false`) também não: as funções exigem membro ativo, e o app encerra a sessão.

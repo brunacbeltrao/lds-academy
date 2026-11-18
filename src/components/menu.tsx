@@ -71,7 +71,7 @@ export function Estrutura({ itens, nome, papel, foto, recolhidoInicial, children
       <Menu itens={itens} nome={nome} papel={papel} foto={foto} recolhido={recolhido} alternar={alternar} />
       <main
         id="conteudo"
-        className={`min-h-screen transition-[padding] duration-300 ease-entra-sai ${recolhido ? "lg:pl-(--menu-recolhido)" : "lg:pl-(--menu-largura)"}`}
+        className={`min-h-screen transition-[padding] print:pl-0! duration-300 ease-entra-sai ${recolhido ? "lg:pl-(--menu-recolhido)" : "lg:pl-(--menu-largura)"}`}
       >
         {children}
       </main>
@@ -179,7 +179,7 @@ function Menu({
   return (
     <>
       {/* Barra do topo, só em telas pequenas */}
-      <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-linha bg-superficie/90 px-4 backdrop-blur-md lg:hidden">
+      <header className="sticky top-0 z-30 flex h-14 print:hidden items-center justify-between border-b border-linha bg-superficie/90 px-4 backdrop-blur-md lg:hidden">
         <Link href="/" aria-label="LDS Academy, início" className="rounded-md">
           <Image src="/marca/lockup-vinho.png" alt="LDS·FDR" width={119} height={44} priority className="h-8 w-auto" />
         </Link>
@@ -208,7 +208,7 @@ function Menu({
       <nav
         id="menu-principal"
         aria-label="Menu principal"
-        className={`fixed inset-y-0 left-0 z-40 flex w-(--menu-largura) flex-col border-r border-linha bg-superficie transition-[translate,width] duration-300 ease-entra-sai lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex print:hidden w-(--menu-largura) flex-col border-r border-linha bg-superficie transition-[translate,width] duration-300 ease-entra-sai lg:translate-x-0 ${
           aberto ? "translate-x-0" : "invisible -translate-x-full lg:visible"
         } ${r ? "overflow-y-auto lg:w-(--menu-recolhido) lg:overflow-visible" : "overflow-y-auto"}`}
       >

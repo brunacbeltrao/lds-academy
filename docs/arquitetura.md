@@ -76,4 +76,4 @@ Não há chave de serviço no app nesta etapa.
 
 ## Banco
 
-Tabelas: `membros`, `ciclos`, `aulas`, `aula_leituras`, `biblioteca_itens`, `favoritos`, `competicoes`, `equipes`, `equipe_membros`, `eventos`, `avisos`, `perguntas`, `respostas`, `presencas`, `justificativas`, `ia_trechos`, `aula_materiais`, `producoes`, `producao_participantes`, `producao_entregas`, `artigo_andamento`, `documentos`, `professores`, `aula_planejamento`, `oportunidades`, `oportunidade_interessados`. Regras de acesso em `permissoes.md`.
+Tabelas: `membros`, `ciclos`, `aulas`, `aula_leituras`, `biblioteca_itens`, `favoritos`, `competicoes`, `equipes`, `equipe_membros`, `eventos`, `avisos`, `perguntas`, `respostas`, `presencas`, `justificativas`, `ia_trechos`, `aula_materiais`, `producoes`, `producao_participantes`, `producao_entregas`, `artigo_andamento`, `documentos`, `professores`, `aula_planejamento`, `oportunidades`, `oportunidade_interessados`, `leituras_feitas`, `avaliacoes_aula`. Regras de acesso em `permissoes.md`.

@@ -379,3 +379,15 @@ dd {
     animation: none !important;
   }
 }
+
+/* Impressão (relatório do ciclo): fundo branco, sem menu, cartões sem quebra no meio. */
+@media print {
+  html,
+  body {
+    background: #fff;
+  }
+  .cartao,
+  .break-inside-avoid {
+    break-inside: avoid;
+  }
+}

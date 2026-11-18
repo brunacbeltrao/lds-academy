@@ -62,6 +62,10 @@ Etapas: vaga aberta → tema → redação → rascunho → revisão → ajustes
 
 - **Depois da aula:** slides e apostila entram como links (Drive, Canva), não como arquivos; o resumo é texto livre. A seção aparece quando há conteúdo ou depois que a aula passou.
 
+- **Leitura feita:** o membro marca na página da aula ou no Início; vale só para aulas do ciclo em curso. A bibliografia do próximo encontro aparece no Início, e a leitura vira pendência na semana da aula.
+- **Avaliação da aula:** nota de 1 a 5 e comentário opcional, a partir do horário de início da aula, só no ciclo em curso; dá para corrigir depois. As telas da diretoria e do conselho mostram as avaliações sem o nome de quem avaliou; o banco guarda o vínculo, para haver uma avaliação por pessoa e permitir a correção. A nota média aparece também na ficha do professor. Aula não avaliada vira pendência por uma semana.
+- **Relatório do ciclo:** página na Gestão (diretoria e conselho), com versão de impressão. Percentuais de leitura usam a lista atual de membros ativos, sem o conselho; perguntas e oportunidades contam pelo período do ciclo.
+
 ## Em aberto
 
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.

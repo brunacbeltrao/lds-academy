@@ -30,6 +30,9 @@
 - Planejamento do ciclo: cronograma em rascunho, convites, publicação e início do ciclo.
 - Mural de oportunidades, com cartaz, lista de quem vai e destaque no Início.
 - Seção "Depois da aula" na página da aula: resumo, slides e apostila (links), editados pela diretoria no painel da aula.
+- Leitura da semana: a bibliografia da próxima aula no Início, o botão "Fiz a leitura" e as leituras na Minha trajetória.
+- Avaliação da aula pelos membros (nota de 1 a 5 e comentário), com o retorno na página da aula e a nota média na ficha do professor.
+- Relatório do ciclo na Gestão, com versão para imprimir ou salvar em PDF.
 
 ## Próximas etapas
 

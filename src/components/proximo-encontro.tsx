@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowRight, Clock, MapPin, Paperclip } from "lucide-react";
+import { ArrowRight, BookOpen, Clock, MapPin, Paperclip } from "lucide-react";
+import { BotaoDeLeitura } from "@/components/aproveitamento";
 import { ehHoje, rotuloEncontro, type Encontro } from "@/lib/ciclos";
 import { hora, longa, quando } from "@/lib/datas";
 
@@ -7,14 +8,25 @@ import { hora, longa, quando } from "@/lib/datas";
  * Próximo encontro do Grupo de Estudos. Sem efeitos: o que importa é quando, onde e o quê.
  * A régua embaixo mostra o andamento do ciclo, um traço por encontro.
  */
+export type LeituraDoEncontro = {
+  aulaId: string;
+  /** Referências da bibliografia, uma por linha. */
+  linhas: string[];
+  anexos: number;
+  /** null para quem não marca leitura (conselho). */
+  feita: boolean | null;
+};
+
 export function ProximoEncontro({
   proximo,
   ciclo,
   encontros,
+  leitura = null,
 }: {
   proximo: Encontro | null;
   ciclo: string | null;
   encontros: Encontro[];
+  leitura?: LeituraDoEncontro | null;
 }) {
   if (!proximo) {
     return (
@@ -75,6 +87,35 @@ export function ProximoEncontro({
           </li>
         ) : null}
       </ul>
+
+      {leitura && (leitura.linhas.length > 0 || leitura.anexos > 0) ? (
+        <div className="mt-5 rounded-xl bg-sutil p-4">
+          <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+            <p className="flex items-center gap-2 text-sm font-semibold text-tinta">
+              <BookOpen aria-hidden="true" className="size-4 shrink-0 text-vinho" strokeWidth={1.75} />
+              Leitura para este encontro
+            </p>
+            {leitura.feita !== null ? <BotaoDeLeitura aulaId={leitura.aulaId} feita={leitura.feita} /> : null}
+          </div>
+          {leitura.linhas.length > 0 ? (
+            <ul className="mt-2 flex flex-col gap-1 text-[0.9375rem] text-tinta">
+              {leitura.linhas.slice(0, 3).map((linha, i) => (
+                <li key={i} className="line-clamp-2 break-words">
+                  {linha.replace(/https?:\/\/\S+/g, "").trim() || "Link indicado na página da aula"}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <p className="mt-2 text-sm text-grafite">
+            {[
+              leitura.linhas.length > 3 ? `e mais ${leitura.linhas.length - 3} na página da aula` : null,
+              leitura.anexos > 0 ? `${leitura.anexos} ${leitura.anexos === 1 ? "anexo em PDF" : "anexos em PDF"}` : null,
+            ]
+              .filter(Boolean)
+              .join(" · ") || "Tudo na página da aula"}
+          </p>
+        </div>
+      ) : null}
 
       <div className="mt-6 flex flex-col gap-5 border-t border-linha pt-5 sm:flex-row sm:items-center sm:justify-between">
         {encontros.length > 1 ? (

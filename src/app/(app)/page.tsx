@@ -6,8 +6,9 @@ import { InstalarApp } from "@/components/instalar-app";
 import { ProximoEncontro } from "@/components/proximo-encontro";
 import { CabecalhoDaPagina, Pagina, Painel } from "@/components/ui";
 import { pendenciasDeArtigos, type Pendencia } from "@/lib/artigo";
+import { getMinhasMarcacoes } from "@/lib/aproveitamento";
 import { getAvisos } from "@/lib/avisos";
-import { getCicloAtual, proximoEncontro } from "@/lib/ciclos";
+import { getAula, getCicloAtual, proximoEncontro, rotuloAula } from "@/lib/ciclos";
 import { curta, diasAte, hoje, longa, quando } from "@/lib/datas";
 import { getFrequencia, LIMITE_DE_FALTAS, resumo } from "@/lib/frequencia";
 import { getMembroAtual } from "@/lib/membro";
@@ -22,7 +23,8 @@ export const metadata: Metadata = { title: "Início" };
 export default async function InicioPage() {
   const membro = await getMembroAtual();
   const gestao = membro.papel !== "ligante";
-  const [atual, avisos, perguntas, frequencia, producoes, filaRespostas, justificativasAbertas, oportunidades] = await Promise.all([
+  const participa = membro.papel !== "conselheiro";
+  const [atual, avisos, perguntas, frequencia, producoes, filaRespostas, justificativasAbertas, oportunidades, marcacoes] = await Promise.all([
     getCicloAtual(),
     getAvisos(4),
     getPerguntas(5),
@@ -31,10 +33,22 @@ export default async function InicioPage() {
     gestao ? getRespostasPendentes() : Promise.resolve([]),
     gestao ? contarJustificativasPendentes() : Promise.resolve(0),
     getOportunidadesAbertas(membro.id, 3),
+    participa ? getMinhasMarcacoes(membro.id) : null,
   ]);
 
   const primeiroNome = membro.nome.split(" ")[0];
   const proximo = atual ? proximoEncontro(atual.encontros) : null;
+
+  // Leitura da semana: a bibliografia e os anexos da próxima aula.
+  const aulaDoProximo = proximo?.aulaId ? await getAula(proximo.aulaId) : null;
+  const leituraDoProximo = aulaDoProximo
+    ? {
+        aulaId: aulaDoProximo.id,
+        linhas: (aulaDoProximo.bibliografia ?? "").split("\n").map((l) => l.trim()).filter(Boolean),
+        anexos: aulaDoProximo.materiais.length,
+        feita: marcacoes ? marcacoes.leituras.has(aulaDoProximo.id) : null,
+      }
+    : null;
   const freq = resumo(frequencia);
   const dataDeHoje = hoje();
 
@@ -71,6 +85,23 @@ export default async function InicioPage() {
     }
   }
   pendencias.push(...pendenciasDeArtigos(producoes, membro));
+  // Leitura do próximo encontro, na semana da aula.
+  if (proximo && leituraDoProximo && leituraDoProximo.feita === false && (leituraDoProximo.linhas.length > 0 || leituraDoProximo.anexos > 0) && diasAte(proximo.inicio) <= 7) {
+    pendencias.push({
+      href: `/ciclos/aulas/${leituraDoProximo.aulaId}#bibliografia`,
+      texto: `Fazer a leitura da ${rotuloAula(proximo.numero).toLowerCase()}`,
+      detalhe: proximo.titulo,
+      urgente: diasAte(proximo.inicio) <= 1,
+    });
+  }
+  // Avaliar as aulas da última semana que ainda não foram avaliadas.
+  if (marcacoes) {
+    for (const l of frequencia) {
+      if (new Date(l.data) <= new Date() && diasAte(l.data) >= -7 && !marcacoes.avaliadas.has(l.aulaId)) {
+        pendencias.push({ href: `/ciclos/aulas/${l.aulaId}#avaliacao`, texto: `Avaliar a ${rotuloAula(l.numero).toLowerCase()}`, detalhe: l.titulo });
+      }
+    }
+  }
   for (const l of frequencia) {
     if (l.presenca === "falta" && !l.justificativa) {
       pendencias.push({ href: `/ciclos/aulas/${l.aulaId}#justificativa`, texto: `Justificar a falta na ${l.numero ? `aula ${l.numero}` : "aula extra"}`, detalhe: l.titulo, urgente: true });
@@ -95,7 +126,7 @@ export default async function InicioPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
-        <ProximoEncontro proximo={proximo} ciclo={atual?.ciclo.codigo ?? null} encontros={atual?.encontros ?? []} />
+        <ProximoEncontro proximo={proximo} ciclo={atual?.ciclo.codigo ?? null} encontros={atual?.encontros ?? []} leitura={leituraDoProximo} />
 
         <Painel titulo="Minha frequência" link={{ href: "/trajetoria", rotulo: "Detalhes" }}>
           <p className="numeral text-[2.5rem] leading-none font-bold tracking-[-0.03em] text-tinta">
