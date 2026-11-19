@@ -33,6 +33,7 @@
 - Leitura da semana: a bibliografia da próxima aula no Início, o botão "Fiz a leitura" e as leituras na Minha trajetória.
 - Avaliação da aula pelos membros (nota de 1 a 5 e comentário), com o retorno na página da aula e a nota média na ficha do professor.
 - Relatório do ciclo na Gestão, com versão para imprimir ou salvar em PDF.
+- Notificações no celular (Web Push): avisos, oportunidades, respostas e justificativas, fila da diretoria e lembretes diários de aula, leitura, avaliação e prazos.
 
 ## Próximas etapas
 
