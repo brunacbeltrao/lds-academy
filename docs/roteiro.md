@@ -33,8 +33,12 @@
 - Leitura da semana: a bibliografia da próxima aula no Início, o botão "Fiz a leitura" e as leituras na Minha trajetória.
 - Avaliação da aula pelos membros (nota de 1 a 5 e comentário), com o retorno na página da aula e a nota média na ficha do professor.
 - Relatório do ciclo na Gestão, com versão para imprimir ou salvar em PDF.
+- Trilha de estudos (`/trilha`): a ordem de aprendizado de 2026.1, com a Parte I (12 tópicos) ligada ao livro, às aulas do acervo e às pastas do Drive, e o progresso de cada membro.
+- Notificações no celular (Web Push): avisos, oportunidades, respostas e justificativas, fila da diretoria e lembretes diários de aula, leitura, avaliação e prazos.
 
 ## Próximas etapas
+
+- Trilha de estudos: preencher as Partes II a IV (Fusões e Aquisições, Contabilidade Empresarial, Outros Temas Essenciais) e conferir as referências do livro sugeridas para a Parte I.
 
 - Informar as pastas originais de Eventos e Projetos (competições) no Drive da liga, que ainda apontam para a cópia.
 - Rascunho da IA no tira-dúvidas (depende da escolha do modelo; ver decisões).
