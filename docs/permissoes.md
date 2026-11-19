@@ -53,6 +53,8 @@ O fluxo do mini-artigo usa gatilhos no banco (`privado.producoes_antes_de_gravar
 | `presencas` | Lê as próprias | Registra e lê todas |
 | `justificativas` | Envia e acompanha as próprias | Lê todas e decide |
 | `leituras_feitas` | Marca e desmarca as próprias (aulas do ciclo em curso) | Marca as próprias; lê todas (o conselho também lê) |
+| `trilha_partes`, `trilha_topicos`, `trilha_materiais` | Lê | Lê e escreve |
+| `trilha_progresso` | Marca e desmarca o próprio | Marca o próprio; lê o de todos (o conselho também lê) |
 | `inscricoes_push`, `preferencias_notificacao` | Só os próprios | Só os próprios (o conselho não recebe notificações) |
 | `notificacoes` | Lê as próprias; cria só o próprio teste. As demais nascem no banco | Igual ao ligante |
 | `avaliacoes_aula` | Avalia e corrige a própria (aulas do ciclo em curso que já começaram) | Avalia as próprias; lê todas, e a tela mostra sem nomes (o conselho também lê) |

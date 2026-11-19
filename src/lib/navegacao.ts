@@ -5,6 +5,7 @@ export const MENU: ItemMenu[] = [
   { href: "/", rotulo: "Início", resumo: "Próxima aula, avisos, prazos e pendências." },
   { href: "/calendario", rotulo: "Calendário", resumo: "Aulas, eventos e competições do ciclo." },
   { href: "/ciclos", rotulo: "Ciclos e aulas", resumo: "Ciclo atual, próximos e o acervo dos anteriores." },
+  { href: "/trilha", rotulo: "Trilha de estudos", resumo: "A ordem dos temas para estudar, com a leitura no livro e as aulas de cada um." },
   { href: "/biblioteca", rotulo: "Biblioteca", resumo: "Doutrina, legislação, jurisprudência e apostilas." },
   { href: "/competicoes", rotulo: "Competições", resumo: "Sociecap, CMNA e outras; materiais da equipe." },
   { href: "/oportunidades", rotulo: "Oportunidades", resumo: "Vagas de estágio, cursos, eventos e concursos divulgados pela diretoria." },

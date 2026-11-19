@@ -68,6 +68,8 @@ Etapas: vaga aberta → tema → redação → rascunho → revisão → ajustes
 
 - **Notificações no celular:** por Web Push, sem aplicativo de loja. Cada membro ativa por aparelho e escolhe as categorias (avisos, lembretes, respostas e justificativas, oportunidades e, para a diretoria, a fila do que espera decisão). Os lembretes saem às 9h: véspera da aula (com a pergunta sobre a leitura para quem não marcou), dia seguinte para avaliar, véspera da entrega de carrossel ou do rascunho de mini-artigo e véspera do prazo das oportunidades marcadas com "Vou". O conselho não recebe, porque não participa. O aviso de faltas perto do limite não entrou: depende do ponto 6.
 
+- **Trilha de estudos:** item próprio no menu (`/trilha`), com a ordem de aprendizado da liga. Segue o livro *Direito das Companhias* (2ª ed., Forense, 2017): cada tópico cita título, capítulo, parágrafos e páginas, sem anexar o livro (ver ponto 7). As referências da Parte I foram sugeridas a partir do sumário e cabem à diretoria conferir; o livro trata só das companhias, então limitadas e manipulação de mercado têm só pontos de partida. Cada tópico liga às aulas da plataforma (acervo e ciclo atual) e às pastas do Drive da ordem de aprendizado. O membro marca o tópico como estudado; a diretoria e o conselho veem quantos marcaram. O conteúdo (títulos e links do Drive) foi carregado direto no banco, fora das migrações, porque o repositório é público.
+
 ## Em aberto
 
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.
