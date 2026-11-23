@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { erro, id, ok, texto, type Estado } from "@/lib/estado";
 import { exigirDiretoria } from "@/lib/membro";
 import { ehCargoDiretoria, ROTULO_CARGO } from "@/lib/cargos";
+import { LIMITE_NOME_EXIBICAO, problemaNoNomeDeExibicao } from "@/lib/nome-exibicao";
 import { createClient } from "@/lib/supabase/server";
 
 const PAPEIS = ["ligante", "diretoria", "conselheiro"];
@@ -14,31 +15,37 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function adicionarMembro(_: Estado, formData: FormData): Promise<Estado> {
   await exigirDiretoria();
   const nome = texto(formData, "nome", 200);
+  const exibicao = texto(formData, "nome_exibicao", LIMITE_NOME_EXIBICAO);
   const email = texto(formData, "email", 200)?.toLowerCase() ?? null;
   const papel = String(formData.get("papel") ?? "ligante");
   if (!nome) return erro("Informe o nome completo.");
+  const problema = problemaNoNomeDeExibicao(exibicao);
+  if (problema) return erro(problema);
   if (email && !EMAIL.test(email)) return erro("E-mail inválido.");
   if (!PAPEIS.includes(papel)) return erro("Papel inválido.");
 
   const supabase = await createClient();
-  const { data, error } = await supabase.from("membros").insert({ nome, papel }).select("id").single();
+  const { data, error } = await supabase.from("membros").insert({ nome_completo: nome, nome_exibicao: exibicao, papel }).select("id").single();
   if (error || !data) return erro("Não foi possível adicionar.");
   if (email) {
     const { error: erroEmail } = await supabase.from("membros_acesso").insert({ membro_id: data.id, email });
     if (erroEmail) return erro("Membro adicionado, mas este e-mail já está em uso por outra pessoa.");
   }
   revalidatePath("/gestao");
-  return ok(`${nome.split(" ")[0]} entrou na lista.${email ? " Já pode criar a conta em Primeiro acesso." : ""}`);
+  return ok(`${(exibicao ?? nome).split(" ")[0]} entrou na lista.${email ? " Já pode criar a conta em Primeiro acesso." : ""}`);
 }
 
 export async function salvarMembro(_: Estado, formData: FormData): Promise<Estado> {
   const eu = await exigirDiretoria();
   const membroId = id(formData);
   const nome = texto(formData, "nome", 200);
+  const exibicao = texto(formData, "nome_exibicao", LIMITE_NOME_EXIBICAO);
   const email = texto(formData, "email", 200)?.toLowerCase() ?? null;
   const papel = String(formData.get("papel") ?? "");
   const ativo = formData.get("ativo") === "sim";
   if (!membroId || !nome || !PAPEIS.includes(papel)) return erro("Dados inválidos.");
+  const problema = problemaNoNomeDeExibicao(exibicao);
+  if (problema) return erro(problema);
   if (email && !EMAIL.test(email)) return erro("E-mail inválido.");
   if (membroId === eu.id && (!ativo || papel !== "diretoria")) return erro("Você não pode tirar o seu próprio acesso de diretoria.");
   const valorCargo = String(formData.get("cargo_diretoria") ?? "");
@@ -49,7 +56,7 @@ export async function salvarMembro(_: Estado, formData: FormData): Promise<Estad
   const supabase = await createClient();
   const { error } = await supabase
     .from("membros")
-    .update({ nome, papel, ativo, cargo_diretoria: cargo })
+    .update({ nome_completo: nome, nome_exibicao: exibicao, papel, ativo, cargo_diretoria: cargo })
     .eq("id", membroId);
   // 23505: o índice único do banco aceita um só ocupante ativo por cargo.
   if (error?.code === "23505" && cargo) return erro(`${ROTULO_CARGO[cargo]} já está com outra pessoa. Tire o cargo dela antes.`);
@@ -58,7 +65,7 @@ export async function salvarMembro(_: Estado, formData: FormData): Promise<Estad
     ? await supabase.from("membros_acesso").upsert({ membro_id: membroId, email })
     : await supabase.from("membros_acesso").delete().eq("membro_id", membroId);
   if (erroEmail) return erro("Dados salvos, mas este e-mail já está em uso por outra pessoa.");
-  revalidatePath("/gestao");
+  revalidatePath("/", "layout");
   return ok("Salvo.");
 }
 

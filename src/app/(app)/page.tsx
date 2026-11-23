@@ -110,6 +110,9 @@ export default async function InicioPage() {
       pendencias.push({ href: "/trajetoria", texto: "Justificativa em análise", detalhe: l.titulo });
     }
   }
+  if (!membro.nomeExibicao) {
+    pendencias.push({ href: "/conta#nome", texto: "Escolher como seu nome aparece", detalhe: `Hoje aparece ${membro.nome}` });
+  }
   if (gestao && filaRespostas.length > 0) {
     pendencias.push({ href: "/gestao?aba=fila", texto: `${filaRespostas.length} ${filaRespostas.length === 1 ? "resposta aguarda" : "respostas aguardam"} validação`, detalhe: "Tira-dúvidas" });
   }

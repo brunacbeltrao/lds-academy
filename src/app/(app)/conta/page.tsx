@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AcaoRapida, BotaoEnviar, Formulario } from "@/components/formulario";
+import { AcaoRapida, BotaoEnviar, Campo, Formulario } from "@/components/formulario";
 import { InstalarApp } from "@/components/instalar-app";
 import { CabecalhoDaPagina, Pagina } from "@/components/ui";
 import { getFotos } from "@/lib/fotos";
@@ -8,6 +8,8 @@ import { rotuloDoMembro } from "@/lib/cargos";
 import { getMinhasNotificacoes } from "@/lib/notificacoes";
 import { CATEGORIAS_NOTIFICACAO } from "@/lib/notificacoes-formato";
 import { registro } from "@/lib/datas";
+import { LIMITE_NOME_EXIBICAO } from "@/lib/nome-exibicao";
+import { salvarNomeDeExibicao } from "./actions";
 import { AtivarNotificacoes } from "./notificacoes";
 import { removerAparelho, salvarPreferencias } from "./notificacoes-actions";
 import { FormularioSenha } from "./senha/formulario";
@@ -28,6 +30,28 @@ export default async function ContaPage() {
           Foto de perfil
         </h2>
         <EnvioDeFoto membroId={membro.id} nome={membro.nome} foto={fotos[membro.id] ?? null} />
+      </section>
+      <section id="nome" aria-labelledby="nome-titulo" className="cartao mt-3 scroll-mt-24 p-5 sm:p-6">
+        <h2 id="nome-titulo" className="h3">
+          Como seu nome aparece
+        </h2>
+        <p className="prosa mt-1 mb-4 text-[0.9375rem] text-grafite">
+          É o nome que os colegas veem no menu, nas equipes, na produção e no tira-dúvidas. Use o nome com que você se apresenta na liga.
+          Em branco, aparece o nome da lista oficial.
+        </p>
+        <Formulario acao={salvarNomeDeExibicao} className="flex flex-col gap-4">
+          <Campo
+            nome="nome_exibicao"
+            rotulo="Nome de exibição"
+            padrao={membro.nomeExibicao ?? ""}
+            placeholder={membro.nomeCompleto}
+            maxLength={LIMITE_NOME_EXIBICAO}
+            ajuda={`Na lista oficial: ${membro.nomeCompleto}. Esse continua registrado e só a diretoria altera.`}
+          />
+          <BotaoEnviar variante="secundario" className="self-start">
+            Salvar nome
+          </BotaoEnviar>
+        </Formulario>
       </section>
       <section id="notificacoes" aria-labelledby="notificacoes-titulo" className="cartao mt-3 scroll-mt-24 p-5 sm:p-6">
         <h2 id="notificacoes-titulo" className="h3">

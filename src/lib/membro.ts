@@ -9,7 +9,18 @@ export type Papel = "ligante" | "diretoria" | "conselheiro";
  * `papel` decide as permissões. `cargoDiretoria` é o cargo na diretoria
  * (diretor-presidente etc.), quando há. O diretor acadêmico decorre desse cargo.
  */
-export type Membro = { id: string; nome: string; papel: Papel; cargoDiretoria: CargoDiretoria | null; diretorAcademico: boolean };
+export type Membro = {
+  id: string;
+  /** Como o nome aparece na plataforma: o nome de exibição ou, sem ele, o nome completo. */
+  nome: string;
+  /** Nome da lista oficial, mantido pela diretoria. */
+  nomeCompleto: string;
+  /** Como o membro escolheu aparecer; null enquanto não escolheu. */
+  nomeExibicao: string | null;
+  papel: Papel;
+  cargoDiretoria: CargoDiretoria | null;
+  diretorAcademico: boolean;
+};
 
 /**
  * Membro logado, conferido no servidor a cada requisição.
@@ -23,7 +34,7 @@ export const getMembroAtual = cache(async (): Promise<Membro> => {
 
   const { data: membro } = await supabase
     .from("membros")
-    .select("id, nome, papel, ativo, cargo_diretoria, diretor_academico")
+    .select("id, nome, nome_completo, nome_exibicao, papel, ativo, cargo_diretoria, diretor_academico")
     .eq("user_id", userId)
     .maybeSingle();
 
@@ -31,7 +42,15 @@ export const getMembroAtual = cache(async (): Promise<Membro> => {
   const papel = membro.papel as Papel;
   // Diretor acadêmico só vale com o papel diretoria (a função do banco repete a regra).
   const cargoDiretoria = ehCargoDiretoria(membro.cargo_diretoria) ? membro.cargo_diretoria : null;
-  return { id: membro.id, nome: membro.nome, papel, cargoDiretoria, diretorAcademico: papel === "diretoria" && Boolean(membro.diretor_academico) };
+  return {
+    id: membro.id,
+    nome: membro.nome,
+    nomeCompleto: membro.nome_completo,
+    nomeExibicao: membro.nome_exibicao,
+    papel,
+    cargoDiretoria,
+    diretorAcademico: papel === "diretoria" && Boolean(membro.diretor_academico),
+  };
 });
 
 /** Gestão: a diretoria gere e o conselho acompanha em modo leitura. Ligantes não entram. */

@@ -77,6 +77,8 @@ Etapas: vaga aberta → tema → redação → rascunho → revisão → ajustes
 - **Diretor acadêmico:** deixou de ser uma marcação à parte. A coluna `membros.diretor_academico` passou a ser calculada a partir do cargo, então as regras do mini-artigo seguem iguais. Os outros cargos não dão permissões próprias: a diretoria continua sem níveis.
 - **Troca de cargo:** em Gestão → Membros, campo "Cargo na diretoria". Para passar um cargo a outra pessoa, tire-o primeiro de quem o ocupa.
 
+- **Nome de exibição:** cada membro escolhe como o nome aparece na plataforma (o sobrenome pelo qual é conhecido, por exemplo), em Meu perfil → "Como seu nome aparece"; a diretoria também pode preencher ao cadastrar ou editar em Gestão → Membros. O nome da lista oficial continua guardado em `membros.nome_completo` e só a diretoria o altera. `membros.nome` passou a ser calculado pelo banco (nome de exibição ou, sem ele, o completo), então todas as telas mostram o nome escolhido. Em branco, vale o nome completo. Enquanto não escolhe, a pessoa vê a pendência no Início. Vale também para o conselho, como a foto de perfil: é dado do próprio perfil, não conteúdo da liga. A Gestão mostra os dois nomes quando diferem.
+
 - **Menu por grupos:** o menu se organiza pelo que a pessoa vai fazer ali (Estudar, Praticar e Diretoria), com "Início" solto no topo. O Calendário fica em Estudar e Oportunidades em Praticar. "Minha trajetória" vai para o pé do menu, junto de Meu perfil, e "A Liga" para o rodapé. Detalhes em `sitemap.md`.
 
 ## Acesso ao site (novembro de 2026)
