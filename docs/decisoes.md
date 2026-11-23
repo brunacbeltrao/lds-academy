@@ -34,6 +34,8 @@
 
 - **Regularização:** aba da diretoria (conselho em leitura) com os documentos da liga em PDF, por categoria. Os arquivos ficam no Storage, em bucket privado próprio, fora do alcance dos ligantes.
 
+- **Menu por grupos:** o menu se organiza pelo que a pessoa vai fazer ali (Estudar, Praticar, Minha rotina, Diretoria), com "Início" solto no topo. "Minha trajetória" vai para junto do nome do membro, no pé do menu, e "A Liga" para o rodapé. Detalhes em `sitemap.md`.
+
 ## Em aberto
 
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.
@@ -45,3 +47,4 @@
 7. **Direitos autorais dos anexos.** Os PDFs de bibliografia ficam restritos aos membros, mas trechos e livros inteiros têm regras diferentes. Definir o que pode ser anexado.
 8. **Edição da Produção.** O calendário de carrosséis e mini-artigos é só leitura; temas, autores, revisores e status ainda são alterados direto no banco. Falta a tela de edição para a diretoria.
 9. **Datas a confirmar.** A aula extra de Litígios Societários foi registrada em 06/11 (data deduzida das mensagens). A aula de Atos Constitutivos teve dois professores e só um foi identificado.
+10. **Grupos do menu com um item só.** Com a trajetória fora da lista, "Minha rotina" ficou só com o Calendário. Decidir se o grupo se mantém, se o Calendário sobe para junto do Início ou se entra em "Estudar". O nome "Praticar" também pode mudar, já que a Produção (Instagram e LinkedIn) não é bem prática; alternativas: "Projetos", "Mão na massa".

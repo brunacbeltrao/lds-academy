@@ -21,6 +21,7 @@
 
 ## Próximas etapas (a definir a ordem)
 
+- Menu por grupos (Estudar, Praticar, Minha rotina, Diretoria), com Minha trajetória e A Liga no pé do menu (ver `sitemap.md`).
 - Gestão de membros: tela para a diretoria manter a lista oficial.
 - Envio de e-mail próprio para o login, antes de abrir aos ligantes.
 - Produção: edição do calendário pela diretoria.

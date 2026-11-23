@@ -18,6 +18,36 @@ Entrada única: **LDS Academy**, com login por lista de membros. Fonte: quadro "
 
 As abas "Produção" e "A Liga" não estavam no mapa original; foram acrescentadas em novembro de 2026.
 
+### Organização do menu (decidida em novembro de 2026, ainda não aplicada)
+
+O menu se agrupa pelo que a pessoa vai fazer ali. "Minha trajetória" e "A Liga" saem da lista principal: a trajetória fica junto do nome e do papel do membro, no pé do menu, e "A Liga" vai para o rodapé do menu. As rotas continuam as mesmas.
+
+```
+Início
+
+Estudar
+  Ciclos e aulas
+  Biblioteca
+  Tira-dúvidas
+
+Praticar
+  Competições
+  Produção
+
+Minha rotina
+  Calendário
+
+Diretoria (só diretoria e conselho)
+  Regularização
+  Gestão
+
+Pé do menu: nome e papel do membro, com acesso a Minha trajetória · A Liga · Sair
+```
+
+- Títulos de grupo em texto normal, menores e mais claros que os itens, nunca em caixa alta.
+- Grupos fixos, sem abrir e fechar, no computador e na gaveta do celular.
+- Ligante e diretoria veem os mesmos grupos; a diretoria ganha só o bloco "Diretoria" no fim.
+
 ## Gestão (diretoria e conselho)
 
 Não aparece no menu do ligante e é bloqueada no servidor. A diretoria gere; o conselho só lê.
