@@ -77,6 +77,8 @@ Etapas: vaga aberta → tema → redação → rascunho → revisão → ajustes
 - **Diretor acadêmico:** deixou de ser uma marcação à parte. A coluna `membros.diretor_academico` passou a ser calculada a partir do cargo, então as regras do mini-artigo seguem iguais. Os outros cargos não dão permissões próprias: a diretoria continua sem níveis.
 - **Troca de cargo:** em Gestão → Membros, campo "Cargo na diretoria". Para passar um cargo a outra pessoa, tire-o primeiro de quem o ocupa.
 
+- **Menu por grupos:** o menu se organiza pelo que a pessoa vai fazer ali (Estudar, Praticar e Diretoria), com "Início" solto no topo. O Calendário fica em Estudar e Oportunidades em Praticar. "Minha trajetória" vai para o pé do menu, junto de Meu perfil, e "A Liga" para o rodapé. Detalhes em `sitemap.md`.
+
 ## Em aberto
 
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.
