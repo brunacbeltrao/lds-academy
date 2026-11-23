@@ -6,7 +6,7 @@ Entrada única: **LDS Academy**, com login por lista de membros. Fonte: quadro "
 
 | Área | Rota | Conteúdo previsto |
 | --- | --- | --- |
-| Início | `/` | Próxima aula e leitura · Avisos da diretoria · Prazos de competições · Perguntas recentes · Minhas pendências |
+| Início | `/` | Próxima aula e leitura · Avisos da diretoria · Seus prazos da produção (a diretoria e o conselho veem também os da liga) · Prazos de competições · Perguntas recentes · Minhas pendências |
 | Calendário | `/calendario` | Visão mensal e semanal · Filtro por ciclo e tipo · Aulas, eventos e competições · Sincronizar com Google Agenda |
 | Ciclos e aulas | `/ciclos` | Ciclo atual: 2026.2, Ciclo-base de Direito Societário · Próximo ciclo: 2027.1, M&A · Ciclos anteriores, abertos a todos · Página da aula: slides, leituras e apostila |
 | Trilha de estudos | `/trilha` | A ordem de aprendizado da liga, em partes (Direito Societário Básico, Fusões e Aquisições, Contabilidade Empresarial, Outros Temas Essenciais) · Cada tópico com a leitura no livro *Direito das Companhias*, as aulas da plataforma e as pastas do Drive · Progresso de cada membro (marcar como estudado) · A diretoria edita na própria página |
