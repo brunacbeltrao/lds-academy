@@ -8,10 +8,9 @@ export type MembroDaLista = {
   nome: string;
   papel: Papel;
   ativo: boolean;
-  acessoDiretoria: boolean;
   /** Cargo na diretoria (só para o papel diretoria). */
   cargoDiretoria: CargoDiretoria | null;
-  /** Decorre do cargo de diretor acadêmico. Designa revisores e faz a conferência final dos mini-artigos (só vale com permissões de diretoria). */
+  /** Decorre do cargo de diretor acadêmico. Designa revisores e faz a conferência final dos mini-artigos (só vale com o papel diretoria). */
   diretorAcademico: boolean;
   temConta: boolean;
   email: string | null;
@@ -23,26 +22,21 @@ export const ROTULO_PAPEL: Record<Papel, string> = { ligante: "Ligante", diretor
 export async function getMembros(): Promise<MembroDaLista[]> {
   const supabase = await createClient();
   const [{ data: membros, error }, { data: acessos }] = await Promise.all([
-    supabase.from("membros").select("id, nome, papel, ativo, acesso_diretoria, cargo_diretoria, diretor_academico, user_id").order("nome"),
+    supabase.from("membros").select("id, nome, papel, ativo, cargo_diretoria, diretor_academico, user_id").order("nome"),
     supabase.from("membros_acesso").select("membro_id, email"),
   ]);
   if (error) throw new Error(`Falha ao ler os membros: ${error.message}`);
   const emails = new Map((acessos ?? []).map((a) => [a.membro_id as string, a.email as string]));
-  return (membros ?? []).map((m) => {
-    const acessoDiretoria = Boolean(m.acesso_diretoria);
-    const diretoria = m.papel === "diretoria" || (acessoDiretoria && m.papel !== "conselheiro");
-    return {
-      id: m.id,
-      nome: m.nome,
-      papel: m.papel as Papel,
-      ativo: m.ativo,
-      acessoDiretoria,
-      cargoDiretoria: ehCargoDiretoria(m.cargo_diretoria) ? m.cargo_diretoria : null,
-      diretorAcademico: diretoria && Boolean(m.diretor_academico),
-      temConta: Boolean(m.user_id),
-      email: emails.get(m.id) ?? null,
-    };
-  });
+  return (membros ?? []).map((m) => ({
+    id: m.id,
+    nome: m.nome,
+    papel: m.papel as Papel,
+    ativo: m.ativo,
+    cargoDiretoria: ehCargoDiretoria(m.cargo_diretoria) ? m.cargo_diretoria : null,
+    diretorAcademico: m.papel === "diretoria" && Boolean(m.diretor_academico),
+    temConta: Boolean(m.user_id),
+    email: emails.get(m.id) ?? null,
+  }));
 }
 
 export type OcupanteDeCargo = { cargo: CargoDiretoria; rotulo: string; membro: { id: string; nome: string } | null };

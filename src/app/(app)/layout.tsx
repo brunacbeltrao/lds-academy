@@ -20,7 +20,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
       >
         Pular para o conteúdo
       </a>
-      <Estrutura itens={itens} nome={membro.nome} rotulo={rotuloDoMembro(membro.cargo, membro.cargoDiretoria)} foto={fotos[membro.id] ?? null} recolhidoInicial={recolhido}>
+      <Estrutura itens={itens} nome={membro.nome} rotulo={rotuloDoMembro(membro.papel, membro.cargoDiretoria)} foto={fotos[membro.id] ?? null} recolhidoInicial={recolhido}>
         <ViewTransition default="pagina">{children}</ViewTransition>
       </Estrutura>
     </>

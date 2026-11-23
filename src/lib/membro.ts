@@ -6,11 +6,10 @@ import { ehCargoDiretoria, type CargoDiretoria } from "@/lib/cargos";
 
 export type Papel = "ligante" | "diretoria" | "conselheiro";
 /**
- * `papel` é o papel efetivo, que decide as permissões: quem tem acesso de diretoria
- * conta como diretoria. `cargo` é o papel registrado e `cargoDiretoria`, o cargo na diretoria
+ * `papel` decide as permissões. `cargoDiretoria` é o cargo na diretoria
  * (diretor-presidente etc.), quando há. O diretor acadêmico decorre desse cargo.
  */
-export type Membro = { id: string; nome: string; papel: Papel; cargo: Papel; cargoDiretoria: CargoDiretoria | null; diretorAcademico: boolean };
+export type Membro = { id: string; nome: string; papel: Papel; cargoDiretoria: CargoDiretoria | null; diretorAcademico: boolean };
 
 /**
  * Membro logado, conferido no servidor a cada requisição.
@@ -24,16 +23,15 @@ export const getMembroAtual = cache(async (): Promise<Membro> => {
 
   const { data: membro } = await supabase
     .from("membros")
-    .select("id, nome, papel, ativo, acesso_diretoria, cargo_diretoria, diretor_academico")
+    .select("id, nome, papel, ativo, cargo_diretoria, diretor_academico")
     .eq("user_id", userId)
     .maybeSingle();
 
   if (!membro || !membro.ativo) redirect("/auth/sair?erro=inativo");
-  const cargo = membro.papel as Papel;
-  const papel: Papel = membro.acesso_diretoria && cargo !== "conselheiro" ? "diretoria" : cargo;
-  // Diretor acadêmico só vale com permissões de diretoria (a função do banco repete a regra).
+  const papel = membro.papel as Papel;
+  // Diretor acadêmico só vale com o papel diretoria (a função do banco repete a regra).
   const cargoDiretoria = ehCargoDiretoria(membro.cargo_diretoria) ? membro.cargo_diretoria : null;
-  return { id: membro.id, nome: membro.nome, papel, cargo, cargoDiretoria, diretorAcademico: papel === "diretoria" && Boolean(membro.diretor_academico) };
+  return { id: membro.id, nome: membro.nome, papel, cargoDiretoria, diretorAcademico: papel === "diretoria" && Boolean(membro.diretor_academico) };
 });
 
 /** Gestão: a diretoria gere e o conselho acompanha em modo leitura. Ligantes não entram. */

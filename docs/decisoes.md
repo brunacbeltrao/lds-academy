@@ -83,6 +83,8 @@ Etapas: vaga aberta → tema → redação → rascunho → revisão → ajustes
 
 - **Vercel Authentication em "Standard Protection":** o endereço principal (`lds-academy.vercel.app`) fica aberto, e o controle de acesso passa a ser só o login da liga com a RLS do banco. Os previews dos pull requests e os endereços próprios de cada publicação seguem exigindo login na Vercel. Um domínio próprio da liga continua possível mais tarde.
 
+- **Permissões só pelo papel:** não há "acesso de diretoria" para ligantes. Quem não é da diretoria tem as permissões de ligante (ou de conselheiro). A coluna `membros.acesso_diretoria` ficou inerte e sai numa migração seguinte, depois que o app publicado deixar de lê-la.
+
 ## Em aberto
 
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.
