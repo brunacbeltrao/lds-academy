@@ -8,7 +8,7 @@ Três papéis: **ligante** (associado acadêmico), **diretoria** (associado dire
 
 | Área | Ligante | Diretoria |
 | --- | --- | --- |
-| Início | Vê avisos, prazos e pendências | Publica avisos |
+| Início | Vê avisos, os próprios prazos e pendências | Publica avisos; vê também os prazos de produção da liga |
 | Calendário | Consulta e sincroniza | Cria e edita eventos |
 | Ciclos e aulas | Lê todos os ciclos, inclusive os anteriores | Planeja ciclos e publica aulas |
 | Biblioteca | Busca, lê (links do Drive) e favorita | Cadastra links do Drive e classifica |

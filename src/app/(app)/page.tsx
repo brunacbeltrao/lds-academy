@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Pin } from "lucide-react";
 import { CartaoOportunidade } from "@/components/cartao-oportunidade";
 import { InstalarApp } from "@/components/instalar-app";
+import { PrazosDaProducao } from "@/components/prazos-da-producao";
 import { ProximoEncontro } from "@/components/proximo-encontro";
 import { CabecalhoDaPagina, Pagina, Painel } from "@/components/ui";
 import { pendenciasDeArtigos, type Pendencia } from "@/lib/artigo";
@@ -13,6 +14,7 @@ import { curta, diasAte, hoje, longa, quando } from "@/lib/datas";
 import { getFrequencia, LIMITE_DE_FALTAS, resumo } from "@/lib/frequencia";
 import { getMembroAtual } from "@/lib/membro";
 import { getOportunidadesAbertas } from "@/lib/oportunidades";
+import { prazosDaProducao } from "@/lib/prazos-producao";
 import { getProducoes } from "@/lib/producao";
 import { getPerguntas, getRespostasPendentes } from "@/lib/tira-duvidas";
 import { createClient } from "@/lib/supabase/server";
@@ -52,21 +54,8 @@ export default async function InicioPage() {
   const freq = resumo(frequencia);
   const dataDeHoje = hoje();
 
-  // Prazos: próximas publicações e entregas da Produção.
-  const prazos = producoes
-    .filter((p): p is typeof p & { publicacao: string } => p.status !== "publicado" && Boolean(p.publicacao) && (p.publicacao as string) >= dataDeHoje)
-    .slice(0, 5)
-    .map((p) => {
-      const rascunhoPela = p.tipo === "artigo" && (p.fase === "tema" || p.fase === "redacao") && p.entrega && p.entrega >= dataDeHoje;
-      return {
-        id: p.id,
-        titulo: `${p.tipo === "artigo" ? "Artigo" : "Carrossel"} ${String(p.numero ?? "").padStart(2, "0")}`,
-        tema: p.tema,
-        data: p.tipo === "artigo" ? (rascunhoPela ? (p.entrega as string) : p.publicacao) : (p.entrega ?? p.publicacao),
-        rotulo: p.tipo === "artigo" ? (rascunhoPela ? "rascunho" : "publicação") : "entrega",
-        minha: p.participantes.some((x) => x.id === membro.id),
-      };
-    });
+  // Prazos da produção: os do membro e, para a diretoria e o conselho, os do resto da liga.
+  const prazos = prazosDaProducao(producoes, membro.id, dataDeHoje);
 
   // Pendências do membro: carrosséis por entrega; mini-artigos pela etapa do fluxo.
   const pendencias: Pendencia[] = [];
@@ -243,29 +232,7 @@ export default async function InicioPage() {
           )}
         </Painel>
 
-        <Painel titulo="Prazos da produção" link={{ href: "/producao", rotulo: "Produção" }}>
-          {prazos.length === 0 ? (
-            <p className="text-[0.9375rem] text-grafite">Nenhum prazo próximo.</p>
-          ) : (
-            <ul className="-my-2 divide-y divide-linha">
-              {prazos.map((p) => (
-                <li key={p.id} className="flex items-baseline justify-between gap-3 py-2.5">
-                  <span className="min-w-0">
-                    <span className="block font-medium text-tinta">
-                      {p.titulo}
-                      {p.minha ? <span className="selo selo-suave ml-2 align-middle">Sua</span> : null}
-                    </span>
-                    <span className="block truncate text-sm text-grafite">{p.tema ?? "Tema a definir"}</span>
-                  </span>
-                  <span className="shrink-0 text-right text-sm">
-                    <span className="numeral block font-semibold text-tinta">{curta(p.data)}</span>
-                    <span className="text-grafite">{p.rotulo}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Painel>
+<PrazosDaProducao meus={prazos.meus} daLiga={prazos.daLiga} gestao={gestao} />
       </div>
     </Pagina>
   );
