@@ -18,6 +18,8 @@ A Liga de Direito Societário e Mercado de Capitais da Faculdade de Direito do R
 | Associados diretores | Associados acadêmicos eleitos pela Assembleia Geral para os cargos da Diretoria |
 | Associados conselheiros | Ex-associados acadêmicos, a partir do 9º período, que por deliberação da Diretoria exercem papel consultor e supervisor |
 
+Os cargos da Diretoria são, em ordem: diretor-presidente, diretor vice-presidente, diretor acadêmico e diretor de relações institucionais. Quem ocupa cada um fica só no banco e aparece em A Liga → Cargos.
+
 Na plataforma: "ligante" é o associado acadêmico, "diretoria" o associado diretor e "conselheiro" o associado conselheiro, que lê tudo em modo leitura.
 
 ## Grupo de Estudos

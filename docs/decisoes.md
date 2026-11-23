@@ -42,7 +42,7 @@
 
 Etapas: vaga aberta → tema → redação → rascunho → revisão → ajustes → conferência final → publicação. A fase de cada artigo é calculada pelo banco a partir do que já aconteceu.
 
-- **Diretor acadêmico:** só ele designa o revisor, registra o parecer de revisor de fora, decide depois de um parecer "Reescrever" e faz a conferência final. É uma marcação na lista de membros (Gestão), válida só para quem tem permissões de diretoria. Abrir vagas, mudar datas e marcar como publicado ficam com qualquer membro da diretoria.
+- **Diretor acadêmico:** só ele designa o revisor, registra o parecer de revisor de fora, decide depois de um parecer "Reescrever" e faz a conferência final. Decorre do cargo de diretor acadêmico (ver "Cargos da diretoria"). Abrir vagas, mudar datas e marcar como publicado ficam com qualquer membro da diretoria.
 - **Revisor de fora da liga:** não entra no site. Recebe o link do Docs pelo diretor acadêmico, que registra o parecer por ele.
 - **Rascunho:** entregue como link do Google Docs, com permissão de comentário. O site grava a data da primeira entrega e diz se foi no prazo ou com quantos dias de atraso.
 - **Designação do revisor:** a qualquer momento, e cobrada até a entrega do rascunho, para a semana de revisão não começar sem revisor. Os autores não podem revisar o próprio texto.
@@ -69,6 +69,13 @@ Etapas: vaga aberta → tema → redação → rascunho → revisão → ajustes
 - **Notificações no celular:** por Web Push, sem aplicativo de loja. Cada membro ativa por aparelho e escolhe as categorias (avisos, lembretes, respostas e justificativas, oportunidades e, para a diretoria, a fila do que espera decisão). Os lembretes saem às 9h: véspera da aula (com a pergunta sobre a leitura para quem não marcou), dia seguinte para avaliar, véspera da entrega de carrossel ou do rascunho de mini-artigo e véspera do prazo das oportunidades marcadas com "Vou". O conselho não recebe, porque não participa. O aviso de faltas perto do limite não entrou: depende do ponto 6.
 
 - **Trilha de estudos:** item próprio no menu (`/trilha`), com a ordem de aprendizado da liga. Segue o livro *Direito das Companhias* (2ª ed., Forense, 2017): cada tópico cita título, capítulo, parágrafos e páginas, sem anexar o livro (ver ponto 7). As referências da Parte I foram sugeridas a partir do sumário e cabem à diretoria conferir; o livro trata só das companhias, então limitadas e manipulação de mercado têm só pontos de partida. Cada tópico liga às aulas da plataforma (acervo e ciclo atual) e às pastas do Drive da ordem de aprendizado. O membro marca o tópico como estudado; a diretoria e o conselho veem quantos marcaram. O conteúdo (títulos e links do Drive) foi carregado direto no banco, fora das migrações, porque o repositório é público.
+
+## Cargos da diretoria (novembro de 2026)
+
+- **Cargos:** diretor-presidente, diretor vice-presidente, diretor acadêmico e diretor de relações institucionais, nessa ordem. Ficam em `membros.cargo_diretoria`, só para quem tem o papel diretoria, com um ocupante ativo por cargo (o banco recusa o segundo). Quem ocupa cada cargo é gravado direto no banco, fora das migrações.
+- **Onde aparece:** ao lado do nome no menu e em Meu perfil (no lugar de "Diretoria"), em Gestão → Membros e na aba Cargos de A Liga, em "Diretoria atual".
+- **Diretor acadêmico:** deixou de ser uma marcação à parte. A coluna `membros.diretor_academico` passou a ser calculada a partir do cargo, então as regras do mini-artigo seguem iguais. Os outros cargos não dão permissões próprias: a diretoria continua sem níveis.
+- **Troca de cargo:** em Gestão → Membros, campo "Cargo na diretoria". Para passar um cargo a outra pessoa, tire-o primeiro de quem o ocupa.
 
 ## Em aberto
 

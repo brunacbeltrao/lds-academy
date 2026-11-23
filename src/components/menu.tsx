@@ -29,8 +29,6 @@ import {
 import type { ItemMenu } from "@/lib/navegacao";
 import { Avatar } from "@/components/ui";
 
-type Papel = "ligante" | "diretoria" | "conselheiro";
-const ROTULO_PAPEL: Record<Papel, string> = { ligante: "Ligante", diretoria: "Diretoria", conselheiro: "Conselho" };
 
 const ICONES: Record<string, LucideIcon> = {
   "/": House,
@@ -54,10 +52,10 @@ function ativo(pathname: string, href: string) {
 }
 
 
-type Props = { itens: ItemMenu[]; nome: string; papel: Papel; foto: string | null; recolhidoInicial: boolean; children: ReactNode };
+type Props = { itens: ItemMenu[]; nome: string; rotulo: string; foto: string | null; recolhidoInicial: boolean; children: ReactNode };
 
 /** Moldura da área logada: o menu lateral (recolhível no computador, gaveta no celular) e o conteúdo. */
-export function Estrutura({ itens, nome, papel, foto, recolhidoInicial, children }: Props) {
+export function Estrutura({ itens, nome, rotulo, foto, recolhidoInicial, children }: Props) {
   const [recolhido, setRecolhido] = useState(recolhidoInicial);
 
   const alternar = useCallback(() => {
@@ -70,7 +68,7 @@ export function Estrutura({ itens, nome, papel, foto, recolhidoInicial, children
 
   return (
     <>
-      <Menu itens={itens} nome={nome} papel={papel} foto={foto} recolhido={recolhido} alternar={alternar} />
+      <Menu itens={itens} nome={nome} rotulo={rotulo} foto={foto} recolhido={recolhido} alternar={alternar} />
       <main
         id="conteudo"
         className={`min-h-screen transition-[padding] print:pl-0! duration-300 ease-entra-sai ${recolhido ? "lg:pl-(--menu-recolhido)" : "lg:pl-(--menu-largura)"}`}
@@ -84,14 +82,14 @@ export function Estrutura({ itens, nome, papel, foto, recolhidoInicial, children
 function Menu({
   itens,
   nome,
-  papel,
+  rotulo,
   foto,
   recolhido,
   alternar,
 }: {
   itens: ItemMenu[];
   nome: string;
-  papel: Papel;
+  rotulo: string;
   foto: string | null;
   recolhido: boolean;
   alternar: () => void;
@@ -278,13 +276,13 @@ function Menu({
             href="/conta"
             onClick={() => setAberto(false)}
             aria-label={`Meu perfil: ${nome}`}
-            title={r ? `${nome} · ${ROTULO_PAPEL[papel]}` : "Meu perfil"}
+            title={r ? `${nome} · ${rotulo}` : "Meu perfil"}
             className={`flex min-w-0 items-center gap-3 rounded-lg p-1 transition-colors hover:bg-sutil ${r ? "flex-1 lg:flex-none" : "flex-1"}`}
           >
             <Avatar nome={nome} foto={foto} />
             <span className={`min-w-0 flex-1 ${r ? "lg:sr-only" : ""}`}>
               <span className="block truncate text-sm font-semibold text-tinta">{nome}</span>
-              <span className="block text-xs text-grafite">{ROTULO_PAPEL[papel]}</span>
+              <span className="block text-xs text-grafite">{rotulo}</span>
             </span>
           </Link>
           <form action="/auth/sair" method="post">

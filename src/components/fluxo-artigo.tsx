@@ -287,7 +287,7 @@ export function FluxoDoArtigo({ p, v, fotos, membros, revisoes, temasOutros, esp
     if (semDiretorAcademico && fase !== "publicado") {
       passos.push(
         <div key="sem-academico" className="aviso aviso-erro">
-          Ninguém está marcado como diretor acadêmico, e só ele designa o revisor e libera a publicação. Marque em{" "}
+          Ninguém ocupa o cargo de diretor acadêmico, e só ele designa o revisor e libera a publicação. Escolha o cargo em{" "}
           <Link href="/gestao" className="link">
             Gestão, Membros
           </Link>

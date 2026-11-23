@@ -9,6 +9,7 @@ import { curta, dia, hoje, registro } from "@/lib/datas";
 import { LIMITE_DE_FALTAS } from "@/lib/frequencia";
 import { exigirGestao } from "@/lib/membro";
 import { getMembros, ROTULO_PAPEL, type MembroDaLista } from "@/lib/membros";
+import { CARGOS_DIRETORIA, ROTULO_CARGO } from "@/lib/cargos";
 import { createClient } from "@/lib/supabase/server";
 import { getPerguntas, getRespostasPendentes } from "@/lib/tira-duvidas";
 import { decidirResposta } from "../tira-duvidas/actions";
@@ -392,7 +393,7 @@ function LinhaDeMembro({ membro: m, editavel, faltas }: { membro: MembroDaLista;
       <span className="truncate text-sm text-grafite">{m.email ?? <span className="text-vinho">sem e-mail</span>}</span>
       <span className="text-sm">
         <span className={`selo ${m.papel === "diretoria" ? "selo-suave" : ""}`}>{ROTULO_PAPEL[m.papel]}</span>
-        {m.diretorAcademico ? <span className="selo ml-1">Diretor acadêmico</span> : null}
+        {m.cargoDiretoria ? <span className="selo ml-1">{ROTULO_CARGO[m.cargoDiretoria]}</span> : null}
       </span>
       <span className="text-sm text-grafite">
         {!m.ativo ? "Inativo" : m.temConta ? "Conta criada" : "Sem conta"}
@@ -433,14 +434,12 @@ function LinhaDeMembro({ membro: m, editavel, faltas }: { membro: MembroDaLista;
           />
           <Escolha
             prefixo={m.id}
-            nome="diretor_academico"
-            rotulo="Mini-artigos"
-            padrao={m.diretorAcademico ? "sim" : "nao"}
-            ajuda="O diretor acadêmico designa revisores e faz a conferência final. Só vale para quem tem permissões de diretoria."
-            opcoes={[
-              { valor: "nao", rotulo: "Sem função no fluxo" },
-              { valor: "sim", rotulo: "Diretor acadêmico" },
-            ]}
+            nome="cargo_diretoria"
+            rotulo="Cargo na diretoria"
+            padrao={m.cargoDiretoria ?? ""}
+            obrigatorio={false}
+            ajuda="Só para o papel Diretoria, um por cargo. O diretor acadêmico designa revisores e faz a conferência final dos mini-artigos."
+            opcoes={[{ valor: "", rotulo: "Sem cargo" }, ...CARGOS_DIRETORIA]}
           />
           <BotaoEnviar variante="secundario" className="justify-self-start">
             Salvar

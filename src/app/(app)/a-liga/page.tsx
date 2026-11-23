@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { ArrowUpRight } from "lucide-react";
 import { getBiblioteca } from "@/lib/biblioteca";
+import { getFotos } from "@/lib/fotos";
 import { getMembroAtual } from "@/lib/membro";
+import { getDiretoriaAtual } from "@/lib/membros";
+import { ListaDaDiretoria } from "./diretoria";
 import { Abas, abaAtual, CabecalhoDaPagina, Lista, Pagina, type Aba } from "@/components/ui";
 
 export const metadata: Metadata = { title: "A Liga" };
@@ -85,6 +88,7 @@ export default async function ALigaPage({ searchParams }: PageProps<"/a-liga">) 
           </dl>
         </Bloco>
       ) : null}
+      {ativa === "cargos" ? <DiretoriaAtual /> : null}
 
       {ativa === "grupo-de-estudos" ? (
         <Bloco titulo="Regras do Grupo de Estudos">
@@ -198,4 +202,9 @@ async function EventosRealizados() {
       </ul>
     </div>
   );
+}
+
+async function DiretoriaAtual() {
+  const [diretoria, fotos] = await Promise.all([getDiretoriaAtual(), getFotos()]);
+  return <ListaDaDiretoria diretoria={diretoria} fotos={fotos} />;
 }

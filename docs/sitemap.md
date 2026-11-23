@@ -42,7 +42,7 @@ A diretoria cria o próximo ciclo e monta o cronograma em rascunho (`/gestao/pla
 
 ### Gestão (`/gestao`)
 
-- Membros e papéis (lista oficial)
+- Membros, papéis e cargos da diretoria (lista oficial)
 - Frequência e justificativas (decide o acadêmico)
 - Planejamento do ciclo
 - Curadoria da biblioteca e da base da IA
