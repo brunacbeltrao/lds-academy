@@ -4,7 +4,7 @@ import { InstalarApp } from "@/components/instalar-app";
 import { CabecalhoDaPagina, Pagina } from "@/components/ui";
 import { getFotos } from "@/lib/fotos";
 import { getMembroAtual } from "@/lib/membro";
-import { ROTULO_PAPEL } from "@/lib/membros";
+import { rotuloDoMembro } from "@/lib/cargos";
 import { getMinhasNotificacoes } from "@/lib/notificacoes";
 import { CATEGORIAS_NOTIFICACAO } from "@/lib/notificacoes-formato";
 import { registro } from "@/lib/datas";
@@ -22,7 +22,7 @@ export default async function ContaPage() {
   const categorias = CATEGORIAS_NOTIFICACAO.filter((c) => !c.soDiretoria || membro.papel === "diretoria");
   return (
     <Pagina>
-      <CabecalhoDaPagina titulo="Meu perfil" descricao={`${membro.nome} · ${ROTULO_PAPEL[membro.cargo]}`} />
+      <CabecalhoDaPagina titulo="Meu perfil" descricao={`${membro.nome} · ${rotuloDoMembro(membro.cargo, membro.cargoDiretoria)}`} />
       <section aria-labelledby="foto" className="cartao p-5 sm:p-6">
         <h2 id="foto" className="h3 mb-4">
           Foto de perfil

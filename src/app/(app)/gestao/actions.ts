@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { erro, id, ok, texto, type Estado } from "@/lib/estado";
 import { exigirDiretoria } from "@/lib/membro";
+import { ehCargoDiretoria, ROTULO_CARGO } from "@/lib/cargos";
 import { createClient } from "@/lib/supabase/server";
 
 const PAPEIS = ["ligante", "diretoria", "conselheiro"];
@@ -41,15 +42,18 @@ export async function salvarMembro(_: Estado, formData: FormData): Promise<Estad
   if (!membroId || !nome || !PAPEIS.includes(papel)) return erro("Dados inválidos.");
   if (email && !EMAIL.test(email)) return erro("E-mail inválido.");
   if (membroId === eu.id && (!ativo || (papel !== "diretoria" && !acessoDiretoria))) return erro("Você não pode tirar o seu próprio acesso de diretoria.");
-  const comoDiretoria = papel === "diretoria" || (papel === "ligante" && acessoDiretoria);
-  const diretorAcademico = formData.get("diretor_academico") === "sim";
-  if (diretorAcademico && !comoDiretoria) return erro("Diretor acadêmico precisa ter permissões de diretoria.");
+  const valorCargo = String(formData.get("cargo_diretoria") ?? "");
+  if (valorCargo && !ehCargoDiretoria(valorCargo)) return erro("Cargo inválido.");
+  const cargo = ehCargoDiretoria(valorCargo) ? valorCargo : null;
+  if (cargo && papel !== "diretoria") return erro("Cargo na diretoria é só para quem tem o papel Diretoria.");
 
   const supabase = await createClient();
   const { error } = await supabase
     .from("membros")
-    .update({ nome, papel, ativo, acesso_diretoria: papel === "conselheiro" ? false : acessoDiretoria, diretor_academico: diretorAcademico })
+    .update({ nome, papel, ativo, acesso_diretoria: papel === "conselheiro" ? false : acessoDiretoria, cargo_diretoria: cargo })
     .eq("id", membroId);
+  // 23505: o índice único do banco aceita um só ocupante ativo por cargo.
+  if (error?.code === "23505" && cargo) return erro(`${ROTULO_CARGO[cargo]} já está com outra pessoa. Tire o cargo dela antes.`);
   if (error) return erro("Não foi possível salvar.");
   const { error: erroEmail } = email
     ? await supabase.from("membros_acesso").upsert({ membro_id: membroId, email })

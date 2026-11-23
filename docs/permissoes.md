@@ -4,6 +4,8 @@ Três papéis: **ligante** (associado acadêmico), **diretoria** (associado dire
 
 **Acesso de diretoria** (`membros.acesso_diretoria`): dá a um ligante as permissões da diretoria sem mudar o cargo exibido, para quem ajuda a manter a plataforma. A diretoria liga e desliga em Gestão → Membros. No banco, `privado.is_diretoria()` aceita o cargo ou o acesso; no app, `getMembroAtual()` devolve `papel` (efetivo) e `cargo` (exibido).
 
+**Cargos da diretoria** (`membros.cargo_diretoria`): diretor-presidente, diretor vice-presidente, diretor acadêmico e diretor de relações institucionais. Só para o papel diretoria e um ocupante ativo por cargo. São exibidos no site; o único com permissão própria é o diretor acadêmico, no fluxo do mini-artigo. Só a diretoria altera (política `membros_gerir`).
+
 **Conselheiro:** lê tudo o que a diretoria lê, em todas as áreas e na Gestão, e não escreve nada: não pergunta, não responde, não justifica, não favorita e não gere. No banco, isso são as políticas `*_conselho_ler` e a função `privado.pode_participar()`, exigida em toda escrita de participação.
 
 | Área | Ligante | Diretoria |
@@ -43,7 +45,7 @@ Todas as tabelas têm RLS. As políticas usam funções do schema `privado` (`is
 | `producao_entregas` | Lê, envia e apaga as próprias se participa da publicação | Lê, envia e apaga |
 | `artigo_andamento` | Só se participa do artigo: o autor envia o rascunho e conclui ajustes; o revisor registra o parecer | Lê tudo; o diretor acadêmico registra parecer por revisor de fora, decide a reescrita e libera (o conselho lê) |
 
-O fluxo do mini-artigo usa gatilhos no banco (`privado.producoes_antes_de_gravar`, `privado.artigo_andamento_antes_de_gravar`, `privado.participantes_conferir`) que conferem quem altera cada campo, carimbam datas e autoria e recalculam a fase. A função `privado.is_diretor_academico()` exige a marcação de diretor acadêmico e permissões de diretoria.
+O fluxo do mini-artigo usa gatilhos no banco (`privado.producoes_antes_de_gravar`, `privado.artigo_andamento_antes_de_gravar`, `privado.participantes_conferir`) que conferem quem altera cada campo, carimbam datas e autoria e recalculam a fase. A função `privado.is_diretor_academico()` exige o cargo de diretor acadêmico (`membros.cargo_diretoria = academico`, refletido na coluna calculada `diretor_academico`) e permissões de diretoria.
 | `documentos` e arquivos do bucket `documentos` | Sem acesso | Envia, registra e apaga (o conselho lê) |
 | `favoritos` | Só os próprios | Só os próprios |
 | `perfis` e arquivos do bucket `fotos` | Lê as fotos de todos; envia, troca e apaga só a própria | Igual ao ligante |

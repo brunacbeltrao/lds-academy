@@ -3,6 +3,7 @@ import { ViewTransition } from "react";
 import { Estrutura } from "@/components/menu";
 import { getFotos } from "@/lib/fotos";
 import { getMembroAtual } from "@/lib/membro";
+import { rotuloDoMembro } from "@/lib/cargos";
 import { MENU } from "@/lib/navegacao";
 
 export default async function AppLayout({ children }: LayoutProps<"/">) {
@@ -19,7 +20,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
       >
         Pular para o conteúdo
       </a>
-      <Estrutura itens={itens} nome={membro.nome} papel={membro.cargo} foto={fotos[membro.id] ?? null} recolhidoInicial={recolhido}>
+      <Estrutura itens={itens} nome={membro.nome} rotulo={rotuloDoMembro(membro.cargo, membro.cargoDiretoria)} foto={fotos[membro.id] ?? null} recolhidoInicial={recolhido}>
         <ViewTransition default="pagina">{children}</ViewTransition>
       </Estrutura>
     </>
