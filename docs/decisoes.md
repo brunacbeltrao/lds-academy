@@ -79,13 +79,17 @@ Etapas: vaga aberta → tema → redação → rascunho → revisão → ajustes
 
 - **Menu por grupos:** o menu se organiza pelo que a pessoa vai fazer ali (Estudar, Praticar e Diretoria), com "Início" solto no topo. O Calendário fica em Estudar e Oportunidades em Praticar. "Minha trajetória" vai para o pé do menu, junto de Meu perfil, e "A Liga" para o rodapé. Detalhes em `sitemap.md`.
 
+## Acesso ao site (novembro de 2026)
+
+- **Vercel Authentication em "Standard Protection":** o endereço principal (`lds-academy.vercel.app`) fica aberto, e o controle de acesso passa a ser só o login da liga com a RLS do banco. Os previews dos pull requests e os endereços próprios de cada publicação seguem exigindo login na Vercel. Um domínio próprio da liga continua possível mais tarde.
+
 ## Em aberto
 
 1. **A IA vai ler os PDFs do Drive?** Se sim, a base precisa dos arquivos em si, e não só de links. Disso depende também o modelo de embeddings: a coluna `ia_trechos.embedding` está sem dimensão fixa até essa escolha.
 2. **Aceitar justificativas dá ao diretor acadêmico uma permissão própria: isso vira um nível?** Hoje qualquer membro da diretoria pode decidir.
 3. **Em quanto tempo a diretoria valida uma resposta antes de a dúvida ficar parada?**
 4. **Envio de e-mail.** Com o login por senha, o e-mail só sai em Esqueci a senha. As notificações no celular cobrem os avisos do dia a dia, mas não chegam a quem não ativou. O serviço padrão do Supabase manda poucos por hora; se os pedidos de nova senha ficarem frequentes, configurar um serviço de envio próprio (SMTP).
-5. **Proteção de acesso da Vercel.** O projeto está com a "Vercel Authentication" ligada em todos os endereços `vercel.app`: só entra quem está logado na conta da Vercel. Serve para a fase de construção, mas impede o acesso dos ligantes. Antes de abrir, definir entre um domínio próprio da liga ou liberar o endereço de produção.
+5. **Proteção de acesso da Vercel.** Resolvido em novembro de 2026: ver "Acesso ao site", mais acima. Mantido aqui para não mudar a numeração.
 6. **Faltas: avisos.** Definir o que a plataforma faz quando o membro se aproxima das três faltas sem justificativa (aviso ao membro, alerta à diretoria).
 7. **Direitos autorais dos anexos.** Os PDFs de bibliografia ficam restritos aos membros, mas trechos e livros inteiros têm regras diferentes. Definir o que pode ser anexado.
 8. **Atraso de mais de 2 dias no rascunho: o artigo muda de data sozinho ou o diretor confirma?** Hoje o site sugere o próximo espaço livre (a primeira segunda-feira da grade quinzenal sem artigo) e qualquer membro da diretoria confirma ou escolhe outra data; sem confirmação, a data não muda.

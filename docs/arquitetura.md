@@ -81,6 +81,7 @@ Não há chave de serviço no app. A Edge Function usa a do próprio ambiente do
 
 - **Supabase → Authentication → URL Configuration:** a "Site URL" e as "Redirect URLs" precisam conter o endereço do app na Vercel (com `/auth/callback`), senão o link do e-mail não volta para o site.
 - **Vercel:** projeto `lds-academy` no time BRUNA, funções em São Paulo (`gru1`), produção no branch `main` e preview nos demais.
+- **Vercel → Deployment Protection:** Vercel Authentication em "Standard Protection": o endereço principal fica aberto e os previews pedem login na Vercel.
 - **Lista de membros:** mantida direto no banco até existir a tela de Gestão.
 
 ## Banco
