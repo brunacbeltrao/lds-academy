@@ -77,6 +77,8 @@ Etapas: vaga aberta → tema → redação → rascunho → revisão → ajustes
 - **Diretor acadêmico:** deixou de ser uma marcação à parte. A coluna `membros.diretor_academico` passou a ser calculada a partir do cargo, então as regras do mini-artigo seguem iguais. Os outros cargos não dão permissões próprias: a diretoria continua sem níveis.
 - **Troca de cargo:** em Gestão → Membros, campo "Cargo na diretoria". Para passar um cargo a outra pessoa, tire-o primeiro de quem o ocupa.
 
+- **Menu por grupos:** o menu se organiza pelo que a pessoa vai fazer ali (Estudar, Praticar e Diretoria), com "Início" solto no topo. O Calendário fica em Estudar e Oportunidades em Praticar. "Minha trajetória" vai para o pé do menu, junto de Meu perfil, e "A Liga" para o rodapé. Detalhes em `sitemap.md`.
+
 ## Acesso ao site (novembro de 2026)
 
 - **Vercel Authentication em "Standard Protection":** o endereço principal (`lds-academy.vercel.app`) fica aberto, e o controle de acesso passa a ser só o login da liga com a RLS do banco. Os previews dos pull requests e os endereços próprios de cada publicação seguem exigindo login na Vercel. Um domínio próprio da liga continua possível mais tarde.

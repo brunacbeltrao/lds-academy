@@ -20,6 +20,38 @@ Entrada única: **LDS Academy**, com login por lista de membros. Fonte: quadro "
 
 As abas "Produção", "A Liga", "Oportunidades" e "Trilha de estudos" não estavam no mapa original; foram acrescentadas em novembro de 2026.
 
+### Organização do menu (novembro de 2026)
+
+O menu se agrupa pelo que a pessoa vai fazer ali. "Minha trajetória" e "A Liga" saem da lista principal: a trajetória vai para o pé do menu, junto de Meu perfil (nome e cargo do membro), e "A Liga" para o rodapé do menu. As rotas continuam as mesmas.
+
+```
+Início
+
+Estudar
+  Calendário
+  Ciclos e aulas
+  Trilha de estudos
+  Biblioteca
+  Tira-dúvidas
+
+Praticar
+  Competições
+  Produção
+  Oportunidades
+
+Diretoria e conselho (só diretoria e conselho)
+  Regularização
+  Professores
+  Gestão
+
+Pé do menu: Meu perfil (nome e cargo) · Minha trajetória · A Liga · Sair
+```
+
+- Títulos de grupo em texto normal, menores e mais claros que os itens, nunca em caixa alta.
+- Grupos fixos, sem abrir e fechar, no computador e na gaveta do celular.
+- Ligante e diretoria veem os mesmos grupos; a diretoria e o conselho ganham só o bloco "Diretoria e conselho" no fim.
+- O grupo de cada item fica em `src/lib/navegacao.ts` (campo `grupo`), e a ordem da lista é a ordem do menu.
+
 ## Gestão (diretoria e conselho)
 
 Não aparece no menu do ligante e é bloqueada no servidor. A diretoria gere; o conselho só lê.
