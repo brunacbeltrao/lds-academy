@@ -16,6 +16,7 @@
 - Aba "A Liga", com regras do Grupo de Estudos e Código de Conduta.
 - Página de cada aula, com professor, bibliografia e anexos em PDF; edição pela diretoria.
 - Área de Produção, com carrosséis e mini-artigos.
+- Suas entregas de produção, no topo da Produção e no Início.
 - Aba Regularização, com os documentos da liga.
 - Redesenho da interface (Figtree, fundo bege da liga, vinho como destaque).
 

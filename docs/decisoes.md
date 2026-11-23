@@ -29,6 +29,7 @@
 
 - **Bibliografia das aulas:** cada aula tem professor, apresentação, bibliografia em texto e **anexos em PDF enviados à plataforma** (não links). Os arquivos ficam no Storage do Supabase, em bucket privado, e nunca no repositório. A Biblioteca geral segue prevista com links do Drive.
 - **Produção:** nova área com o calendário dos carrosséis do Instagram (terças-feiras) e dos mini-artigos do LinkedIn (quinzenais, às segundas), com autores, prazos e orientações.
+- **Produção aberta, com destaque do que é seu:** o calendário completo continua visível a todos os membros. Cada pessoa vê, no topo da Produção e no Início, as próximas entregas das publicações em que é autora ou revisora. O vínculo é feito pelo primeiro e último nome do membro no campo de autores ou de revisor.
 - **Visual:** a plataforma tem identidade própria para tela (ver `identidade-visual.md`): fonte Figtree, fundo bege da liga, vinho só como destaque. O design system da liga segue valendo para redes e apostila.
 - **Cronograma real:** em 16/09 foi a aula de Acordo de Acionistas e em 23/09 a de Atos Constitutivos (invertidas em relação ao cronograma impresso). Houve uma aula extra de Litígios Societários numa sexta-feira.
 

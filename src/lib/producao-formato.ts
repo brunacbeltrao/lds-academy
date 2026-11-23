@@ -47,3 +47,66 @@ export function ehAutor(autores: string | null, nomeDoMembro: string): boolean {
   if (partes.length < 2) return false;
   return semAcento(autores).includes(`${partes[0]} ${partes[partes.length - 1]}`);
 }
+
+export type PapelNaProducao = "autoria" | "revisao";
+
+/** Próximo passo de um membro numa publicação: o que entregar e até quando. */
+export type Entrega = {
+  producao: Producao;
+  papel: PapelNaProducao;
+  etapa: string;
+  prazo: string; // AAAA-MM-DD
+};
+
+const DIAS_DA_SEMANA = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
+
+function emDias(data: string): number {
+  const [ano, mes, dia] = data.split("-").map(Number);
+  return Date.UTC(ano, mes - 1, dia) / 86_400_000;
+}
+
+/** "2026-11-30" → "segunda". */
+export function diaDaSemana(data: string): string {
+  return DIAS_DA_SEMANA[(((emDias(data) + 4) % 7) + 7) % 7];
+}
+
+/** Distância até o prazo: "hoje", "amanhã", "em 5 dias". */
+export function quantoFalta(prazo: string, hoje: string): string {
+  const dias = emDias(prazo) - emDias(hoje);
+  if (dias <= 0) return "hoje";
+  if (dias === 1) return "amanhã";
+  return `em ${dias} dias`;
+}
+
+/** A data ainda não passou (vale o próprio dia). */
+function aindaVale(data: string | null, hoje: string): data is string {
+  return data !== null && data >= hoje;
+}
+
+function proximaEtapa(p: Producao, papel: PapelNaProducao, hoje: string): Pick<Entrega, "etapa" | "prazo"> {
+  if (p.tipo === "carrossel") {
+    if (aindaVale(p.entrega, hoje)) return { etapa: "Entrega da arte, às 18h", prazo: p.entrega };
+    return { etapa: "Publicação", prazo: p.publicacao };
+  }
+  if (papel === "autoria" && aindaVale(p.entrega, hoje)) return { etapa: "Entrega do rascunho", prazo: p.entrega };
+  if (aindaVale(p.fim_revisao, hoje)) {
+    return { etapa: papel === "revisao" ? "Fim da revisão" : "Versão final, depois da revisão", prazo: p.fim_revisao };
+  }
+  return { etapa: "Publicação", prazo: p.publicacao };
+}
+
+/**
+ * Publicações ainda por sair em que o membro é autor ou revisor, com o próximo prazo de cada uma,
+ * do mais próximo para o mais distante.
+ */
+export function minhasEntregas(producoes: Producao[], nome: string, hoje: string): Entrega[] {
+  const entregas: Entrega[] = [];
+  for (const p of producoes) {
+    if (p.status === "publicado" || p.publicacao < hoje) continue;
+    const papeis: PapelNaProducao[] = [];
+    if (ehAutor(p.autores, nome)) papeis.push("autoria");
+    if (ehAutor(p.revisor, nome)) papeis.push("revisao");
+    for (const papel of papeis) entregas.push({ producao: p, papel, ...proximaEtapa(p, papel, hoje) });
+  }
+  return entregas.sort((a, b) => a.prazo.localeCompare(b.prazo) || a.producao.publicacao.localeCompare(b.producao.publicacao));
+}

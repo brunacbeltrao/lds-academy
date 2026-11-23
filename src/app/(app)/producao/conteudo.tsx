@@ -1,5 +1,6 @@
 import { Atalhos, CabecalhoDaPagina, Lista, Pagina, Recolhivel, Secao } from "@/components/ui";
-import { ehAutor, formatarData, ROTULO_STATUS, type Producao } from "@/lib/producao-formato";
+import { ancoraDaProducao, MinhasEntregas } from "@/components/minhas-entregas";
+import { ehAutor, formatarData, minhasEntregas, ROTULO_STATUS, type Producao } from "@/lib/producao-formato";
 import { BANCO_DE_TEMAS, ORIENTACOES_ARTIGO, ORIENTACOES_CARROSSEL, TIPOS_DE_POST } from "@/lib/producao-orientacoes";
 
 function Calendario({ itens, nome, hoje, artigo }: { itens: Producao[]; nome: string; hoje: string; artigo: boolean }) {
@@ -12,12 +13,14 @@ function Calendario({ itens, nome, hoje, artigo }: { itens: Producao[]; nome: st
       {itens.map((p) => {
         const proxima = p.id === proximaId;
         const minha = ehAutor(p.autores, nome);
+        const revisao = ehAutor(p.revisor, nome);
         const passada = p.publicacao < hoje;
         const outroAno = p.publicacao.slice(0, 4) !== ano;
         return (
           <li
             key={p.id}
-            className={`flex gap-4 rounded-[0.875rem] border p-4 sm:gap-5 sm:p-5 ${
+            id={ancoraDaProducao(p.id)}
+            className={`flex scroll-mt-24 gap-4 rounded-[0.875rem] border p-4 sm:gap-5 sm:p-5 ${
               proxima ? "border-vinho-borda bg-vinho-suave" : "border-linha bg-superficie"
             }`}
           >
@@ -34,6 +37,7 @@ function Calendario({ itens, nome, hoje, artigo }: { itens: Producao[]; nome: st
                 </span>
                 {proxima ? <span className="selo selo-vinho">Próxima</span> : null}
                 {minha ? <span className="selo selo-suave border border-vinho-borda">Sua autoria</span> : null}
+                {revisao ? <span className="selo selo-suave border border-vinho-borda">Sua revisão</span> : null}
                 {p.status !== "a_definir" ? <span className="selo">{ROTULO_STATUS[p.status]}</span> : null}
               </div>
               <h3 className={`mt-1.5 ${p.tema ? "h3" : "text-[1.0625rem] text-grafite"}`}>{p.tema ?? "Tema a definir"}</h3>
@@ -59,17 +63,33 @@ function Calendario({ itens, nome, hoje, artigo }: { itens: Producao[]; nome: st
 export function ConteudoDaProducao({ producoes, nome, hoje }: { producoes: Producao[]; nome: string; hoje: string }) {
   const carrosseis = producoes.filter((p) => p.tipo === "carrossel");
   const artigos = producoes.filter((p) => p.tipo === "artigo");
+  const entregas = minhasEntregas(producoes, nome, hoje);
 
   return (
     <Pagina>
       <CabecalhoDaPagina titulo="Produção" descricao="O que a liga publica, quem escreve e quando: carrosséis semanais no Instagram e mini-artigos quinzenais no LinkedIn.">
         <Atalhos
           itens={[
+            { id: "suas-entregas", rotulo: "Suas entregas" },
             { id: "carrosseis", rotulo: "Carrosséis do Instagram" },
             { id: "mini-artigos", rotulo: "Mini-artigos do LinkedIn" },
           ]}
         />
       </CabecalhoDaPagina>
+
+      <Secao
+        id="suas-entregas"
+        titulo="Suas entregas"
+        descricao="Os próximos prazos das publicações em que você é autor ou revisor. O calendário completo da liga vem logo abaixo."
+      >
+        {entregas.length > 0 ? (
+          <MinhasEntregas entregas={entregas} hoje={hoje} />
+        ) : (
+          <p className="cartao p-5 text-grafite">
+            Você não tem publicações por entregar. Quando a diretoria escalar você como autor ou revisor, os prazos aparecem aqui.
+          </p>
+        )}
+      </Secao>
 
       <Secao
         id="carrosseis"
