@@ -2,26 +2,44 @@
 
 /*
  * LDS Academy · base visual
- * Estratégia de cor contida: o bege da liga no fundo, superfícies brancas e o vinho da liga
+ * Estratégia de cor contida: o bege da liga no fundo, superfícies em creme do mesmo matiz e o vinho da liga
  * como único destaque (ações, item ativo, próximo encontro). Uma só família tipográfica.
+ *
+ * Movimento: tokens próprios (duração e curva), inspirados nas receitas de transitions.dev.
+ * Só transform e opacity animam; nada de "transition: all". Tudo desliga com menos movimento.
  */
 :root {
   --lds-vinho: #a7002e;
   --lds-vinho-escuro: #8a0026;
-  --lds-vinho-suave: #fbeff1;
-  --lds-vinho-borda: #efc9d1;
+  --lds-vinho-profundo: #6e001f;
+  --lds-vinho-suave: #f2e5e1;
+  --lds-vinho-borda: #e7c2c6;
   --lds-tinta: #231c1e;
   --lds-grafite: #635a5c;
   --lds-fundo: #ebece0;
-  --lds-superficie: #ffffff;
-  --lds-sutil: #f4f4ec;
-  --lds-linha: #d9d9cb;
+  --lds-superficie: #f9f9f1;
+  --lds-sutil: #f1f2e6;
+  --lds-linha: #dcdecf;
   --lds-linha-forte: #bdbcab;
+
+  /* Elevação mínima: só para separar o branco do bege, nunca como efeito. */
+  --lds-sombra: 0 1px 2px rgb(35 28 30 / 0.04), 0 0 0 1px rgb(35 28 30 / 0.02);
+  --lds-sombra-alta: 0 1px 2px rgb(35 28 30 / 0.04), 0 8px 24px -12px rgb(35 28 30 / 0.18);
+
+  --duracao-rapida: 150ms;
+  --duracao-media: 240ms;
+  --duracao-lenta: 420ms;
+  --curva-saida: cubic-bezier(0.23, 1, 0.32, 1);
+  --curva-entra-sai: cubic-bezier(0.77, 0, 0.175, 1);
+
+  --menu-largura: 16rem;
+  --menu-recolhido: 4.5rem;
 }
 
 @theme inline {
   --color-vinho: var(--lds-vinho);
   --color-vinho-escuro: var(--lds-vinho-escuro);
+  --color-vinho-profundo: var(--lds-vinho-profundo);
   --color-vinho-suave: var(--lds-vinho-suave);
   --color-vinho-borda: var(--lds-vinho-borda);
   --color-tinta: var(--lds-tinta);
@@ -32,12 +50,17 @@
   --color-linha: var(--lds-linha);
   --color-linha-forte: var(--lds-linha-forte);
   --font-sans: var(--font-figtree), ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --ease-saida: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-saida: var(--curva-saida);
+  --ease-entra-sai: var(--curva-entra-sai);
+  --shadow-cartao: var(--lds-sombra);
+  --shadow-alta: var(--lds-sombra-alta);
 }
 
 html {
   background: var(--lds-fundo);
   scroll-behavior: smooth;
+  /* A troca de página anima só o conteúdo (ver .transicao-pagina); o menu fica parado. */
+  view-transition-name: none;
 }
 
 body {
@@ -46,6 +69,12 @@ body {
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.6;
+  font-feature-settings: "ss01";
+}
+
+::selection {
+  background: var(--lds-vinho-borda);
+  color: var(--lds-tinta);
 }
 
 h1,
@@ -63,23 +92,24 @@ dd {
 @layer components {
   /* Títulos: mesma família do texto, em peso maior. */
   .h1 {
-    font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.25rem);
+    font-size: clamp(1.875rem, 1.45rem + 1.6vw, 2.5rem);
     font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    line-height: 1.1;
+    letter-spacing: -0.028em;
     color: var(--lds-tinta);
   }
   .h2 {
     font-size: 1.375rem;
     font-weight: 700;
     line-height: 1.25;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.018em;
     color: var(--lds-tinta);
   }
   .h3 {
     font-size: 1.0625rem;
     font-weight: 600;
     line-height: 1.35;
+    letter-spacing: -0.005em;
     color: var(--lds-tinta);
   }
 
@@ -88,18 +118,24 @@ dd {
     max-width: 68ch;
   }
 
+  .numeral {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum", "ss01";
+  }
+
   .link {
     color: var(--lds-vinho);
     font-weight: 500;
     text-decoration: underline;
     text-decoration-color: var(--lds-vinho-borda);
     text-underline-offset: 0.2em;
-    transition: text-decoration-color 0.15s var(--ease-saida);
+    transition: text-decoration-color var(--duracao-rapida) var(--curva-saida);
   }
   .link:hover {
     text-decoration-color: var(--lds-vinho);
   }
 
+  /* Botões: resposta ao toque com leve compressão (scale 0,97). */
   .botao {
     display: inline-flex;
     align-items: center;
@@ -112,14 +148,36 @@ dd {
     color: #fff;
     font-size: 0.9375rem;
     font-weight: 600;
-    transition: background-color 0.15s var(--ease-saida);
+    transition:
+      background-color var(--duracao-rapida) var(--curva-saida),
+      transform var(--duracao-rapida) var(--curva-saida);
   }
   .botao:hover {
     background: var(--lds-vinho-escuro);
   }
+  .botao:active:not(:disabled) {
+    transform: scale(0.97);
+  }
   .botao:disabled {
     opacity: 0.6;
     cursor: progress;
+  }
+  .botao-secundario {
+    background: var(--lds-superficie);
+    color: var(--lds-tinta);
+    box-shadow: inset 0 0 0 1px var(--lds-linha-forte);
+  }
+  .botao-secundario:hover {
+    background: var(--lds-sutil);
+  }
+
+  /* Seta que avança no hover (receita "learn more hover"). */
+  .seta {
+    transition: transform var(--duracao-media) var(--curva-saida);
+  }
+  .group:hover .seta,
+  .group:focus-visible .seta {
+    transform: translateX(3px);
   }
 
   .campo {
@@ -130,7 +188,9 @@ dd {
     border-radius: 0.625rem;
     background: var(--lds-superficie);
     color: var(--lds-tinta);
-    transition: border-color 0.15s var(--ease-saida);
+    transition:
+      border-color var(--duracao-rapida) var(--curva-saida),
+      box-shadow var(--duracao-rapida) var(--curva-saida);
   }
   .campo::placeholder {
     color: var(--lds-grafite);
@@ -140,8 +200,8 @@ dd {
   }
   .campo:focus {
     border-color: var(--lds-vinho);
-    outline: 2px solid var(--lds-vinho-borda);
-    outline-offset: 0;
+    outline: none;
+    box-shadow: 0 0 0 3px var(--lds-vinho-borda);
   }
 
   .rotulo-campo {
@@ -160,6 +220,7 @@ dd {
     border-radius: 999px;
     background: var(--lds-sutil);
     color: var(--lds-grafite);
+    box-shadow: inset 0 0 0 1px var(--lds-linha);
     font-size: 0.75rem;
     font-weight: 600;
     line-height: 1.5;
@@ -168,16 +229,35 @@ dd {
   .selo-vinho {
     background: var(--lds-vinho);
     color: #fff;
+    box-shadow: none;
   }
   .selo-suave {
     background: var(--lds-vinho-suave);
     color: var(--lds-vinho);
+    box-shadow: inset 0 0 0 1px var(--lds-vinho-borda);
   }
 
   .cartao {
     border: 1px solid var(--lds-linha);
     border-radius: 0.875rem;
     background: var(--lds-superficie);
+    box-shadow: var(--lds-sombra);
+  }
+
+  /* Cartão clicável: borda escurece e o cartão sobe 1px. */
+  .cartao-link {
+    transition:
+      border-color var(--duracao-rapida) var(--curva-saida),
+      box-shadow var(--duracao-media) var(--curva-saida),
+      transform var(--duracao-media) var(--curva-saida);
+  }
+  .cartao-link:hover {
+    border-color: var(--lds-linha-forte);
+    box-shadow: var(--lds-sombra-alta);
+    transform: translateY(-1px);
+  }
+  .cartao-link:active {
+    transform: translateY(0) scale(0.995);
   }
 
   .aviso {
@@ -194,6 +274,86 @@ dd {
     background: var(--lds-superficie);
     color: var(--lds-vinho-escuro);
   }
+
+  /* Aviso que aparece: sobe com fade e desfoque (receita "toast open"). */
+  .surgir {
+    animation: surgir var(--duracao-media) var(--curva-saida) both;
+  }
+
+  /*
+   * Entrada da página (receita "texts reveal"): os filhos diretos sobem 8px em sequência.
+   * O atraso para no quinto filho, para a página nunca parecer lenta.
+   */
+  .entrada > * {
+    animation: subir var(--duracao-lenta) var(--curva-saida) both;
+  }
+  .entrada > :nth-child(2) {
+    animation-delay: 50ms;
+  }
+  .entrada > :nth-child(3) {
+    animation-delay: 100ms;
+  }
+  .entrada > :nth-child(4) {
+    animation-delay: 150ms;
+  }
+  .entrada > :nth-child(n + 5) {
+    animation-delay: 200ms;
+  }
+
+  /*
+   * Dica do menu recolhido (receita "tooltip"): espera 400ms para abrir e fecha na hora.
+   */
+  .dica {
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(-4px) scale(0.97);
+    transform-origin: left center;
+    transition:
+      opacity 0ms,
+      transform 0ms;
+  }
+  .com-dica:hover .dica,
+  .com-dica:has(:focus-visible) .dica {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--duracao-rapida) var(--curva-saida) 400ms,
+      transform var(--duracao-rapida) var(--curva-saida) 400ms;
+  }
+}
+
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes surgir {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+    filter: blur(2px);
+  }
+}
+
+/* Troca de página: o conteúdo antigo some rápido; o novo sobe 6px. */
+::view-transition-old(.pagina) {
+  animation: 120ms var(--curva-saida) both sair-pagina;
+}
+::view-transition-new(.pagina) {
+  animation: 280ms var(--curva-saida) 40ms both entrar-pagina;
+}
+@keyframes sair-pagina {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes entrar-pagina {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 }
 
 :focus-visible {
@@ -209,6 +369,25 @@ dd {
   *::before,
   *::after {
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Impressão (relatório do ciclo): fundo branco, sem menu, cartões sem quebra no meio. */
+@media print {
+  html,
+  body {
+    background: #fff;
+  }
+  .cartao,
+  .break-inside-avoid {
+    break-inside: avoid;
   }
 }

@@ -1,10 +1,16 @@
-import { Menu } from "@/components/menu";
+import { cookies } from "next/headers";
+import { ViewTransition } from "react";
+import { Estrutura } from "@/components/menu";
+import { getFotos } from "@/lib/fotos";
 import { getMembroAtual } from "@/lib/membro";
+import { rotuloDoMembro } from "@/lib/cargos";
 import { MENU } from "@/lib/navegacao";
 
 export default async function AppLayout({ children }: LayoutProps<"/">) {
-  const membro = await getMembroAtual();
+  const [membro, cookieStore, fotos] = await Promise.all([getMembroAtual(), cookies(), getFotos()]);
   const itens = MENU.filter((item) => !item.gestao || membro.papel !== "ligante");
+  // A preferência de menu recolhido vem do cookie, para a página já chegar na largura certa.
+  const recolhido = cookieStore.get("lds-menu")?.value === "recolhido";
 
   return (
     <>
@@ -14,10 +20,9 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
       >
         Pular para o conteúdo
       </a>
-      <Menu itens={itens} nome={membro.nome} papel={membro.papel} />
-      <main id="conteudo" className="min-h-screen lg:pl-64">
-        {children}
-      </main>
+      <Estrutura itens={itens} nome={membro.nome} rotulo={rotuloDoMembro(membro.cargo, membro.cargoDiretoria)} foto={fotos[membro.id] ?? null} recolhidoInicial={recolhido}>
+        <ViewTransition default="pagina">{children}</ViewTransition>
+      </Estrutura>
     </>
   );
 }
