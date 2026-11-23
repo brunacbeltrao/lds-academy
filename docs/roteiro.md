@@ -39,7 +39,7 @@
 
 ## Próximas etapas
 
-- Menu por grupos (Estudar, Praticar, Minha rotina, Diretoria), com Minha trajetória e A Liga no pé do menu (ver `sitemap.md`).
+- Menu por grupos (Estudar, Praticar, Diretoria), com Minha trajetória e A Liga no pé do menu (ver `sitemap.md`).
 - Cadastrar o e-mail de acesso dos membros em Gestão → Membros: sem ele, a pessoa não consegue criar a conta.
 - Trilha de estudos: preencher as Partes II a IV (Fusões e Aquisições, Contabilidade Empresarial, Outros Temas Essenciais) e conferir as referências do livro sugeridas para a Parte I.
 

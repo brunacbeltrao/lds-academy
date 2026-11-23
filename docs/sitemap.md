@@ -28,6 +28,7 @@ O menu se agrupa pelo que a pessoa vai fazer ali. "Minha trajetória" e "A Liga"
 Início
 
 Estudar
+  Calendário
   Ciclos e aulas
   Trilha de estudos
   Biblioteca
@@ -36,10 +37,7 @@ Estudar
 Praticar
   Competições
   Produção
-  Oportunidades (provisório; ver decisoes.md, ponto 11)
-
-Minha rotina
-  Calendário
+  Oportunidades
 
 Diretoria (só diretoria e conselho)
   Regularização
