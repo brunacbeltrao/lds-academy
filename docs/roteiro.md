@@ -36,10 +36,10 @@
 - Trilha de estudos (`/trilha`): a ordem de aprendizado de 2026.1, com a Parte I (12 tópicos) ligada ao livro, às aulas do acervo e às pastas do Drive, e o progresso de cada membro.
 - Notificações no celular (Web Push): avisos, oportunidades, respostas e justificativas, fila da diretoria e lembretes diários de aula, leitura, avaliação e prazos.
 - Cargos da diretoria (presidente, vice-presidente, acadêmico e relações institucionais), na Gestão, no menu e em A Liga; o diretor acadêmico passa a decorrer do cargo.
+- Menu por grupos (Estudar, Praticar, Diretoria e conselho), com Minha trajetória e A Liga no pé do menu.
 
 ## Próximas etapas
 
-- Menu por grupos (Estudar, Praticar, Diretoria), com Minha trajetória e A Liga no pé do menu (ver `sitemap.md`).
 - Cadastrar o e-mail de acesso dos membros em Gestão → Membros: sem ele, a pessoa não consegue criar a conta.
 - Trilha de estudos: preencher as Partes II a IV (Fusões e Aquisições, Contabilidade Empresarial, Outros Temas Essenciais) e conferir as referências do livro sugeridas para a Parte I.
 

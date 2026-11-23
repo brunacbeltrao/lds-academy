@@ -26,7 +26,7 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
-import type { ItemMenu } from "@/lib/navegacao";
+import { GRUPOS_COM_TITULO, type ItemMenu } from "@/lib/navegacao";
 import { Avatar } from "@/components/ui";
 
 
@@ -105,8 +105,10 @@ function Menu({
     return () => window.removeEventListener("keydown", fechar);
   }, [aberto]);
 
-  const principais = itens.filter((i) => !i.gestao);
-  const gestao = itens.filter((i) => i.gestao);
+  const topo = itens.filter((i) => i.grupo === "topo");
+  const grupos = GRUPOS_COM_TITULO.map((g) => ({ ...g, itens: itens.filter((i) => i.grupo === g.grupo) })).filter((g) => g.itens.length > 0);
+  const gestao = itens.filter((i) => i.grupo === "diretoria");
+  const noPe = itens.filter((i) => i.grupo === "pe");
   const hrefAtivo = itens.find((i) => ativo(pathname, i.href))?.href ?? null;
 
   /*
@@ -142,22 +144,27 @@ function Menu({
   // No celular o menu é sempre a gaveta completa; recolher vale só a partir de lg.
   const r = recolhido;
 
-  const link = (item: ItemMenu) => {
+  /** Itens do pé do menu ficam fora da pílula deslizante e pintam o próprio fundo quando ativos. */
+  const link = (item: ItemMenu, semPilula = false) => {
     const atual = item.href === hrefAtivo;
     const Icone = ICONES[item.href] ?? House;
     return (
       <li key={item.href} className="com-dica relative">
         <Link
           href={item.href}
-          ref={(el) => {
-            if (el) links.current.set(item.href, el);
-            else links.current.delete(item.href);
-          }}
+          ref={
+            semPilula
+              ? undefined
+              : (el) => {
+                  if (el) links.current.set(item.href, el);
+                  else links.current.delete(item.href);
+                }
+          }
           aria-current={atual ? "page" : undefined}
           onClick={() => setAberto(false)}
           className={`relative z-10 flex min-h-11 items-center gap-3 overflow-hidden rounded-[0.625rem] px-[0.9375rem] text-[0.9375rem] whitespace-nowrap transition-colors duration-150 ${
             atual
-              ? `font-semibold text-vinho ${pilula ? "" : "bg-vinho-suave"}`
+              ? `font-semibold text-vinho ${pilula && !semPilula ? "" : "bg-vinho-suave"}`
               : "font-medium text-tinta hover:bg-tinta/[0.045]"
           }`}
         >
@@ -175,6 +182,16 @@ function Menu({
       </li>
     );
   };
+
+  // Título de grupo: texto normal, pequeno e claro, nunca em caixa alta. Some no menu recolhido, mas guarda o espaço.
+  const titulo = (texto: string) => (
+    <p
+      aria-hidden={r || undefined}
+      className={`flex h-7 items-center px-3 text-xs font-semibold whitespace-nowrap text-grafite transition-opacity duration-200 ${r ? "lg:opacity-0" : ""}`}
+    >
+      {texto}
+    </p>
+  );
 
   return (
     <>
@@ -252,23 +269,29 @@ function Menu({
             />
           ) : null}
 
-          <ul className="flex flex-col gap-0.5">{principais.map(link)}</ul>
+          <ul className="flex flex-col gap-0.5">{topo.map((i) => link(i))}</ul>
+
+          {grupos.map((g) => (
+            <div key={g.grupo} className="mt-3">
+              {titulo(g.titulo)}
+              <ul className="flex flex-col gap-0.5">{g.itens.map((i) => link(i))}</ul>
+            </div>
+          ))}
 
           {gestao.length > 0 && (
             <div className="mt-4 border-t border-linha pt-3">
-              <p
-                aria-hidden={r || undefined}
-                className={`flex h-7 items-center px-3 text-xs font-semibold whitespace-nowrap text-grafite transition-opacity duration-200 ${r ? "lg:opacity-0" : ""}`}
-              >
-                Diretoria e conselho
-              </p>
-              <ul className="flex flex-col gap-0.5">{gestao.map(link)}</ul>
+              {titulo("Diretoria e conselho")}
+              <ul className="flex flex-col gap-0.5">{gestao.map((i) => link(i))}</ul>
             </div>
           )}
         </div>
 
+        {noPe.length > 0 && (
+          <ul className="mt-auto flex flex-col gap-0.5 px-3 pt-4 pb-2">{noPe.map((i) => link(i, true))}</ul>
+        )}
+
         <div
-          className={`mt-auto flex shrink-0 items-center border-t border-linha py-4 ${
+          className={`${noPe.length > 0 ? "" : "mt-auto"} flex shrink-0 items-center border-t border-linha py-4 ${
             r ? "gap-2 px-4 lg:flex-col lg:gap-1 lg:px-0" : "gap-2 px-4"
           }`}
         >
