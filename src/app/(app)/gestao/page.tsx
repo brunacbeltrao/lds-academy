@@ -423,17 +423,6 @@ function LinhaDeMembro({ membro: m, editavel, faltas }: { membro: MembroDaLista;
           />
           <Escolha
             prefixo={m.id}
-            nome="acesso_diretoria"
-            rotulo="Permissões"
-            padrao={m.acessoDiretoria ? "sim" : "nao"}
-            ajuda="Acesso de diretoria vale para ligantes que ajudam a manter a plataforma, sem mudar o cargo."
-            opcoes={[
-              { valor: "nao", rotulo: "As do cargo" },
-              { valor: "sim", rotulo: "Acesso de diretoria" },
-            ]}
-          />
-          <Escolha
-            prefixo={m.id}
             nome="cargo_diretoria"
             rotulo="Cargo na diretoria"
             padrao={m.cargoDiretoria ?? ""}

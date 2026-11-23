@@ -38,10 +38,9 @@ export async function salvarMembro(_: Estado, formData: FormData): Promise<Estad
   const email = texto(formData, "email", 200)?.toLowerCase() ?? null;
   const papel = String(formData.get("papel") ?? "");
   const ativo = formData.get("ativo") === "sim";
-  const acessoDiretoria = formData.get("acesso_diretoria") === "sim";
   if (!membroId || !nome || !PAPEIS.includes(papel)) return erro("Dados inválidos.");
   if (email && !EMAIL.test(email)) return erro("E-mail inválido.");
-  if (membroId === eu.id && (!ativo || (papel !== "diretoria" && !acessoDiretoria))) return erro("Você não pode tirar o seu próprio acesso de diretoria.");
+  if (membroId === eu.id && (!ativo || papel !== "diretoria")) return erro("Você não pode tirar o seu próprio acesso de diretoria.");
   const valorCargo = String(formData.get("cargo_diretoria") ?? "");
   if (valorCargo && !ehCargoDiretoria(valorCargo)) return erro("Cargo inválido.");
   const cargo = ehCargoDiretoria(valorCargo) ? valorCargo : null;
@@ -50,7 +49,7 @@ export async function salvarMembro(_: Estado, formData: FormData): Promise<Estad
   const supabase = await createClient();
   const { error } = await supabase
     .from("membros")
-    .update({ nome, papel, ativo, acesso_diretoria: papel === "conselheiro" ? false : acessoDiretoria, cargo_diretoria: cargo })
+    .update({ nome, papel, ativo, cargo_diretoria: cargo })
     .eq("id", membroId);
   // 23505: o índice único do banco aceita um só ocupante ativo por cargo.
   if (error?.code === "23505" && cargo) return erro(`${ROTULO_CARGO[cargo]} já está com outra pessoa. Tire o cargo dela antes.`);

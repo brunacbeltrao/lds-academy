@@ -22,7 +22,7 @@ export default async function ContaPage() {
   const categorias = CATEGORIAS_NOTIFICACAO.filter((c) => !c.soDiretoria || membro.papel === "diretoria");
   return (
     <Pagina>
-      <CabecalhoDaPagina titulo="Meu perfil" descricao={`${membro.nome} · ${rotuloDoMembro(membro.cargo, membro.cargoDiretoria)}`} />
+      <CabecalhoDaPagina titulo="Meu perfil" descricao={`${membro.nome} · ${rotuloDoMembro(membro.papel, membro.cargoDiretoria)}`} />
       <section aria-labelledby="foto" className="cartao p-5 sm:p-6">
         <h2 id="foto" className="h3 mb-4">
           Foto de perfil
