@@ -9,6 +9,7 @@ import { curta, dia, hoje, registro } from "@/lib/datas";
 import { LIMITE_DE_FALTAS } from "@/lib/frequencia";
 import { exigirGestao } from "@/lib/membro";
 import { getMembros, ROTULO_PAPEL, type MembroDaLista } from "@/lib/membros";
+import { LIMITE_NOME_EXIBICAO } from "@/lib/nome-exibicao";
 import { CARGOS_DIRETORIA, ROTULO_CARGO } from "@/lib/cargos";
 import { createClient } from "@/lib/supabase/server";
 import { getPerguntas, getRespostasPendentes } from "@/lib/tira-duvidas";
@@ -115,7 +116,13 @@ export default async function GestaoPage({ searchParams }: PageProps<"/gestao">)
             <div className="mt-6">
               <Recolhivel titulo="Adicionar membro">
                 <Formulario acao={adicionarMembro} resetar className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <Campo nome="nome" rotulo="Nome completo" obrigatorio maxLength={200} className="sm:col-span-2" />
+                  <Campo nome="nome" rotulo="Nome completo" obrigatorio maxLength={200} ajuda="Como está na lista oficial da liga." />
+                  <Campo
+                    nome="nome_exibicao"
+                    rotulo="Como o nome aparece"
+                    maxLength={LIMITE_NOME_EXIBICAO}
+                    ajuda="Opcional. O nome pelo qual a pessoa é conhecida; em branco, aparece o nome completo. Ela também pode mudar em Meu perfil."
+                  />
                   <Campo nome="email" rotulo="E-mail" tipo="email" ajuda="É com este e-mail que a pessoa cria a conta." />
                   <Escolha nome="papel" rotulo="Papel" opcoes={Object.entries(ROTULO_PAPEL).map(([valor, rotulo]) => ({ valor, rotulo }))} />
                   <BotaoEnviar className="justify-self-start">Adicionar</BotaoEnviar>
@@ -389,7 +396,10 @@ export default async function GestaoPage({ searchParams }: PageProps<"/gestao">)
 function LinhaDeMembro({ membro: m, editavel, faltas }: { membro: MembroDaLista; editavel: boolean; faltas: number }) {
   const resumo = (
     <div className="grid grid-cols-1 gap-1 md:grid-cols-[1.6fr_1.4fr_0.8fr_0.8fr] md:items-center md:gap-4">
-      <span className={`font-medium ${m.ativo ? "text-tinta" : "text-grafite line-through"}`}>{m.nome}</span>
+      <span className="min-w-0">
+        <span className={`block font-medium ${m.ativo ? "text-tinta" : "text-grafite line-through"}`}>{m.nome}</span>
+        {m.nome !== m.nomeCompleto ? <span className="block truncate text-sm text-grafite">{m.nomeCompleto}</span> : null}
+      </span>
       <span className="truncate text-sm text-grafite">{m.email ?? <span className="text-vinho">sem e-mail</span>}</span>
       <span className="text-sm">
         <span className={`selo ${m.papel === "diretoria" ? "selo-suave" : ""}`}>{ROTULO_PAPEL[m.papel]}</span>
@@ -408,7 +418,15 @@ function LinhaDeMembro({ membro: m, editavel, faltas }: { membro: MembroDaLista;
         <summary className="cursor-pointer list-none px-4 py-3 hover:bg-sutil/60 [&::-webkit-details-marker]:hidden">{resumo}</summary>
         <Formulario acao={salvarMembro} className="grid grid-cols-1 gap-4 border-t border-linha bg-sutil/50 px-4 py-4 sm:grid-cols-2 lg:grid-cols-4">
           <input type="hidden" name="id" value={m.id} />
-          <Campo prefixo={m.id} nome="nome" rotulo="Nome" obrigatorio padrao={m.nome} maxLength={200} />
+          <Campo prefixo={m.id} nome="nome" rotulo="Nome completo" obrigatorio padrao={m.nomeCompleto} maxLength={200} />
+          <Campo
+            prefixo={m.id}
+            nome="nome_exibicao"
+            rotulo="Como o nome aparece"
+            padrao={m.nomeExibicao ?? ""}
+            maxLength={LIMITE_NOME_EXIBICAO}
+            placeholder={m.nomeCompleto}
+          />
           <Campo prefixo={m.id} nome="email" rotulo="E-mail de acesso" tipo="email" padrao={m.email ?? ""} />
           <Escolha prefixo={m.id} nome="papel" rotulo="Papel" padrao={m.papel} opcoes={Object.entries(ROTULO_PAPEL).map(([valor, rotulo]) => ({ valor, rotulo }))} />
           <Escolha

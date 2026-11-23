@@ -37,6 +37,7 @@
 - Notificações no celular (Web Push): avisos, oportunidades, respostas e justificativas, fila da diretoria e lembretes diários de aula, leitura, avaliação e prazos.
 - Cargos da diretoria (presidente, vice-presidente, acadêmico e relações institucionais), na Gestão, no menu e em A Liga; o diretor acadêmico passa a decorrer do cargo.
 - Menu por grupos (Estudar, Praticar, Diretoria e conselho), com Minha trajetória e A Liga no pé do menu.
+- Nome de exibição: cada membro escolhe como o nome aparece (Meu perfil e Gestão → Membros).
 
 ## Próximas etapas
 

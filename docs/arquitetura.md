@@ -27,7 +27,7 @@ docs/                       decisões de produto
 
 ## Login por lista de membros
 
-1. A diretoria cadastra a pessoa em `membros` (nome, papel, ativo) e, quando tiver, o e-mail em minúsculas. Sem e-mail, o nome fica na lista mas ninguém cria conta por ele. A carga de nomes é feita direto no banco, nunca em migração.
+1. A diretoria cadastra a pessoa em `membros` (nome completo, papel, ativo; opcionalmente o nome de exibição) e, quando tiver, o e-mail em minúsculas. Sem e-mail, o nome fica na lista mas ninguém cria conta por ele. A carga de nomes é feita direto no banco, nunca em migração.
 2. No primeiro acesso, a pessoa abre a aba Primeiro acesso em `/login`, informa o e-mail e cria a senha.
 3. Um gatilho em `auth.users` confere a lista: se o e-mail não está ativo em `membros`, o cadastro é recusado; se está, a conta é vinculada à linha do membro (e o papel vem dela).
 4. Nos acessos seguintes, e-mail e senha. Trocar a senha: `/conta/senha` (ícone de chave no menu).
@@ -86,4 +86,4 @@ Não há chave de serviço no app. A Edge Function usa a do próprio ambiente do
 
 ## Banco
 
-Tabelas: `membros`, `ciclos`, `aulas`, `aula_leituras`, `biblioteca_itens`, `favoritos`, `competicoes`, `equipes`, `equipe_membros`, `eventos`, `avisos`, `perguntas`, `respostas`, `presencas`, `justificativas`, `ia_trechos`, `aula_materiais`, `producoes`, `producao_participantes`, `producao_entregas`, `artigo_andamento`, `documentos`, `professores`, `aula_planejamento`, `oportunidades`, `oportunidade_interessados`, `leituras_feitas`, `avaliacoes_aula`, `inscricoes_push`, `preferencias_notificacao`, `notificacoes`, `trilha_partes`, `trilha_topicos`, `trilha_materiais`, `trilha_progresso`. Regras de acesso em `permissoes.md`.
+Tabelas: `membros` (`nome_completo` é o da lista oficial; `nome_exibicao`, o escolhido pela pessoa; `nome`, calculado por gatilho, é o que as telas mostram), `ciclos`, `aulas`, `aula_leituras`, `biblioteca_itens`, `favoritos`, `competicoes`, `equipes`, `equipe_membros`, `eventos`, `avisos`, `perguntas`, `respostas`, `presencas`, `justificativas`, `ia_trechos`, `aula_materiais`, `producoes`, `producao_participantes`, `producao_entregas`, `artigo_andamento`, `documentos`, `professores`, `aula_planejamento`, `oportunidades`, `oportunidade_interessados`, `leituras_feitas`, `avaliacoes_aula`, `inscricoes_push`, `preferencias_notificacao`, `notificacoes`, `trilha_partes`, `trilha_topicos`, `trilha_materiais`, `trilha_progresso`. Regras de acesso em `permissoes.md`.

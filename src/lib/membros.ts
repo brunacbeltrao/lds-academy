@@ -5,7 +5,12 @@ import { CARGOS_DIRETORIA, ehCargoDiretoria, type CargoDiretoria } from "@/lib/c
 
 export type MembroDaLista = {
   id: string;
+  /** Como o nome aparece na plataforma (nome de exibição ou, sem ele, o completo). */
   nome: string;
+  /** Nome da lista oficial. */
+  nomeCompleto: string;
+  /** Como a pessoa escolheu aparecer; null enquanto não escolheu. */
+  nomeExibicao: string | null;
   papel: Papel;
   ativo: boolean;
   /** Cargo na diretoria (só para o papel diretoria). */
@@ -22,7 +27,7 @@ export const ROTULO_PAPEL: Record<Papel, string> = { ligante: "Ligante", diretor
 export async function getMembros(): Promise<MembroDaLista[]> {
   const supabase = await createClient();
   const [{ data: membros, error }, { data: acessos }] = await Promise.all([
-    supabase.from("membros").select("id, nome, papel, ativo, cargo_diretoria, diretor_academico, user_id").order("nome"),
+    supabase.from("membros").select("id, nome, nome_completo, nome_exibicao, papel, ativo, cargo_diretoria, diretor_academico, user_id").order("nome"),
     supabase.from("membros_acesso").select("membro_id, email"),
   ]);
   if (error) throw new Error(`Falha ao ler os membros: ${error.message}`);
@@ -30,6 +35,8 @@ export async function getMembros(): Promise<MembroDaLista[]> {
   return (membros ?? []).map((m) => ({
     id: m.id,
     nome: m.nome,
+    nomeCompleto: m.nome_completo,
+    nomeExibicao: m.nome_exibicao,
     papel: m.papel as Papel,
     ativo: m.ativo,
     cargoDiretoria: ehCargoDiretoria(m.cargo_diretoria) ? m.cargo_diretoria : null,

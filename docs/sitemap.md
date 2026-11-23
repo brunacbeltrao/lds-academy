@@ -88,7 +88,7 @@ A diretoria cria o próximo ciclo e monta o cronograma em rascunho (`/gestao/pla
 - `/ciclos/acervo/[codigo]`: um ciclo anterior, com o cronograma datado (quando há calendário) e as aulas do Drive. Na aba Acervo de `/ciclos`, os ciclos ficam agrupados por tema.
 - `/producao/[id]`: página de uma publicação. Nos mini-artigos, o fluxo completo: etapas, prazos, o que cada pessoa faz agora (tema, rascunho, revisor, parecer, ajustes, conferência, publicação) e o andamento. Nos carrosséis, entregas e edição pela diretoria.
 - `/tira-duvidas/[id]`: pergunta, respostas, validação e resposta da diretoria.
-- `/conta`: meu perfil: foto (bucket privado `fotos`, visível aos membros), notificações no celular (ativar por aparelho, escolher categorias, últimas notificações) e troca de senha. Abre pelo nome no rodapé do menu.
+- `/conta`: meu perfil: foto (bucket privado `fotos`, visível aos membros), como o nome aparece (nome de exibição), notificações no celular (ativar por aparelho, escolher categorias, últimas notificações) e troca de senha. Abre pelo nome no rodapé do menu.
 - `/conta/senha`: nova senha, destino do link de Esqueci a senha.
 - `/materiais/[id]/ler` e `/documentos/[id]/ler`: leitura do PDF no próprio site, com tela cheia e download.
 - `/materiais/[id]`: download de um anexo, por link temporário.

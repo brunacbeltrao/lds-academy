@@ -28,7 +28,7 @@ Todas as tabelas têm RLS. As políticas usam funções do schema `privado` (`is
 
 | Tabela | Ligante | Diretoria |
 | --- | --- | --- |
-| `membros` (nome, papel, situação) | Lê todas, para ver os colegas | Lê e gere todas |
+| `membros` (nome, papel, situação) | Lê todas, para ver os colegas; altera só o próprio nome de exibição (`nome_exibicao`) | Lê e gere todas |
 | `membros_acesso` (e-mail de acesso) | Lê só o próprio | Lê e gere todos (o conselho lê) |
 | `ciclos`, `biblioteca_itens`, `aula_leituras`, `avisos`, `competicoes` | Lê | Lê e escreve |
 | `eventos` | Lê os publicados (`publicado`); os rascunhos do planejamento ficam ocultos | Lê e escreve todos (o conselho lê todos) |
