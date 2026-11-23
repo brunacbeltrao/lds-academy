@@ -9,6 +9,7 @@ Entrada única: **LDS Academy**, com login por lista de membros. Fonte: quadro "
 | Início | `/` | Próxima aula e leitura · Avisos da diretoria · Prazos de competições · Perguntas recentes · Minhas pendências |
 | Calendário | `/calendario` | Visão mensal e semanal · Filtro por ciclo e tipo · Aulas, eventos e competições · Sincronizar com Google Agenda |
 | Ciclos e aulas | `/ciclos` | Ciclo atual: 2026.2, Ciclo-base de Direito Societário · Próximo ciclo: 2027.1, M&A · Ciclos anteriores, abertos a todos · Página da aula: slides, leituras e apostila |
+| Trilha de estudos | `/trilha` | A ordem de aprendizado da liga, em partes (Direito Societário Básico, Fusões e Aquisições, Contabilidade Empresarial, Outros Temas Essenciais) · Cada tópico com a leitura no livro *Direito das Companhias*, as aulas da plataforma e as pastas do Drive · Progresso de cada membro (marcar como estudado) · A diretoria edita na própria página |
 | Biblioteca | `/biblioteca` | Doutrina por tema, autor e ciclo · Legislação e jurisprudência · Apostilas da liga · Artigos produzidos pela liga · Busca e favoritos |
 | Competições | `/competicoes` | Sociecap, CMNA e outras · Edital, regras e prazos · Casos e peças de edições anteriores · Equipes: acesso só da equipe e da diretoria · Trilha de preparação e treinos |
 | Oportunidades | `/oportunidades` | Mural de vagas de estágio, cursos, eventos, concursos e conteúdos · Abertas e encerradas pelo prazo · Filtro por tipo · Cartaz em imagem · Lista de quem vai (botão "Vou") · As abertas aparecem no Início |
@@ -17,7 +18,7 @@ Entrada única: **LDS Academy**, com login por lista de membros. Fonte: quadro "
 | Minha trajetória | `/trajetoria` | Presença, faltas e justificativas (limite de 3) · Leituras e aulas concluídas · Minhas perguntas e respostas · Minhas equipes de competição |
 | A Liga | `/a-liga` | O que é a LDS·FDR · Cargos · Regras do Grupo de Estudos · Eventos · Código de Conduta |
 
-As abas "Produção", "A Liga" e "Oportunidades" não estavam no mapa original; foram acrescentadas em novembro de 2026.
+As abas "Produção", "A Liga", "Oportunidades" e "Trilha de estudos" não estavam no mapa original; foram acrescentadas em novembro de 2026.
 
 ## Gestão (diretoria e conselho)
 
@@ -55,7 +56,7 @@ A diretoria cria o próximo ciclo e monta o cronograma em rascunho (`/gestao/pla
 - `/ciclos/acervo/[codigo]`: um ciclo anterior, com o cronograma datado (quando há calendário) e as aulas do Drive. Na aba Acervo de `/ciclos`, os ciclos ficam agrupados por tema.
 - `/producao/[id]`: página de uma publicação. Nos mini-artigos, o fluxo completo: etapas, prazos, o que cada pessoa faz agora (tema, rascunho, revisor, parecer, ajustes, conferência, publicação) e o andamento. Nos carrosséis, entregas e edição pela diretoria.
 - `/tira-duvidas/[id]`: pergunta, respostas, validação e resposta da diretoria.
-- `/conta`: meu perfil: foto (bucket privado `fotos`, visível aos membros) e troca de senha. Abre pelo nome no rodapé do menu.
+- `/conta`: meu perfil: foto (bucket privado `fotos`, visível aos membros), notificações no celular (ativar por aparelho, escolher categorias, últimas notificações) e troca de senha. Abre pelo nome no rodapé do menu.
 - `/conta/senha`: nova senha, destino do link de Esqueci a senha.
 - `/materiais/[id]/ler` e `/documentos/[id]/ler`: leitura do PDF no próprio site, com tela cheia e download.
 - `/materiais/[id]`: download de um anexo, por link temporário.

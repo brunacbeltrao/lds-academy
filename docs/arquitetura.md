@@ -47,6 +47,14 @@ docs/                       decisões de produto
 - `public/sw.js`: o service worker guarda só a página `public/offline.html`. Nenhuma página da plataforma fica no aparelho, porque todas exigem login e trazem dados dos membros. Registrado em produção por `src/components/registro-do-app.tsx`; o `next.config.ts` impede o cache do `sw.js`.
 - `src/components/instalar-app.tsx`: convite para instalar, no Início (celular, pode ser dispensado) e no perfil. No Android e no computador abre o pedido do navegador; no iPhone mostra o caminho pelo Compartilhar.
 
+## Notificações no celular (Web Push)
+
+- O membro ativa em Meu perfil (`/conta`), aparelho por aparelho. O navegador inscreve o aparelho com a chave pública VAPID (`src/lib/notificacoes-formato.ts`) e a inscrição vai para `inscricoes_push`. No iPhone, só funciona no app instalado na tela de início (iOS 16.4 ou mais novo).
+- Quem decide o que enviar é o banco: gatilhos em `avisos`, `oportunidades`, `justificativas`, `perguntas` e `respostas`, e a função `privado.lembretes_do_dia()`, agendada no pg_cron para as 9h de Recife. Elas gravam em `notificacoes` só para quem tem aparelho e não desligou a categoria (`preferencias_notificacao`).
+- Cada gravação chama, pelo pg_net, a Edge Function `enviar-notificacoes` (`supabase/functions/`), que esvazia a fila com a chave privada VAPID e marca o que foi enviado. Um job do pg_cron a cada 10 minutos repete o chamado para o que ficou pendente. Inscrições expiradas são apagadas no envio, e o histórico fica 30 dias.
+- A função não exige login (verify_jwt desligado) porque não recebe dados de quem chama: só envia o que o banco já colocou na fila.
+- O service worker (`public/sw.js`) mostra a notificação e abre a página certa ao tocar nela.
+
 ## Cartazes do mural
 
 Bucket privado `mural` (JPG, PNG ou WebP até 5 MB). Mesmo desenho dos anexos: o navegador envia direto ao Storage (só a diretoria pode) e uma ação registra a oportunidade. A imagem é servida por `/oportunidades/[id]/cartaz`, que confere o membro e redireciona para um link temporário de 10 minutos.
@@ -65,8 +73,9 @@ Nomes de membros, professores, autores e revisores ficam só no banco. Cargas de
 | --- | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Vercel (todos os ambientes) e `.env.local` | Pública |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Vercel (todos os ambientes) e `.env.local` | Pública por desenho; a proteção é a RLS |
+| `VAPID_PRIVATE_KEY` | Supabase → Edge Functions → Secrets | Segredo. Chave privada das notificações, par da chave pública em `src/lib/notificacoes-formato.ts`. Se for trocada, as duas mudam juntas e os aparelhos precisam ativar de novo |
 
-Não há chave de serviço no app nesta etapa.
+Não há chave de serviço no app. A Edge Function usa a do próprio ambiente do Supabase.
 
 ## Configuração feita fora do repositório
 
@@ -76,4 +85,4 @@ Não há chave de serviço no app nesta etapa.
 
 ## Banco
 
-Tabelas: `membros`, `ciclos`, `aulas`, `aula_leituras`, `biblioteca_itens`, `favoritos`, `competicoes`, `equipes`, `equipe_membros`, `eventos`, `avisos`, `perguntas`, `respostas`, `presencas`, `justificativas`, `ia_trechos`, `aula_materiais`, `producoes`, `producao_participantes`, `producao_entregas`, `artigo_andamento`, `documentos`, `professores`, `aula_planejamento`, `oportunidades`, `oportunidade_interessados`, `leituras_feitas`, `avaliacoes_aula`. Regras de acesso em `permissoes.md`.
+Tabelas: `membros`, `ciclos`, `aulas`, `aula_leituras`, `biblioteca_itens`, `favoritos`, `competicoes`, `equipes`, `equipe_membros`, `eventos`, `avisos`, `perguntas`, `respostas`, `presencas`, `justificativas`, `ia_trechos`, `aula_materiais`, `producoes`, `producao_participantes`, `producao_entregas`, `artigo_andamento`, `documentos`, `professores`, `aula_planejamento`, `oportunidades`, `oportunidade_interessados`, `leituras_feitas`, `avaliacoes_aula`, `inscricoes_push`, `preferencias_notificacao`, `notificacoes`, `trilha_partes`, `trilha_topicos`, `trilha_materiais`, `trilha_progresso`. Regras de acesso em `permissoes.md`.

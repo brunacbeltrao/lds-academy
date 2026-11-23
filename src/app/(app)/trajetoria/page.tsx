@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CabecalhoDaPagina, Cartao, Grade, Numero, nomeCurto, Pagina, Secao, Vazio } from "@/components/ui";
 import { getMinhasMarcacoes } from "@/lib/aproveitamento";
+import { getProgressoNaTrilha } from "@/lib/trilha";
 import { rotuloAula } from "@/lib/ciclos";
 import { getCompeticoes } from "@/lib/competicoes";
 import { curta } from "@/lib/datas";
@@ -23,6 +24,7 @@ export default async function TrajetoriaPage() {
     getProducoes(),
     getMinhasMarcacoes(membro.id),
   ]);
+  const trilha = await getProgressoNaTrilha(membro.id);
   const leiturasFeitas = frequencia.filter((l) => marcacoes.leituras.has(l.aulaId)).length;
   const r = resumo(frequencia);
   const minhasPerguntas = perguntas.filter((p) => p.autor?.id === membro.id);
@@ -40,6 +42,22 @@ export default async function TrajetoriaPage() {
         <Numero rotulo="Faltas justificadas" valor={r.justificadas} />
         <Numero rotulo="Respostas validadas" valor={minhasRespostas.filter((x) => x.status === "validada").length} detalhe={`${minhasPerguntas.length} perguntas feitas`} />
       </Grade>
+
+      {trilha.total > 0 ? (
+        <Secao titulo="Trilha de estudos" descricao="A ordem dos temas da liga, do básico ao avançado.">
+          <Link href="/trilha" className="cartao cartao-link group flex items-center gap-4 p-4 sm:p-5">
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm text-grafite">
+                <span className="numeral font-semibold text-tinta">{trilha.estudados}</span> de <span className="numeral">{trilha.total}</span> tópicos estudados
+              </span>
+              <span aria-hidden="true" className="mt-2 block h-1.5 overflow-hidden rounded-full bg-linha">
+                <span className="block h-full rounded-full bg-vinho" style={{ width: `${Math.round((trilha.estudados / trilha.total) * 100)}%` }} />
+              </span>
+            </span>
+            <span className="shrink-0 text-sm font-semibold text-vinho">{trilha.estudados === 0 ? "Começar" : "Continuar"}</span>
+          </Link>
+        </Secao>
+      ) : null}
 
       <Secao
         titulo="Aulas do ciclo"
